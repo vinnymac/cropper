@@ -288,7 +288,7 @@
 
     if (!url) {
       if ($this.is('img')) {
-        if (!$this.attr('src')) {
+        if (!$this.get(0).getAttribute('src')) {
           return;
         }
 
@@ -335,10 +335,10 @@
       this.build();
     }, this)).one('error', function () {
       $clone.remove();
-    }).attr({
-      crossOrigin: crossOrigin, // "crossOrigin" must before "src" (#271)
-      src: bustCacheUrl || url
     });
+
+    $clone.get(0).crossOrigin = crossOrigin || null; // "crossOrigin" must before "src" (#271)
+    $clone.get(0).src         = bustCacheUrl || url;
 
     // Hide and insert into the document
     addClass($clone.get(0), CLASS_HIDE);
