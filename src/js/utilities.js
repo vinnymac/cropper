@@ -73,7 +73,7 @@
   }
 
   function getSourceCanvas(image, data) {
-    var canvas = $('<canvas>')[0],
+    var canvas = document.createElement('canvas'),
         context = canvas.getContext('2d'),
         width = data.naturalWidth,
         height = data.naturalHeight,

@@ -353,7 +353,7 @@
       canvasWidth = scaledWidth || originalWidth;
       canvasHeight = scaledHeight || originalHeight;
 
-      canvas = $('<canvas>')[0];
+      canvas = document.createElement('canvas');
       canvas.width = canvasWidth;
       canvas.height = canvasHeight;
       context = canvas.getContext('2d');
