@@ -50,12 +50,16 @@
 
     if (!options.highlight) {
       var highlight = $cropBox.find('.cropper-face');
-      addClass(highlight.get(0), CLASS_INVISIBLE);
+      highlight.get().forEach(function (element) {
+        addClass(element, CLASS_INVISIBLE);
+      });
     }
 
     if (!options.guides) {
       var guides = $cropBox.find('.cropper-dashed');
-      addClass(guides.get(0), CLASS_HIDDEN);
+      guides.get().forEach(function (element) {
+        addClass(element, CLASS_HIDDEN);
+      });
     }
 
     if (!options.movable) {
@@ -64,7 +68,9 @@
 
     if (!options.resizable) {
       var resizable = $cropBox.find('.cropper-line, .cropper-point');
-      addClass(resizable.get(0), CLASS_HIDDEN);
+      resizable.get().forEach(function (element) {
+        addClass(element, CLASS_HIDDEN);
+      });
     }
 
     this.setDragMode(options.dragCrop ? 'crop' : 'move');
