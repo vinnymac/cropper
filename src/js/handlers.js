@@ -112,7 +112,7 @@
 
         if (dragType === 'crop') {
           this.cropping = true;
-          this.$dragBox.addClass(CLASS_MODAL);
+          addClass(this.$dragBox.get(0), CLASS_MODAL);
         }
       }
     },

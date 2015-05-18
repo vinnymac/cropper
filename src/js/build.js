@@ -17,7 +17,7 @@
     this.$cropper = $cropper = $(Cropper.TEMPLATE);
 
     // Hide the original image
-    $this.addClass(CLASS_HIDDEN);
+    addClass($this.get(0), CLASS_HIDDEN);
 
     // Show the clone iamge
     removeClass($clone.get(0), CLASS_HIDE);
@@ -38,22 +38,24 @@
       this.cropped = true;
 
       if (options.modal) {
-        this.$dragBox.addClass(CLASS_MODAL);
+        addClass(this.$dragBox.get(0), CLASS_MODAL);
       }
     } else {
-      $cropBox.addClass(CLASS_HIDDEN);
+      addClass($cropBox.get(0), CLASS_HIDDEN);
     }
 
     if (options.background) {
-      $cropper.addClass(CLASS_BG);
+      addClass($cropper.get(0), CLASS_BG);
     }
 
     if (!options.highlight) {
-      $cropBox.find('.cropper-face').addClass(CLASS_INVISIBLE);
+      var highlight = $cropBox.find('.cropper-face');
+      addClass(highlight.get(0), CLASS_INVISIBLE);
     }
 
     if (!options.guides) {
-      $cropBox.find('.cropper-dashed').addClass(CLASS_HIDDEN);
+      var guides = $cropBox.find('.cropper-dashed');
+      addClass(guides.get(0), CLASS_HIDDEN);
     }
 
     if (!options.movable) {
@@ -61,7 +63,8 @@
     }
 
     if (!options.resizable) {
-      $cropBox.find('.cropper-line, .cropper-point').addClass(CLASS_HIDDEN);
+      var resizable = $cropBox.find('.cropper-line, .cropper-point');
+      addClass(resizable.get(0), CLASS_HIDDEN);
     }
 
     this.setDragMode(options.dragCrop ? 'crop' : 'move');

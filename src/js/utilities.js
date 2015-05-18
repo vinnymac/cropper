@@ -95,6 +95,14 @@
     return canvas;
   }
 
+  function addClass(element, className) {
+    if (element.classList) {
+      element.classList.add(className);
+    } else {
+      element.className += ' ' + className;
+    }
+  }
+
   function removeClass(element, className) {
     if (element.classList) {
       element.classList.remove(className);

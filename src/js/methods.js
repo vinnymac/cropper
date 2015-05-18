@@ -9,7 +9,7 @@
         this.limitCropBox(true, true);
 
         if (this.options.modal) {
-          this.$dragBox.addClass(CLASS_MODAL);
+          addClass(this.$dragBox.get(0), CLASS_MODAL);
         }
 
         removeClass(this.$cropBox.get(0), CLASS_HIDDEN);
@@ -53,7 +53,7 @@
       this.renderCanvas(); // Render canvas after render crop box
 
       removeClass(this.$dragBox.get(0), CLASS_MODAL);
-      this.$cropBox.addClass(CLASS_HIDDEN);
+      addClass(this.$cropBox.get(0), CLASS_HIDDEN);
     },
 
     destroy: function () {
@@ -86,7 +86,7 @@
     disable: function () {
       if (this.built) {
         this.disabled = true;
-        this.$cropper.addClass(CLASS_DISABLED);
+        addClass(this.$cropper.get(0), CLASS_DISABLED);
       }
     },
 
