@@ -157,10 +157,11 @@
 
         ratio = image.width / image.naturalWidth;
 
-        $.each(data, function (i, n) {
-          n = n / ratio;
-          data[i] = n;
-        });
+        for (var k in data) {
+          if (data.hasOwnProperty(k)) {
+            data[k] = (data[k] / ratio);
+          }
+        }
 
       } else {
         data = {

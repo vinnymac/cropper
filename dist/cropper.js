@@ -950,12 +950,19 @@
         cropBoxData = this.getCropBoxData();
 
         this.render();
-        this.setCanvasData($.each(canvasData, function (i, n) {
-          canvasData[i] = n * ratio;
-        }));
-        this.setCropBoxData($.each(cropBoxData, function (i, n) {
-          cropBoxData[i] = n * ratio;
-        }));
+        for (var k in canvasData) {
+          if (canvasData.hasOwnProperty(k)) {
+            canvasData[k] = canvasData[k] * ratio;
+          }
+        }
+        this.setCanvasData(canvasData);
+
+        for (k in cropBoxData) {
+          if (cropBoxData.hasOwnProperty(k)) {
+            cropBoxData[k] = cropBoxData[k] * ratio;
+          }
+        }
+        this.setCropBoxData(cropBoxData);
       }
     },
 
@@ -1290,10 +1297,11 @@
 
         ratio = image.width / image.naturalWidth;
 
-        $.each(data, function (i, n) {
-          n = n / ratio;
-          data[i] = n;
-        });
+        for (var k in data) {
+          if (data.hasOwnProperty(k)) {
+            data[k] = (data[k] / ratio);
+          }
+        }
 
       } else {
         data = {
