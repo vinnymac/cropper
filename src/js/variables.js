@@ -35,7 +35,7 @@
       EVENT_ZOOM_OUT = 'zoomout' + CROPPER_NAMESPACE,
 
       // Supports
-      SUPPORT_CANVAS = (typeof $('<canvas>')[0].getContext === 'function' || false),
+      SUPPORT_CANVAS = (typeof document.createElement('canvas').getContext === 'function' || false),
 
       // Others
       sqrt = Math.sqrt,
