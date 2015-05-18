@@ -12,7 +12,7 @@
           return;
         }
 
-        url = $this.prop('src');
+        url = $this.get(0).src;
       } else if ($this.is('canvas') && SUPPORT_CANVAS) {
         url = $this[0].toDataURL();
       }
@@ -32,7 +32,7 @@
     if (options.checkImageOrigin && isCrossOriginURL(url)) {
       crossOrigin = 'anonymous';
 
-      if (!$this.prop('crossOrigin')) { // Only when there was not a "crossOrigin" property
+      if (!$this.get(0).crossOrigin) { // Only when there was not a "crossOrigin" property
         bustCacheUrl = addTimestamp(url); // Bust cache (#148)
       }
     }
@@ -40,8 +40,8 @@
     this.$clone = $clone = $('<img>');
 
     $clone.one('load', proxy(function () {
-      var naturalWidth = $clone.prop('naturalWidth') || $clone.width(),
-          naturalHeight = $clone.prop('naturalHeight') || $clone.height();
+      var naturalWidth = $clone.get(0).naturalWidth || $clone.width(),
+          naturalHeight = $clone.get(0).naturalHeight || $clone.height();
 
       this.image = {
         naturalWidth: naturalWidth,
