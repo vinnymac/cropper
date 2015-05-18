@@ -12,7 +12,7 @@
           this.$dragBox.addClass(CLASS_MODAL);
         }
 
-        this.$cropBox.removeClass(CLASS_HIDDEN);
+        removeClass(this.$cropBox.get(0), CLASS_HIDDEN);
       }
 
       this.setCropBoxData(this.initialCropBox);
@@ -52,7 +52,7 @@
       this.limitCanvas();
       this.renderCanvas(); // Render canvas after render crop box
 
-      this.$dragBox.removeClass(CLASS_MODAL);
+      removeClass(this.$dragBox.get(0), CLASS_MODAL);
       this.$cropBox.addClass(CLASS_HIDDEN);
     },
 
@@ -61,7 +61,7 @@
 
       if (this.ready) {
         this.unbuild();
-        $this.removeClass(CLASS_HIDDEN);
+        removeClass($this.get(0), CLASS_HIDDEN);
       } else if (this.$clone) {
         this.$clone.remove();
       }
@@ -79,7 +79,7 @@
     enable: function () {
       if (this.built) {
         this.disabled = false;
-        this.$cropper.removeClass(CLASS_DISABLED);
+        removeClass(this.$cropper.get(0), CLASS_DISABLED);
       }
     },
 

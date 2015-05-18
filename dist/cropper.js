@@ -1,11 +1,11 @@
 /*!
- * Cropper v0.9.3
+ * Cropper v@VERSION
  * https://github.com/fengyuanchen/cropper
  *
- * Copyright (c) 2014-2015 Fengyuan Chen and contributors
+ * Copyright (c) 2014-@YEAR Fengyuan Chen and contributors
  * Released under the MIT license
  *
- * Date: 2015-05-10T07:25:08.257Z
+ * Date: @DATE
  */
 
 (function (factory) {
@@ -60,7 +60,7 @@
       EVENT_ZOOM_OUT = 'zoomout' + CROPPER_NAMESPACE,
 
       // Supports
-      SUPPORT_CANVAS = $.isFunction($('<canvas>')[0].getContext),
+      SUPPORT_CANVAS = (typeof $('<canvas>')[0].getContext === 'function' || false),
 
       // Others
       sqrt = Math.sqrt,
@@ -171,6 +171,13 @@
     return canvas;
   }
 
+  function removeClass(element, className) {
+    if (element.classList) {
+      element.classList.remove(className);
+    } else {
+      element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+    }
+  }
   function Cropper(element, options) {
     this.$element = $(element);
     this.options = $.extend({}, Cropper.DEFAULTS, $.isPlainObject(options) && options);
@@ -274,7 +281,7 @@
     $this.addClass(CLASS_HIDDEN);
 
     // Show the clone iamge
-    $clone.removeClass(CLASS_HIDE);
+    removeClass($clone.get(0), CLASS_HIDE);
 
     this.$container = $this.parent().append($cropper);
     this.$canvas = $cropper.find('.cropper-canvas').append($clone);
@@ -373,7 +380,7 @@
           options = this.options;
 
       $cropper.addClass(CLASS_HIDDEN);
-      $this.removeClass(CLASS_HIDDEN);
+      removeClass($this.get(0), CLASS_HIDDEN);
 
       $cropper.css((this.container = {
         width: max($container.width(), num(options.minContainerWidth) || 200),
@@ -381,7 +388,7 @@
       }));
 
       $this.addClass(CLASS_HIDDEN);
-      $cropper.removeClass(CLASS_HIDDEN);
+      removeClass($cropper.get(0), CLASS_HIDDEN);
     },
 
     // image box (wrapper)
@@ -1051,7 +1058,7 @@
           this.$dragBox.addClass(CLASS_MODAL);
         }
 
-        this.$cropBox.removeClass(CLASS_HIDDEN);
+        removeClass(this.$cropBox.get(0), CLASS_HIDDEN);
       }
 
       this.setCropBoxData(this.initialCropBox);
@@ -1091,7 +1098,7 @@
       this.limitCanvas();
       this.renderCanvas(); // Render canvas after render crop box
 
-      this.$dragBox.removeClass(CLASS_MODAL);
+      removeClass(this.$dragBox.get(0), CLASS_MODAL);
       this.$cropBox.addClass(CLASS_HIDDEN);
     },
 
@@ -1100,7 +1107,7 @@
 
       if (this.ready) {
         this.unbuild();
-        $this.removeClass(CLASS_HIDDEN);
+        removeClass($this.get(0), CLASS_HIDDEN);
       } else if (this.$clone) {
         this.$clone.remove();
       }
@@ -1110,6 +1117,7 @@
 
     replace: function (url) {
       if (!this.disabled && url) {
+        this.options.data = null; // Remove previous data
         this.load(url);
       }
     },
@@ -1117,7 +1125,7 @@
     enable: function () {
       if (this.built) {
         this.disabled = false;
-        this.$cropper.removeClass(CLASS_DISABLED);
+        removeClass(this.$cropper.get(0), CLASS_DISABLED);
       }
     },
 
@@ -1875,7 +1883,7 @@
           // Show the cropBox if is hidden
           if (!this.cropped) {
             this.cropped = true;
-            this.$cropBox.removeClass(CLASS_HIDDEN);
+            removeClass(this.$cropBox.get(0), CLASS_HIDDEN);
           }
         }
 
@@ -2013,7 +2021,7 @@
         $this.data('cropper', (data = new Cropper(this, options)));
       }
 
-      if (typeof options === 'string' && $.isFunction((fn = data[options]))) {
+      if (typeof options === 'string' && (typeof (fn = data[options]) === 'function' || false)) {
         result = fn.apply(data, args);
       }
     });

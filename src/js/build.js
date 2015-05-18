@@ -20,7 +20,7 @@
     $this.addClass(CLASS_HIDDEN);
 
     // Show the clone iamge
-    $clone.removeClass(CLASS_HIDE);
+    removeClass($clone.get(0), CLASS_HIDE);
 
     this.$container = $this.parent().append($cropper);
     this.$canvas = $cropper.find('.cropper-canvas').append($clone);

@@ -18,7 +18,7 @@
           options = this.options;
 
       $cropper.addClass(CLASS_HIDDEN);
-      $this.removeClass(CLASS_HIDDEN);
+      removeClass($this.get(0), CLASS_HIDDEN);
 
       $cropper.css((this.container = {
         width: max($container.width(), num(options.minContainerWidth) || 200),
@@ -26,7 +26,7 @@
       }));
 
       $this.addClass(CLASS_HIDDEN);
-      $cropper.removeClass(CLASS_HIDDEN);
+      removeClass($cropper.get(0), CLASS_HIDDEN);
     },
 
     // image box (wrapper)
