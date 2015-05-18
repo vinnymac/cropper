@@ -171,6 +171,34 @@
     return canvas;
   }
 
+  function toObject(val) {
+    if (val === null) {
+      throw new TypeError('Object.assign cannot be called with null or undefined');
+    }
+
+    return Object(val);
+  }
+
+  function assign(target, source) {
+    if (Object.assign) {
+      return Object.assign(target, source);
+    }
+    var from;
+    var keys;
+    var to = toObject(target);
+
+    for (var s = 1; s < arguments.length; s++) {
+      from = arguments[s];
+      keys = Object.keys(Object(from));
+
+      for (var i = 0; i < keys.length; i++) {
+        to[keys[i]] = from[keys[i]];
+      }
+    }
+
+    return to;
+  }
+
   function hasClass(el, className) {
     if (el.classList) {
       return el.classList.contains(className);
@@ -225,7 +253,7 @@
   }
   function Cropper(element, options) {
     this.$element = $(element);
-    this.options = $.extend({}, Cropper.DEFAULTS, $.isPlainObject(options) && options);
+    this.options = assign({}, Cropper.DEFAULTS, $.isPlainObject(options) && options);
 
     this.ready = false;
     this.built = false;
@@ -409,7 +437,7 @@
     this.$cropper = null;
   };
 
-  $.extend(prototype, {
+  assign(prototype, {
     render: function () {
       this.initContainer();
       this.initCanvas();
@@ -464,8 +492,8 @@
 
       this.canvas = canvas;
       this.limitCanvas(true, true);
-      this.initialImage = $.extend({}, image);
-      this.initialCanvas = $.extend({}, canvas);
+      this.initialImage = assign({}, image);
+      this.initialCanvas = assign({}, canvas);
     },
 
     limitCanvas: function (size, position) {
@@ -516,7 +544,7 @@
           }
         }
 
-        $.extend(canvas, {
+        assign(canvas, {
           minWidth: minCanvasWidth,
           minHeight: minCanvasHeight,
           maxWidth: Infinity,
@@ -623,7 +651,7 @@
         }, true);
       }
 
-      $.extend(image, reversed ? {
+      assign(image, reversed ? {
         width: reversed.width,
         height: reversed.height,
         left: (canvas.width - reversed.width) / 2,
@@ -675,7 +703,7 @@
       cropBox.oldLeft = cropBox.left = canvas.left + (canvas.width - cropBox.width) / 2;
       cropBox.oldTop = cropBox.top = canvas.top + (canvas.height - cropBox.height) / 2;
 
-      this.initialCropBox = $.extend({}, cropBox);
+      this.initialCropBox = assign({}, cropBox);
     },
 
     limitCropBox: function (size, position) {
@@ -892,7 +920,7 @@
     }
   };
 
-  $.extend(prototype, {
+  assign(prototype, {
     resize: function () {
       var $container = this.$container,
           container = this.container,
@@ -1092,7 +1120,7 @@
     }
   });
 
-  $.extend(prototype, {
+  assign(prototype, {
     crop: function () {
       if (!this.built || this.disabled) {
         return;
@@ -1117,9 +1145,9 @@
         return;
       }
 
-      this.image = $.extend({}, this.initialImage);
-      this.canvas = $.extend({}, this.initialCanvas);
-      this.cropBox = $.extend({}, this.initialCropBox); // required for strict mode
+      this.image = assign({}, this.initialImage);
+      this.canvas = assign({}, this.initialCanvas);
+      this.cropBox = assign({}, this.initialCropBox); // required for strict mode
 
       this.renderCanvas();
 
@@ -1133,7 +1161,7 @@
         return;
       }
 
-      $.extend(this.cropBox, {
+      assign(this.cropBox, {
         left: 0,
         top: 0,
         width: 0,
@@ -1955,7 +1983,7 @@
     this.startY = this.endY;
   };
 
-  $.extend(Cropper.prototype, prototype);
+  assign(Cropper.prototype, prototype);
 
   Cropper.DEFAULTS = {
     // Defines the aspect ratio of the crop box
@@ -2016,7 +2044,7 @@
   };
 
   Cropper.setDefaults = function (options) {
-    $.extend(Cropper.DEFAULTS, options);
+    assign(Cropper.DEFAULTS, options);
   };
 
   // Use the string compressor: Strmin (https://github.com/fengyuanchen/strmin)

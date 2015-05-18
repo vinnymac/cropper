@@ -1,4 +1,4 @@
-  $.extend(prototype, {
+  assign(prototype, {
     render: function () {
       this.initContainer();
       this.initCanvas();
@@ -53,8 +53,8 @@
 
       this.canvas = canvas;
       this.limitCanvas(true, true);
-      this.initialImage = $.extend({}, image);
-      this.initialCanvas = $.extend({}, canvas);
+      this.initialImage = assign({}, image);
+      this.initialCanvas = assign({}, canvas);
     },
 
     limitCanvas: function (size, position) {
@@ -105,7 +105,7 @@
           }
         }
 
-        $.extend(canvas, {
+        assign(canvas, {
           minWidth: minCanvasWidth,
           minHeight: minCanvasHeight,
           maxWidth: Infinity,
@@ -212,7 +212,7 @@
         }, true);
       }
 
-      $.extend(image, reversed ? {
+      assign(image, reversed ? {
         width: reversed.width,
         height: reversed.height,
         left: (canvas.width - reversed.width) / 2,
@@ -264,7 +264,7 @@
       cropBox.oldLeft = cropBox.left = canvas.left + (canvas.width - cropBox.width) / 2;
       cropBox.oldTop = cropBox.top = canvas.top + (canvas.height - cropBox.height) / 2;
 
-      this.initialCropBox = $.extend({}, cropBox);
+      this.initialCropBox = assign({}, cropBox);
     },
 
     limitCropBox: function (size, position) {

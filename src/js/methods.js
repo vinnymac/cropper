@@ -1,4 +1,4 @@
-  $.extend(prototype, {
+  assign(prototype, {
     crop: function () {
       if (!this.built || this.disabled) {
         return;
@@ -23,9 +23,9 @@
         return;
       }
 
-      this.image = $.extend({}, this.initialImage);
-      this.canvas = $.extend({}, this.initialCanvas);
-      this.cropBox = $.extend({}, this.initialCropBox); // required for strict mode
+      this.image = assign({}, this.initialImage);
+      this.canvas = assign({}, this.initialCanvas);
+      this.cropBox = assign({}, this.initialCropBox); // required for strict mode
 
       this.renderCanvas();
 
@@ -39,7 +39,7 @@
         return;
       }
 
-      $.extend(this.cropBox, {
+      assign(this.cropBox, {
         left: 0,
         top: 0,
         width: 0,

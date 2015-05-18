@@ -1,1 +1,1 @@
-  $.extend(Cropper.prototype, prototype);
+  assign(Cropper.prototype, prototype);

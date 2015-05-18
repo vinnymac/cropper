@@ -57,5 +57,5 @@
   };
 
   Cropper.setDefaults = function (options) {
-    $.extend(Cropper.DEFAULTS, options);
+    assign(Cropper.DEFAULTS, options);
   };

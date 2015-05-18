@@ -1,4 +1,4 @@
-  $.extend(prototype, {
+  assign(prototype, {
     resize: function () {
       var $container = this.$container,
           container = this.container,
