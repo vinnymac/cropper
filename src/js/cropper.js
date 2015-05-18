@@ -1,6 +1,6 @@
   function Cropper(element, options) {
     this.$element = $(element);
-    this.options = assign({}, Cropper.DEFAULTS, $.isPlainObject(options) && options);
+    this.options = assign({}, Cropper.DEFAULTS, isPlainObject(options) && options);
 
     this.ready = false;
     this.built = false;

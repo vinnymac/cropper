@@ -16,6 +16,12 @@
     return args.slice.apply(obj, args);
   }
 
+  function isPlainObject(obj) {
+    var type = typeof obj;
+    var isObject = type === 'function' || type === 'object' && !!obj;
+    return isObject && obj.constructor === Object;
+  }
+
   // Custom proxy to avoid jQuery's guid
   function proxy(fn, context) {
     var args = toArray(arguments, 2);

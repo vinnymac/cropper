@@ -182,7 +182,7 @@
           cropBoxData = {},
           ratio;
 
-      if (this.built && !this.disabled && $.isPlainObject(data)) {
+      if (this.built && !this.disabled && isPlainObject(data)) {
         if (isNumber(data.rotate) && data.rotate !== image.rotate && this.options.rotatable) {
           image.rotate = data.rotate;
           this.rotated = true;
@@ -239,7 +239,7 @@
       var canvas = this.canvas,
           aspectRatio = canvas.aspectRatio;
 
-      if (this.built && !this.disabled && $.isPlainObject(data)) {
+      if (this.built && !this.disabled && isPlainObject(data)) {
         if (isNumber(data.left)) {
           canvas.left = data.left;
         }
@@ -280,7 +280,7 @@
       var cropBox = this.cropBox,
           aspectRatio = this.options.aspectRatio;
 
-      if (this.built && this.cropped && !this.disabled && $.isPlainObject(data)) {
+      if (this.built && this.cropped && !this.disabled && isPlainObject(data)) {
 
         if (isNumber(data.left)) {
           cropBox.left = data.left;
@@ -327,7 +327,7 @@
         return;
       }
 
-      if (!$.isPlainObject(options)) {
+      if (!isPlainObject(options)) {
         options = {};
       }
 
@@ -336,7 +336,7 @@
       originalHeight = data.height;
       aspectRatio = originalWidth / originalHeight;
 
-      if ($.isPlainObject(options)) {
+      if (isPlainObject(options)) {
         scaledWidth = options.width;
         scaledHeight = options.height;
 

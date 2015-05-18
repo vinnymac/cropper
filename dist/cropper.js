@@ -92,6 +92,12 @@
     return args.slice.apply(obj, args);
   }
 
+  function isPlainObject(obj) {
+    var type = typeof obj;
+    var isObject = type === 'function' || type === 'object' && !!obj;
+    return isObject && obj.constructor === Object;
+  }
+
   // Custom proxy to avoid jQuery's guid
   function proxy(fn, context) {
     var args = toArray(arguments, 2);
@@ -259,7 +265,7 @@
   }
   function Cropper(element, options) {
     this.$element = $(element);
-    this.options = assign({}, Cropper.DEFAULTS, $.isPlainObject(options) && options);
+    this.options = assign({}, Cropper.DEFAULTS, isPlainObject(options) && options);
 
     this.ready = false;
     this.built = false;
@@ -1309,7 +1315,7 @@
           cropBoxData = {},
           ratio;
 
-      if (this.built && !this.disabled && $.isPlainObject(data)) {
+      if (this.built && !this.disabled && isPlainObject(data)) {
         if (isNumber(data.rotate) && data.rotate !== image.rotate && this.options.rotatable) {
           image.rotate = data.rotate;
           this.rotated = true;
@@ -1366,7 +1372,7 @@
       var canvas = this.canvas,
           aspectRatio = canvas.aspectRatio;
 
-      if (this.built && !this.disabled && $.isPlainObject(data)) {
+      if (this.built && !this.disabled && isPlainObject(data)) {
         if (isNumber(data.left)) {
           canvas.left = data.left;
         }
@@ -1407,7 +1413,7 @@
       var cropBox = this.cropBox,
           aspectRatio = this.options.aspectRatio;
 
-      if (this.built && this.cropped && !this.disabled && $.isPlainObject(data)) {
+      if (this.built && this.cropped && !this.disabled && isPlainObject(data)) {
 
         if (isNumber(data.left)) {
           cropBox.left = data.left;
@@ -1454,7 +1460,7 @@
         return;
       }
 
-      if (!$.isPlainObject(options)) {
+      if (!isPlainObject(options)) {
         options = {};
       }
 
@@ -1463,7 +1469,7 @@
       originalHeight = data.height;
       aspectRatio = originalWidth / originalHeight;
 
-      if ($.isPlainObject(options)) {
+      if (isPlainObject(options)) {
         scaledWidth = options.width;
         scaledHeight = options.height;
 
