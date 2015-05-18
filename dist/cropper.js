@@ -313,7 +313,7 @@
 
     this.$clone = $clone = $('<img>');
 
-    $clone.one('load', $.proxy(function () {
+    $clone.one('load', proxy(function () {
       var naturalWidth = $clone.prop('naturalWidth') || $clone.width(),
           naturalHeight = $clone.prop('naturalHeight') || $clone.height();
 
@@ -895,10 +895,10 @@
     var options = this.options;
 
     this.$element.on(EVENT_DRAG_START, options.dragstart).on(EVENT_DRAG_MOVE, options.dragmove).on(EVENT_DRAG_END, options.dragend).on(EVENT_ZOOM_IN, options.zoomin).on(EVENT_ZOOM_OUT, options.zoomout);
-    this.$cropper.on(EVENT_MOUSE_DOWN, $.proxy(this.dragstart, this)).on(EVENT_DBLCLICK, $.proxy(this.dblclick, this));
+    this.$cropper.on(EVENT_MOUSE_DOWN, (this._dragstart = proxy(this.dragstart, this))).on(EVENT_DBLCLICK, (this._dblclick = proxy(this.dblclick, this)));
 
     if (options.zoomable && options.mouseWheelZoom) {
-      this.$cropper.on(EVENT_WHEEL, $.proxy(this.wheel, this));
+      this.$cropper.on(EVENT_WHEEL, (this._wheel = proxy(this.wheel, this)));
     }
 
     $document.on(EVENT_MOUSE_MOVE, (this._dragmove = proxy(this.dragmove, this))).on(EVENT_MOUSE_UP, (this._dragend = proxy(this.dragend, this)));

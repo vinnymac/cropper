@@ -39,7 +39,7 @@
 
     this.$clone = $clone = $('<img>');
 
-    $clone.one('load', $.proxy(function () {
+    $clone.one('load', proxy(function () {
       var naturalWidth = $clone.prop('naturalWidth') || $clone.width(),
           naturalHeight = $clone.prop('naturalHeight') || $clone.height();
 
