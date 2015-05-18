@@ -62,5 +62,5 @@
 
     // Hide and insert into the document
     addClass($clone.get(0), CLASS_HIDE);
-    $clone.insertAfter($this);
+    insertAfter($this.get(0), $clone.get(0));
   };

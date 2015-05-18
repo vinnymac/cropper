@@ -199,6 +199,12 @@
     return to;
   }
 
+  function insertAfter(newNode, referenceNode) {
+    if (referenceNode.parentNode) {
+      referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    }
+  }
+
   function hasClass(el, className) {
     if (el.classList) {
       return el.classList.contains(className);
@@ -330,9 +336,8 @@
 
     // Hide and insert into the document
     addClass($clone.get(0), CLASS_HIDE);
-    $clone.insertAfter($this);
+    insertAfter($this.get(0), $clone.get(0));
   };
-
   prototype.build = function () {
     var $this = this.$element,
         $clone = this.$clone,

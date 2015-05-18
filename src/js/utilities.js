@@ -123,6 +123,12 @@
     return to;
   }
 
+  function insertAfter(newNode, referenceNode) {
+    if (referenceNode.parentNode) {
+      referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    }
+  }
+
   function hasClass(el, className) {
     if (el.classList) {
       return el.classList.contains(className);
