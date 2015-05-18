@@ -30,8 +30,7 @@
       if (this.disabled) {
         return;
       }
-
-      if (this.$dragBox.hasClass(CLASS_CROP)) {
+      if (hasClass(this.$dragBox.get(0), CLASS_CROP)) {
         this.setDragMode('move');
       } else {
         this.setDragMode('crop');

@@ -171,6 +171,14 @@
     return canvas;
   }
 
+  function hasClass(el, className) {
+    if (el.classList) {
+      return el.classList.contains(className);
+    } else {
+      return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+    }
+  }
+
   function toggleClass(el, className, toggle) {
     if (el.classList) {
       if (toggle === 'undefined' || toggle === null) {
@@ -916,8 +924,7 @@
       if (this.disabled) {
         return;
       }
-
-      if (this.$dragBox.hasClass(CLASS_CROP)) {
+      if (hasClass(this.$dragBox.get(0), CLASS_CROP)) {
         this.setDragMode('move');
       } else {
         this.setDragMode('crop');
