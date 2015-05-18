@@ -191,7 +191,7 @@
 
         if (this.cropping) {
           this.cropping = false;
-          this.$dragBox.toggleClass(CLASS_MODAL, this.cropped && this.options.modal);
+          toggleClass(this.$dragBox.get(0), CLASS_MODAL, this.cropped && this.options.modal);
         }
 
         this.dragType = '';

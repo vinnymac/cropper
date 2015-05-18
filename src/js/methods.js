@@ -465,7 +465,7 @@
         default:
           $dragBox.removeData('drag');
       }
-
-      $dragBox.toggleClass(CLASS_CROP, cropable).toggleClass(CLASS_MOVE, movable);
+      toggleClass($dragBox.get(0), CLASS_CROP, cropable);
+      toggleClass($dragBox.get(0), CLASS_MOVE, movable);
     }
   });

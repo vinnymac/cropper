@@ -95,6 +95,35 @@
     return canvas;
   }
 
+  function toggleClass(el, className, toggle) {
+    if (el.classList) {
+      if (toggle === 'undefined' || toggle === null) {
+        el.classList.toggle(className);
+      } else if (toggle) {
+        el.classList.add(className);
+      } else {
+        el.classList.remove(className);
+      }
+    } else {
+      var classes = el.className.split(' ');
+      var existingIndex = classes.indexOf(className);
+
+      if (toggle === 'undefined' || toggle === null) {
+        if (existingIndex >= 0) {
+          classes.splice(existingIndex, 1);
+        } else {
+          classes.push(className);
+        }
+      } else if (toggle) {
+        classes.push(className);
+      } else {
+        classes.splice(existingIndex, 1);
+      }
+
+      el.className = classes.join(' ');
+    }
+  }
+
   function addClass(element, className) {
     if (element.classList) {
       element.classList.add(className);
