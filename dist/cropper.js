@@ -287,13 +287,13 @@
         $clone;
 
     if (!url) {
-      if ($this.is('img')) {
+      if ($this.get(0) instanceof HTMLImageElement) {
         if (!$this.get(0).getAttribute('src')) {
           return;
         }
 
         url = $this.get(0).src;
-      } else if ($this.is('canvas') && SUPPORT_CANVAS) {
+      } else if ($this.get(0) instanceof HTMLCanvasElement && SUPPORT_CANVAS) {
         url = $this[0].toDataURL();
       }
     }
