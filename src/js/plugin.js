@@ -15,7 +15,7 @@
         $this.data('cropper', (data = new Cropper(this, options)));
       }
 
-      if (typeof options === 'string' && $.isFunction((fn = data[options]))) {
+      if (typeof options === 'string' && (typeof (fn = data[options]) === 'function' || false)) {
         result = fn.apply(data, args);
       }
     });
