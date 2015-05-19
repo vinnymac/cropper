@@ -205,6 +205,12 @@
     return to;
   }
 
+  function remove(element) {
+    if (element.parentNode) {
+      element.parentNode.removeChild(element);
+    }
+  }
+
   function insertAfter(newNode, referenceNode) {
     if (referenceNode.parentNode) {
       referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
@@ -334,7 +340,7 @@
       this.ready = true;
       this.build();
     }, this)).one('error', function () {
-      $clone.remove();
+      remove($clone.get(0));
     });
 
     $clone.get(0).crossOrigin = crossOrigin || null; // "crossOrigin" must before "src" (#271)
@@ -454,7 +460,7 @@
     this.$canvas = null;
     this.$container = null;
 
-    this.$cropper.remove();
+    remove(this.$cropper.get(0));
     this.$cropper = null;
   };
 
@@ -1213,7 +1219,7 @@
         this.unbuild();
         removeClass($this.get(0), CLASS_HIDDEN);
       } else if (this.$clone) {
-        this.$clone.remove();
+        remove(this.$clone.get(0));
       }
 
       $this.removeData('cropper');

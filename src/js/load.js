@@ -54,7 +54,7 @@
       this.ready = true;
       this.build();
     }, this)).one('error', function () {
-      $clone.remove();
+      remove($clone.get(0));
     });
 
     $clone.get(0).crossOrigin = crossOrigin || null; // "crossOrigin" must before "src" (#271)

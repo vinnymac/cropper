@@ -129,6 +129,12 @@
     return to;
   }
 
+  function remove(element) {
+    if (element.parentNode) {
+      element.parentNode.removeChild(element);
+    }
+  }
+
   function insertAfter(newNode, referenceNode) {
     if (referenceNode.parentNode) {
       referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);

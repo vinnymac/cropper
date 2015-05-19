@@ -108,6 +108,6 @@
     this.$canvas = null;
     this.$container = null;
 
-    this.$cropper.remove();
+    remove(this.$cropper.get(0));
     this.$cropper = null;
   };
