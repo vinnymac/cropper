@@ -40,12 +40,15 @@
       return;
     }
 
-    this.$viewBox.find('img').css({
-      width: width,
-      height: height,
-      marginLeft: -left,
-      marginTop: -top,
-      transform: getRotateValue(rotate)
+    var images = this.$viewBox.find('img');
+    images.get().forEach(function (element) {
+      assign(element.style, {
+        width      : width + 'px',
+        height     : height + 'px',
+        marginLeft : -left + 'px',
+        marginTop  : -top + 'px',
+        transform  : getRotateValue(rotate)
+      });
     });
 
     this.$preview.each(function () {
@@ -64,12 +67,15 @@
         newHeight = data.height;
       }
 
-      $this.width(newWidth).height(newHeight).find('img').css({
-        width: width * ratio,
-        height: height * ratio,
-        marginLeft: -left * ratio,
-        marginTop: -top * ratio,
-        transform: getRotateValue(rotate)
+      var images = $this.width(newWidth).height(newHeight).find('img');
+      images.get().forEach(function (element) {
+        assign(element.style, {
+          width      : (width * ratio) + 'px',
+          height     : (height * ratio) + 'px',
+          marginLeft : (-left * ratio) + 'px',
+          marginTop  : (-top * ratio) + 'px',
+          transform  : getRotateValue(rotate)
+        });
       });
     });
   };
