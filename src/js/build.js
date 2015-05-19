@@ -22,8 +22,12 @@
     // Show the clone iamge
     removeClass($clone.get(0), CLASS_HIDE);
 
-    this.$container = $this.parent().append($cropper);
-    this.$canvas = $cropper.find('.cropper-canvas').append($clone);
+    this.$container = $this.parent();
+    this.$container.get(0).appendChild($cropper.get(0));
+
+    this.$canvas = $cropper.find('.cropper-canvas');
+    this.$canvas.get(0).appendChild($clone.get(0));
+
     this.$dragBox = $cropper.find('.cropper-drag-box');
     this.$cropBox = $cropBox = $cropper.find('.cropper-crop-box');
     this.$viewBox = $cropper.find('.cropper-view-box');
