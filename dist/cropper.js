@@ -30,6 +30,9 @@
       // Constants
       CROPPER_NAMESPACE = '.cropper',
       CROPPER_PREVIEW = 'preview' + CROPPER_NAMESPACE,
+      CROPPER_PREVIEW_WIDTH = CROPPER_PREVIEW + '-width',
+      CROPPER_PREVIEW_HEIGHT = CROPPER_PREVIEW + '-height',
+      CROPPER_PREVIEW_ORIGINAL = CROPPER_PREVIEW + '-original',
 
       // RegExps
       REGEXP_DRAG_TYPES = /^(e|n|w|s|ne|nw|sw|se|all|crop|move|zoom)$/,
@@ -419,7 +422,8 @@
     }
 
     if (!options.movable) {
-      $cropBox.find('.cropper-face').data('drag', 'move');
+      var cropperFace = $cropBox.find('.cropper-face');
+      cropperFace.get(0).setAttribute('data-drag', 'move');
     }
 
     if (!options.resizable) {
@@ -811,7 +815,8 @@
       cropBox.oldTop = cropBox.top = min(max(cropBox.top, cropBox.minTop), cropBox.maxTop);
 
       if (options.movable) {
-        $cropBox.find('.cropper-face').data('drag', (cropBox.width === containerWidth && cropBox.height === containerHeight) ? 'move' : 'all');
+        var cropperFace = $cropBox.find('.cropper-face');
+        cropperFace.get(0).setAttribute('data-drag', (cropBox.width === containerWidth && cropBox.height === containerHeight) ? 'move' : 'all');
       }
 
       $cropBox.css({
@@ -852,11 +857,11 @@
     this.$preview.each(function () {
       var $this = $(this);
 
-      $this.data(CROPPER_PREVIEW, {
-        width: $this.width(),
-        height: $this.height(),
-        original: $this.html()
-      }).html('<img src="' + url + '" style="display:block;width:100%;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;image-orientation: 0deg!important">');
+      $this.get(0).setAttribute(CROPPER_PREVIEW_WIDTH, $this.width());
+      $this.get(0).setAttribute(CROPPER_PREVIEW_HEIGHT, $this.height());
+      $this.get(0).setAttribute(CROPPER_PREVIEW_ORIGINAL, $this.html());
+
+      $this.html('<img src="' + url + '" style="display:block;width:100%;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;image-orientation: 0deg!important">');
     });
   };
 
@@ -864,7 +869,8 @@
     this.$preview.each(function () {
       var $this = $(this);
 
-      $this.html($this.data(CROPPER_PREVIEW).original).removeData(CROPPER_PREVIEW);
+      $this.html($this.get(0).getAttribute(CROPPER_PREVIEW_ORIGINAL));
+      $this.get(0).removeAttribute(CROPPER_PREVIEW_ORIGINAL);
     });
   };
 
@@ -892,7 +898,10 @@
 
     this.$preview.each(function () {
       var $this = $(this),
-          data = $this.data(CROPPER_PREVIEW),
+          data = {
+            width  : $this.get(0).getAttribute(CROPPER_PREVIEW_WIDTH),
+            height : $this.get(0).getAttribute(CROPPER_PREVIEW_HEIGHT)
+          },
           ratio = data.width / cropBox.width,
           newWidth = data.width,
           newHeight = cropBox.height * ratio;
@@ -1044,7 +1053,7 @@
         e = touches[0];
       }
 
-      dragType = dragType || $(e.target).data('drag');
+      dragType = dragType || $(e.target).get(0).getAttribute('data-drag');
 
       if (REGEXP_DRAG_TYPES.test(dragType)) {
         event.preventDefault();
@@ -1606,7 +1615,7 @@
         case 'crop':
           if (this.options.dragCrop) {
             cropable = true;
-            $dragBox.data('drag', mode);
+            $dragBox.get(0).setAttribute('data-drag', mode);
           } else {
             movable = true;
           }
@@ -1615,12 +1624,12 @@
 
         case 'move':
           movable = true;
-          $dragBox.data('drag', mode);
+          $dragBox.get(0).setAttribute('data-drag', mode);
 
           break;
 
         default:
-          $dragBox.removeData('drag');
+          $dragBox.get(0).removeAttribute('drag');
       }
       toggleClass($dragBox.get(0), CLASS_CROP, cropable);
       toggleClass($dragBox.get(0), CLASS_MOVE, movable);

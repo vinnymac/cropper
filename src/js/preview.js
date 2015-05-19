@@ -9,11 +9,11 @@
     this.$preview.each(function () {
       var $this = $(this);
 
-      $this.data(CROPPER_PREVIEW, {
-        width: $this.width(),
-        height: $this.height(),
-        original: $this.html()
-      }).html('<img src="' + url + '" style="display:block;width:100%;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;image-orientation: 0deg!important">');
+      $this.get(0).setAttribute(CROPPER_PREVIEW_WIDTH, $this.width());
+      $this.get(0).setAttribute(CROPPER_PREVIEW_HEIGHT, $this.height());
+      $this.get(0).setAttribute(CROPPER_PREVIEW_ORIGINAL, $this.html());
+
+      $this.html('<img src="' + url + '" style="display:block;width:100%;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;image-orientation: 0deg!important">');
     });
   };
 
@@ -21,7 +21,8 @@
     this.$preview.each(function () {
       var $this = $(this);
 
-      $this.html($this.data(CROPPER_PREVIEW).original).removeData(CROPPER_PREVIEW);
+      $this.html($this.get(0).getAttribute(CROPPER_PREVIEW_ORIGINAL));
+      $this.get(0).removeAttribute(CROPPER_PREVIEW_ORIGINAL);
     });
   };
 
@@ -49,7 +50,10 @@
 
     this.$preview.each(function () {
       var $this = $(this),
-          data = $this.data(CROPPER_PREVIEW),
+          data = {
+            width  : $this.get(0).getAttribute(CROPPER_PREVIEW_WIDTH),
+            height : $this.get(0).getAttribute(CROPPER_PREVIEW_HEIGHT)
+          },
           ratio = data.width / cropBox.width,
           newWidth = data.width,
           newHeight = cropBox.height * ratio;

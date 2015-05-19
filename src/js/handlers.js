@@ -95,7 +95,7 @@
         e = touches[0];
       }
 
-      dragType = dragType || $(e.target).data('drag');
+      dragType = dragType || $(e.target).get(0).getAttribute('data-drag');
 
       if (REGEXP_DRAG_TYPES.test(dragType)) {
         event.preventDefault();

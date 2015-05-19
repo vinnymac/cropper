@@ -345,7 +345,8 @@
       cropBox.oldTop = cropBox.top = min(max(cropBox.top, cropBox.minTop), cropBox.maxTop);
 
       if (options.movable) {
-        $cropBox.find('.cropper-face').data('drag', (cropBox.width === containerWidth && cropBox.height === containerHeight) ? 'move' : 'all');
+        var cropperFace = $cropBox.find('.cropper-face');
+        cropperFace.get(0).setAttribute('data-drag', (cropBox.width === containerWidth && cropBox.height === containerHeight) ? 'move' : 'all');
       }
 
       $cropBox.css({

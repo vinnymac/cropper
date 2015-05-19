@@ -67,7 +67,8 @@
     }
 
     if (!options.movable) {
-      $cropBox.find('.cropper-face').data('drag', 'move');
+      var cropperFace = $cropBox.find('.cropper-face');
+      cropperFace.get(0).setAttribute('data-drag', 'move');
     }
 
     if (!options.resizable) {

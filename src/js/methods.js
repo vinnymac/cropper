@@ -450,7 +450,7 @@
         case 'crop':
           if (this.options.dragCrop) {
             cropable = true;
-            $dragBox.data('drag', mode);
+            $dragBox.get(0).setAttribute('data-drag', mode);
           } else {
             movable = true;
           }
@@ -459,12 +459,12 @@
 
         case 'move':
           movable = true;
-          $dragBox.data('drag', mode);
+          $dragBox.get(0).setAttribute('data-drag', mode);
 
           break;
 
         default:
-          $dragBox.removeData('drag');
+          $dragBox.get(0).removeAttribute('drag');
       }
       toggleClass($dragBox.get(0), CLASS_CROP, cropable);
       toggleClass($dragBox.get(0), CLASS_MOVE, movable);
