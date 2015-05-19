@@ -6,23 +6,21 @@
 
     // Override img element styles
     // Add `display:block` to avoid margin top issue (Occur only when margin-top <= -height)
-    this.$preview.each(function () {
-      var $this = $(this);
+    this.$preview.get().forEach(function (element) {
 
-      $this.get(0).setAttribute(CROPPER_PREVIEW_WIDTH, $this.width());
-      $this.get(0).setAttribute(CROPPER_PREVIEW_HEIGHT, $this.height());
-      $this.get(0).setAttribute(CROPPER_PREVIEW_ORIGINAL, $this.get(0).innerHTML);
+      element.setAttribute(CROPPER_PREVIEW_WIDTH, element.offsetWidth);
+      element.setAttribute(CROPPER_PREVIEW_HEIGHT, element.offsetHeight);
+      element.setAttribute(CROPPER_PREVIEW_ORIGINAL, element.innerHTML);
 
-      $this.get(0).innerHTML = '<img src="' + url + '" style="display:block;width:100%;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;image-orientation: 0deg!important">';
+      element.innerHTML = '<img src="' + url + '" style="display:block;width:100%;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;image-orientation: 0deg!important">';
     });
   };
 
   prototype.resetPreview = function () {
-    this.$preview.each(function () {
-      var $this = $(this);
+    this.$preview.get().forEach(function (element) {
 
-      $this.get(0).innerHTML = $this.get(0).getAttribute(CROPPER_PREVIEW_ORIGINAL);
-      $this.get(0).removeAttribute(CROPPER_PREVIEW_ORIGINAL);
+      element.innerHTML = element.getAttribute(CROPPER_PREVIEW_ORIGINAL);
+      element.removeAttribute(CROPPER_PREVIEW_ORIGINAL);
     });
   };
 
@@ -51,11 +49,10 @@
       });
     });
 
-    this.$preview.each(function () {
-      var $this = $(this),
-          data = {
-            width  : parseFloat($this.get(0).getAttribute(CROPPER_PREVIEW_WIDTH)),
-            height : parseFloat($this.get(0).getAttribute(CROPPER_PREVIEW_HEIGHT))
+    this.$preview.get().forEach(function (element) {
+      var data = {
+            width  : parseFloat(element.getAttribute(CROPPER_PREVIEW_WIDTH)),
+            height : parseFloat(element.getAttribute(CROPPER_PREVIEW_HEIGHT))
           },
           ratio = data.width / cropBox.width,
           newWidth = data.width,
@@ -67,8 +64,12 @@
         newHeight = data.height;
       }
 
-      var images = $this.width(newWidth).height(newHeight).find('img');
-      images.get().forEach(function (element) {
+      assign(element.style, {
+        width  : newWidth + 'px',
+        height : newHeight + 'px'
+      });
+
+      toArray(element.querySelectorAll('img')).forEach(function (element) {
         assign(element.style, {
           width      : (width * ratio) + 'px',
           height     : (height * ratio) + 'px',
