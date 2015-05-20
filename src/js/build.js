@@ -25,12 +25,12 @@
     this.$container = $this.parent();
     this.$container.get(0).appendChild($cropper.get(0));
 
-    this.$canvas = $cropper.find('.cropper-canvas');
-    this.$canvas.get(0).appendChild($clone.get(0));
+    this.$canvas = $cropper.get(0).querySelector('.cropper-canvas');
+    this.$canvas.appendChild($clone.get(0));
 
-    this.$dragBox = $cropper.find('.cropper-drag-box');
-    this.$cropBox = $cropBox = $cropper.find('.cropper-crop-box');
-    this.$viewBox = $cropper.find('.cropper-view-box');
+    this.$dragBox = $cropper.get(0).querySelector('.cropper-drag-box');
+    this.$cropBox = $cropBox = $cropper.get(0).querySelector('.cropper-crop-box');
+    this.$viewBox = $cropper.get(0).querySelector('.cropper-view-box');
 
     this.addListeners();
     this.initPreview();
@@ -42,10 +42,10 @@
       this.cropped = true;
 
       if (options.modal) {
-        addClass(this.$dragBox.get(0), CLASS_MODAL);
+        addClass(this.$dragBox, CLASS_MODAL);
       }
     } else {
-      addClass($cropBox.get(0), CLASS_HIDDEN);
+      addClass($cropBox, CLASS_HIDDEN);
     }
 
     if (options.background) {
@@ -53,27 +53,25 @@
     }
 
     if (!options.highlight) {
-      var highlight = $cropBox.find('.cropper-face');
-      highlight.get().forEach(function (element) {
+      toArray($cropBox.querySelectorAll('.cropper-face')).forEach(function (element) {
         addClass(element, CLASS_INVISIBLE);
       });
     }
 
     if (!options.guides) {
-      var guides = $cropBox.find('.cropper-dashed');
-      guides.get().forEach(function (element) {
+      toArray($cropBox.querySelectorAll('.cropper-dashed')).forEach(function (element) {
         addClass(element, CLASS_HIDDEN);
       });
     }
 
     if (!options.movable) {
-      var cropperFace = $cropBox.find('.cropper-face');
-      cropperFace.get(0).setAttribute('data-drag', 'move');
+      toArray($cropBox.querySelectorAll('.cropper-face')).forEach(function (element) {
+        element.setAttribute('data-drag', 'move');
+      });
     }
 
     if (!options.resizable) {
-      var resizable = $cropBox.find('.cropper-line, .cropper-point');
-      resizable.get().forEach(function (element) {
+      toArray($cropBox.querySelectorAll('.cropper-line, .cropper-point')).forEach(function (element) {
         addClass(element, CLASS_HIDDEN);
       });
     }

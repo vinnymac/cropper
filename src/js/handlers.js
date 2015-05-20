@@ -37,7 +37,7 @@
       if (this.disabled) {
         return;
       }
-      if (hasClass(this.$dragBox.get(0), CLASS_CROP)) {
+      if (hasClass(this.$dragBox, CLASS_CROP)) {
         this.setDragMode('move');
       } else {
         this.setDragMode('crop');
@@ -118,7 +118,7 @@
 
         if (dragType === 'crop') {
           this.cropping = true;
-          addClass(this.$dragBox.get(0), CLASS_MODAL);
+          addClass(this.$dragBox, CLASS_MODAL);
         }
       }
     },
@@ -197,7 +197,7 @@
 
         if (this.cropping) {
           this.cropping = false;
-          toggleClass(this.$dragBox.get(0), CLASS_MODAL, this.cropped && this.options.modal);
+          toggleClass(this.$dragBox, CLASS_MODAL, this.cropped && this.options.modal);
         }
 
         this.dragType = '';

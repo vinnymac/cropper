@@ -13,7 +13,7 @@ $(function () {
       QUnit.test('methods.crop', function (assert) {
         $image.cropper('crop');
         assert.ok(cropper.cropped);
-        assert.ok(cropper.$cropBox.is(':visible'));
+        assert.ok(cropper.$cropBox.offsetWidth > 0 && cropper.$cropBox.offsetHeight > 0);
       });
 
     }

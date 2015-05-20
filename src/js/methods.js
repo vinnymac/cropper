@@ -9,10 +9,10 @@
         this.limitCropBox(true, true);
 
         if (this.options.modal) {
-          addClass(this.$dragBox.get(0), CLASS_MODAL);
+          addClass(this.$dragBox, CLASS_MODAL);
         }
 
-        removeClass(this.$cropBox.get(0), CLASS_HIDDEN);
+        removeClass(this.$cropBox, CLASS_HIDDEN);
       }
 
       this.setCropBoxData(this.initialCropBox);
@@ -52,8 +52,8 @@
       this.limitCanvas();
       this.renderCanvas(); // Render canvas after render crop box
 
-      removeClass(this.$dragBox.get(0), CLASS_MODAL);
-      addClass(this.$cropBox.get(0), CLASS_HIDDEN);
+      removeClass(this.$dragBox, CLASS_MODAL);
+      addClass(this.$cropBox, CLASS_HIDDEN);
     },
 
     destroy: function () {
@@ -450,7 +450,7 @@
         case 'crop':
           if (this.options.dragCrop) {
             cropable = true;
-            $dragBox.get(0).setAttribute('data-drag', mode);
+            $dragBox.setAttribute('data-drag', mode);
           } else {
             movable = true;
           }
@@ -459,14 +459,14 @@
 
         case 'move':
           movable = true;
-          $dragBox.get(0).setAttribute('data-drag', mode);
+          $dragBox.setAttribute('data-drag', mode);
 
           break;
 
         default:
-          $dragBox.get(0).removeAttribute('drag');
+          $dragBox.removeAttribute('drag');
       }
-      toggleClass($dragBox.get(0), CLASS_CROP, cropable);
-      toggleClass($dragBox.get(0), CLASS_MOVE, movable);
+      toggleClass($dragBox, CLASS_CROP, cropable);
+      toggleClass($dragBox, CLASS_MOVE, movable);
     }
   });

@@ -16,7 +16,7 @@ $(function () {
       var $dragBox = $image.data('cropper').$dragBox;
 
       // Triggers events manually when built
-      $dragBox.trigger('mousedown').trigger('mouseup');
+      $($dragBox).trigger('mousedown').trigger('mouseup');
     },
 
     dragend: function (e) {

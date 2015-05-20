@@ -2,7 +2,7 @@
     var url = this.url;
 
     this.$preview = $(this.options.preview);
-    this.$viewBox.get(0).innerHTML = '<img src="' + url + '">';
+    this.$viewBox.innerHTML = '<img src="' + url + '">';
 
     // Override img element styles
     // Add `display:block` to avoid margin top issue (Occur only when margin-top <= -height)
@@ -38,8 +38,7 @@
       return;
     }
 
-    var images = this.$viewBox.find('img');
-    images.get().forEach(function (element) {
+    toArray(this.$viewBox.querySelectorAll('img')).forEach(function (element) {
       assign(element.style, {
         width      : width + 'px',
         height     : height + 'px',

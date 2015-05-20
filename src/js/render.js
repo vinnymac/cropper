@@ -185,7 +185,7 @@
       canvas.oldLeft = canvas.left = min(max(canvas.left, canvas.minLeft), canvas.maxLeft);
       canvas.oldTop = canvas.top = min(max(canvas.top, canvas.minTop), canvas.maxTop);
 
-      assign(this.$canvas.get(0).style, {
+      assign(this.$canvas.style, {
         width: canvas.width + 'px',
         height: canvas.height + 'px',
         left: canvas.left + 'px',
@@ -350,11 +350,12 @@
       cropBox.oldTop = cropBox.top = min(max(cropBox.top, cropBox.minTop), cropBox.maxTop);
 
       if (options.movable) {
-        var cropperFace = $cropBox.find('.cropper-face');
-        cropperFace.get(0).setAttribute('data-drag', (cropBox.width === containerWidth && cropBox.height === containerHeight) ? 'move' : 'all');
+        toArray($cropBox.querySelectorAll('.cropper-face')).forEach(function (element) {
+          element.setAttribute('data-drag', (cropBox.width === containerWidth && cropBox.height === containerHeight) ? 'move' : 'all');
+        });
       }
 
-      assign($cropBox.get(0).style, {
+      assign($cropBox.style, {
         width: cropBox.width + 'px',
         height: cropBox.height + 'px',
         left: cropBox.left + 'px',
