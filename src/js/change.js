@@ -338,7 +338,11 @@
       // Crop image
       case 'crop':
         if (range.x && range.y) {
-          offset = this.$cropper.offset();
+          var rect = this.$cropper.getBoundingClientRect();
+          offset = {
+            top  : rect.top + document.body.scrollTop,
+            left : rect.left + document.body.scrollLeft
+          };
           left = this.startX - offset.left;
           top = this.startY - offset.top;
           width = cropBox.minWidth;
