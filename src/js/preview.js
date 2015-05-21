@@ -1,12 +1,12 @@
   prototype.initPreview = function () {
     var url = this.url;
 
-    this.$preview = $(this.options.preview);
+    this.$preview = toArray(document.querySelectorAll(this.options.preview || null));
     this.$viewBox.innerHTML = '<img src="' + url + '">';
 
     // Override img element styles
     // Add `display:block` to avoid margin top issue (Occur only when margin-top <= -height)
-    this.$preview.get().forEach(function (element) {
+    this.$preview.forEach(function (element) {
 
       element.setAttribute(CROPPER_PREVIEW_WIDTH, element.offsetWidth);
       element.setAttribute(CROPPER_PREVIEW_HEIGHT, element.offsetHeight);
@@ -17,7 +17,7 @@
   };
 
   prototype.resetPreview = function () {
-    this.$preview.get().forEach(function (element) {
+    this.$preview.forEach(function (element) {
 
       element.innerHTML = element.getAttribute(CROPPER_PREVIEW_ORIGINAL);
       element.removeAttribute(CROPPER_PREVIEW_ORIGINAL);
@@ -48,7 +48,7 @@
       });
     });
 
-    this.$preview.get().forEach(function (element) {
+    this.$preview.forEach(function (element) {
       var data = {
             width  : parseFloat(element.getAttribute(CROPPER_PREVIEW_WIDTH)),
             height : parseFloat(element.getAttribute(CROPPER_PREVIEW_HEIGHT))
