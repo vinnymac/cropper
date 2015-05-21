@@ -40,8 +40,8 @@
     this.$clone = $clone = $('<img>');
 
     $clone.one('load', proxy(function () {
-      var naturalWidth = $clone.get(0).naturalWidth || $clone.width(),
-          naturalHeight = $clone.get(0).naturalHeight || $clone.height();
+      var naturalWidth = $clone.get(0).naturalWidth || $clone.get(0).offsetWidth,
+          naturalHeight = $clone.get(0).naturalHeight || $clone.get(0).offsetHeight;
 
       this.image = {
         naturalWidth: naturalWidth,

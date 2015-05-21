@@ -329,8 +329,8 @@
     this.$clone = $clone = $('<img>');
 
     $clone.one('load', proxy(function () {
-      var naturalWidth = $clone.get(0).naturalWidth || $clone.width(),
-          naturalHeight = $clone.get(0).naturalHeight || $clone.height();
+      var naturalWidth = $clone.get(0).naturalWidth || $clone.get(0).offsetWidth,
+          naturalHeight = $clone.get(0).naturalHeight || $clone.get(0).offsetHeight;
 
       this.image = {
         naturalWidth: naturalWidth,
@@ -489,8 +489,8 @@
       removeClass($this.get(0), CLASS_HIDDEN);
 
       this.container = {
-        width: max($container.width(), num(options.minContainerWidth) || 200),
-        height: max($container.height(), num(options.minContainerHeight) || 100)
+        width: max($container.get(0).offsetWidth, num(options.minContainerWidth) || 200),
+        height: max($container.get(0).offsetHeight, num(options.minContainerHeight) || 100)
       };
 
       assign($cropper.get(0).style, {
@@ -978,9 +978,9 @@
         return;
       }
 
-      ratio = $container.width() / container.width;
+      ratio = $container.get(0).offsetWidth / container.width;
 
-      if (ratio !== 1 || $container.height() !== container.height) {
+      if (ratio !== 1 || $container.get(0).offsetHeight !== container.height) {
         canvasData = this.getCanvasData();
         cropBoxData = this.getCropBoxData();
 
@@ -1986,7 +1986,7 @@
       // Crop image
       case 'crop':
         if (range.x && range.y) {
-          var rect = this.$cropper.getBoundingClientRect();
+          var rect = this.$cropper.get(0).getBoundingClientRect();
           offset = {
             top  : rect.top + document.body.scrollTop,
             left : rect.left + document.body.scrollLeft

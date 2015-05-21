@@ -338,7 +338,7 @@
       // Crop image
       case 'crop':
         if (range.x && range.y) {
-          var rect = this.$cropper.getBoundingClientRect();
+          var rect = this.$cropper.get(0).getBoundingClientRect();
           offset = {
             top  : rect.top + document.body.scrollTop,
             left : rect.left + document.body.scrollLeft
