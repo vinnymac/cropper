@@ -61,12 +61,12 @@
 
       if (this.ready) {
         this.unbuild();
-        removeClass($this.get(0), CLASS_HIDDEN);
+        removeClass($this, CLASS_HIDDEN);
       } else if (this.$clone) {
         remove(this.$clone);
       }
 
-      $this.removeData('cropper');
+      $($this).removeData('cropper');
     },
 
     replace: function (url) {
@@ -110,7 +110,7 @@
 
       if (delta && this.built && !this.disabled && this.options.zoomable) {
         zoomEvent = delta > 0 ? $.Event(EVENT_ZOOM_IN) : $.Event(EVENT_ZOOM_OUT);
-        this.$element.trigger(zoomEvent);
+        $(this.$element).trigger(zoomEvent);
 
         if (zoomEvent.isDefaultPrevented()) {
           return;

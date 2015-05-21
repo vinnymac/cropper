@@ -273,7 +273,7 @@
     }
   }
   function Cropper(element, options) {
-    this.$element = $(element);
+    this.$element = element;
     this.options = assign({}, Cropper.DEFAULTS, isPlainObject(options) && options);
 
     this.ready = false;
@@ -296,14 +296,14 @@
         $clone;
 
     if (!url) {
-      if ($this.get(0) instanceof HTMLImageElement) {
-        if (!$this.get(0).getAttribute('src')) {
+      if ($this instanceof HTMLImageElement) {
+        if (!$this.getAttribute('src')) {
           return;
         }
 
-        url = $this.get(0).src;
-      } else if ($this.get(0) instanceof HTMLCanvasElement && SUPPORT_CANVAS) {
-        url = $this[0].toDataURL();
+        url = $this.src;
+      } else if ($this instanceof HTMLCanvasElement && SUPPORT_CANVAS) {
+        url = $this.toDataURL();
       }
     }
 
@@ -312,7 +312,7 @@
     }
 
     buildEvent = $.Event(EVENT_BUILD);
-    $this.one(EVENT_BUILD, options.build).trigger(buildEvent); // Only trigger once
+    $($this).one(EVENT_BUILD, options.build).trigger(buildEvent); // Only trigger once
 
     if (buildEvent.isDefaultPrevented()) {
       return;
@@ -321,7 +321,7 @@
     if (options.checkImageOrigin && isCrossOriginURL(url)) {
       crossOrigin = 'anonymous';
 
-      if (!$this.get(0).crossOrigin) { // Only when there was not a "crossOrigin" property
+      if (!$this.crossOrigin) { // Only when there was not a "crossOrigin" property
         bustCacheUrl = addTimestamp(url); // Bust cache (#148)
       }
     }
@@ -351,7 +351,7 @@
 
     // Hide and insert into the document
     addClass($clone, CLASS_HIDE);
-    insertAfter($this.get(0), $clone);
+    insertAfter($this, $clone);
   };
   prototype.build = function () {
     var $this = this.$element,
@@ -375,12 +375,12 @@
     this.$cropper = $cropper = cropperContainer.firstChild;
 
     // Hide the original image
-    addClass($this.get(0), CLASS_HIDDEN);
+    addClass($this, CLASS_HIDDEN);
 
     // Show the clone iamge
     removeClass($clone, CLASS_HIDE);
 
-    this.$container = $this.get(0).parentNode;
+    this.$container = $this.parentNode;
     this.$container.appendChild($cropper);
 
     this.$canvas = $cropper.querySelector('.cropper-canvas');
@@ -439,7 +439,7 @@
     this.built = true;
     this.render();
     this.setData(options.data);
-    $this.one(EVENT_BUILT, options.built).trigger(EVENT_BUILT); // Only trigger once
+    $($this).one(EVENT_BUILT, options.built).trigger(EVENT_BUILT); // Only trigger once
   };
 
   prototype.unbuild = function () {
@@ -489,7 +489,7 @@
           options = this.options;
 
       addClass($cropper, CLASS_HIDDEN);
-      removeClass($this.get(0), CLASS_HIDDEN);
+      removeClass($this, CLASS_HIDDEN);
 
       this.container = {
         width: max($container.offsetWidth, num(options.minContainerWidth) || 200),
@@ -501,7 +501,7 @@
         height : this.container.height + 'px'
       });
 
-      addClass($this.get(0), CLASS_HIDDEN);
+      addClass($this, CLASS_HIDDEN);
       removeClass($cropper, CLASS_HIDDEN);
     },
 
@@ -936,10 +936,11 @@
   };
 
   prototype.addListeners = function () {
-    var options = this.options;
-    var $cropper = $(this.$cropper);
+    var options = this.options,
+      $cropper = $(this.$cropper),
+      $element = $(this.$element);
 
-    this.$element.on(EVENT_DRAG_START, options.dragstart).on(EVENT_DRAG_MOVE, options.dragmove).on(EVENT_DRAG_END, options.dragend).on(EVENT_ZOOM_IN, options.zoomin).on(EVENT_ZOOM_OUT, options.zoomout);
+    $element.on(EVENT_DRAG_START, options.dragstart).on(EVENT_DRAG_MOVE, options.dragmove).on(EVENT_DRAG_END, options.dragend).on(EVENT_ZOOM_IN, options.zoomin).on(EVENT_ZOOM_OUT, options.zoomout);
     $cropper.on(EVENT_MOUSE_DOWN, (this._dragstart = proxy(this.dragstart, this))).on(EVENT_DBLCLICK, (this._dblclick = proxy(this.dblclick, this)));
 
     if (options.zoomable && options.mouseWheelZoom) {
@@ -954,10 +955,11 @@
   };
 
   prototype.removeListeners = function () {
-    var options = this.options;
-    var $cropper = $(this.$cropper);
+    var options = this.options,
+      $cropper = $(this.$cropper),
+      $element = $(this.$element);
 
-    this.$element.off(EVENT_DRAG_START, options.dragstart).off(EVENT_DRAG_MOVE, options.dragmove).off(EVENT_DRAG_END, options.dragend).off(EVENT_ZOOM_IN, options.zoomin).off(EVENT_ZOOM_OUT, options.zoomout);
+    $element.off(EVENT_DRAG_START, options.dragstart).off(EVENT_DRAG_MOVE, options.dragmove).off(EVENT_DRAG_END, options.dragend).off(EVENT_ZOOM_IN, options.zoomin).off(EVENT_ZOOM_OUT, options.zoomout);
     $cropper.off(EVENT_MOUSE_DOWN, this.dragstart).off(EVENT_DBLCLICK, this.dblclick);
 
     if (options.zoomable && options.mouseWheelZoom) {
@@ -1078,7 +1080,7 @@
           dragType: dragType
         });
 
-        this.$element.trigger(dragStartEvent);
+        $(this.$element).trigger(dragStartEvent);
 
         if (dragStartEvent.isDefaultPrevented()) {
           return;
@@ -1133,7 +1135,7 @@
           dragType: dragType
         });
 
-        this.$element.trigger(dragMoveEvent);
+        $(this.$element).trigger(dragMoveEvent);
 
         if (dragMoveEvent.isDefaultPrevented()) {
           return;
@@ -1162,7 +1164,7 @@
           dragType: dragType
         });
 
-        this.$element.trigger(dragEndEvent);
+        $(this.$element).trigger(dragEndEvent);
 
         if (dragEndEvent.isDefaultPrevented()) {
           return;
@@ -1241,12 +1243,12 @@
 
       if (this.ready) {
         this.unbuild();
-        removeClass($this.get(0), CLASS_HIDDEN);
+        removeClass($this, CLASS_HIDDEN);
       } else if (this.$clone) {
         remove(this.$clone);
       }
 
-      $this.removeData('cropper');
+      $($this).removeData('cropper');
     },
 
     replace: function (url) {
@@ -1290,7 +1292,7 @@
 
       if (delta && this.built && !this.disabled && this.options.zoomable) {
         zoomEvent = delta > 0 ? $.Event(EVENT_ZOOM_IN) : $.Event(EVENT_ZOOM_OUT);
-        this.$element.trigger(zoomEvent);
+        $(this.$element).trigger(zoomEvent);
 
         if (zoomEvent.isDefaultPrevented()) {
           return;

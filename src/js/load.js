@@ -7,14 +7,14 @@
         $clone;
 
     if (!url) {
-      if ($this.get(0) instanceof HTMLImageElement) {
-        if (!$this.get(0).getAttribute('src')) {
+      if ($this instanceof HTMLImageElement) {
+        if (!$this.getAttribute('src')) {
           return;
         }
 
-        url = $this.get(0).src;
-      } else if ($this.get(0) instanceof HTMLCanvasElement && SUPPORT_CANVAS) {
-        url = $this[0].toDataURL();
+        url = $this.src;
+      } else if ($this instanceof HTMLCanvasElement && SUPPORT_CANVAS) {
+        url = $this.toDataURL();
       }
     }
 
@@ -23,7 +23,7 @@
     }
 
     buildEvent = $.Event(EVENT_BUILD);
-    $this.one(EVENT_BUILD, options.build).trigger(buildEvent); // Only trigger once
+    $($this).one(EVENT_BUILD, options.build).trigger(buildEvent); // Only trigger once
 
     if (buildEvent.isDefaultPrevented()) {
       return;
@@ -32,7 +32,7 @@
     if (options.checkImageOrigin && isCrossOriginURL(url)) {
       crossOrigin = 'anonymous';
 
-      if (!$this.get(0).crossOrigin) { // Only when there was not a "crossOrigin" property
+      if (!$this.crossOrigin) { // Only when there was not a "crossOrigin" property
         bustCacheUrl = addTimestamp(url); // Bust cache (#148)
       }
     }
@@ -62,5 +62,5 @@
 
     // Hide and insert into the document
     addClass($clone, CLASS_HIDE);
-    insertAfter($this.get(0), $clone);
+    insertAfter($this, $clone);
   };

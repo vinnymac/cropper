@@ -20,12 +20,12 @@
     this.$cropper = $cropper = cropperContainer.firstChild;
 
     // Hide the original image
-    addClass($this.get(0), CLASS_HIDDEN);
+    addClass($this, CLASS_HIDDEN);
 
     // Show the clone iamge
     removeClass($clone, CLASS_HIDE);
 
-    this.$container = $this.get(0).parentNode;
+    this.$container = $this.parentNode;
     this.$container.appendChild($cropper);
 
     this.$canvas = $cropper.querySelector('.cropper-canvas');
@@ -84,7 +84,7 @@
     this.built = true;
     this.render();
     this.setData(options.data);
-    $this.one(EVENT_BUILT, options.built).trigger(EVENT_BUILT); // Only trigger once
+    $($this).one(EVENT_BUILT, options.built).trigger(EVENT_BUILT); // Only trigger once
   };
 
   prototype.unbuild = function () {

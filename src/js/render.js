@@ -18,7 +18,7 @@
           options = this.options;
 
       addClass($cropper, CLASS_HIDDEN);
-      removeClass($this.get(0), CLASS_HIDDEN);
+      removeClass($this, CLASS_HIDDEN);
 
       this.container = {
         width: max($container.offsetWidth, num(options.minContainerWidth) || 200),
@@ -30,7 +30,7 @@
         height : this.container.height + 'px'
       });
 
-      addClass($this.get(0), CLASS_HIDDEN);
+      addClass($this, CLASS_HIDDEN);
       removeClass($cropper, CLASS_HIDDEN);
     },
 

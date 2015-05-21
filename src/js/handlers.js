@@ -105,7 +105,7 @@
           dragType: dragType
         });
 
-        this.$element.trigger(dragStartEvent);
+        $(this.$element).trigger(dragStartEvent);
 
         if (dragStartEvent.isDefaultPrevented()) {
           return;
@@ -160,7 +160,7 @@
           dragType: dragType
         });
 
-        this.$element.trigger(dragMoveEvent);
+        $(this.$element).trigger(dragMoveEvent);
 
         if (dragMoveEvent.isDefaultPrevented()) {
           return;
@@ -189,7 +189,7 @@
           dragType: dragType
         });
 
-        this.$element.trigger(dragEndEvent);
+        $(this.$element).trigger(dragEndEvent);
 
         if (dragEndEvent.isDefaultPrevented()) {
           return;
