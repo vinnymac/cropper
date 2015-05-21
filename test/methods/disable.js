@@ -13,7 +13,7 @@ $(function () {
 
       QUnit.test('methods.disable', function (assert) {
         assert.ok(cropper.disabled);
-        assert.ok(cropper.$cropper.hasClass('cropper-disabled'));
+        assert.ok($(cropper.$cropper).hasClass('cropper-disabled'));
       });
 
       QUnit.test('methods.disable: setAspectRatio', function (assert) {

@@ -17,7 +17,7 @@
           $cropper = this.$cropper,
           options = this.options;
 
-      addClass($cropper.get(0), CLASS_HIDDEN);
+      addClass($cropper, CLASS_HIDDEN);
       removeClass($this.get(0), CLASS_HIDDEN);
 
       this.container = {
@@ -25,13 +25,13 @@
         height: max($container.get(0).offsetHeight, num(options.minContainerHeight) || 100)
       };
 
-      assign($cropper.get(0).style, {
+      assign($cropper.style, {
         width  : this.container.width + 'px',
         height : this.container.height + 'px'
       });
 
       addClass($this.get(0), CLASS_HIDDEN);
-      removeClass($cropper.get(0), CLASS_HIDDEN);
+      removeClass($cropper, CLASS_HIDDEN);
     },
 
     // image box (wrapper)

@@ -12,7 +12,7 @@ $(function () {
           _ratio = cropper.image.ratio;
 
       QUnit.test('options.mouseWheelZoom', function (assert) {
-        cropper.$cropper.trigger($.Event('wheel', {
+        $(cropper.$cropper).trigger($.Event('wheel', {
           originalEvent: {
             wheelDelta: -120
           }

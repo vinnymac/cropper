@@ -357,6 +357,7 @@
     var $this = this.$element,
         $clone = this.$clone,
         options = this.options,
+        cropperContainer,
         $cropper,
         $cropBox;
 
@@ -369,7 +370,9 @@
     }
 
     // Create cropper elements
-    this.$cropper = $cropper = $(Cropper.TEMPLATE);
+    cropperContainer = document.createElement('div');
+    cropperContainer.innerHTML = Cropper.TEMPLATE;
+    this.$cropper = $cropper = cropperContainer.firstChild;
 
     // Hide the original image
     addClass($this.get(0), CLASS_HIDDEN);
@@ -378,14 +381,14 @@
     removeClass($clone.get(0), CLASS_HIDE);
 
     this.$container = $this.parent();
-    this.$container.get(0).appendChild($cropper.get(0));
+    this.$container.get(0).appendChild($cropper);
 
-    this.$canvas = $cropper.get(0).querySelector('.cropper-canvas');
+    this.$canvas = $cropper.querySelector('.cropper-canvas');
     this.$canvas.appendChild($clone.get(0));
 
-    this.$dragBox = $cropper.get(0).querySelector('.cropper-drag-box');
-    this.$cropBox = $cropBox = $cropper.get(0).querySelector('.cropper-crop-box');
-    this.$viewBox = $cropper.get(0).querySelector('.cropper-view-box');
+    this.$dragBox = $cropper.querySelector('.cropper-drag-box');
+    this.$cropBox = $cropBox = $cropper.querySelector('.cropper-crop-box');
+    this.$viewBox = $cropper.querySelector('.cropper-view-box');
 
     this.addListeners();
     this.initPreview();
@@ -404,7 +407,7 @@
     }
 
     if (options.background) {
-      addClass($cropper.get(0), CLASS_BG);
+      addClass($cropper, CLASS_BG);
     }
 
     if (!options.highlight) {
@@ -462,7 +465,7 @@
     this.$canvas = null;
     this.$container = null;
 
-    remove(this.$cropper.get(0));
+    remove(this.$cropper);
     this.$cropper = null;
   };
 
@@ -485,7 +488,7 @@
           $cropper = this.$cropper,
           options = this.options;
 
-      addClass($cropper.get(0), CLASS_HIDDEN);
+      addClass($cropper, CLASS_HIDDEN);
       removeClass($this.get(0), CLASS_HIDDEN);
 
       this.container = {
@@ -493,13 +496,13 @@
         height: max($container.get(0).offsetHeight, num(options.minContainerHeight) || 100)
       };
 
-      assign($cropper.get(0).style, {
+      assign($cropper.style, {
         width  : this.container.width + 'px',
         height : this.container.height + 'px'
       });
 
       addClass($this.get(0), CLASS_HIDDEN);
-      removeClass($cropper.get(0), CLASS_HIDDEN);
+      removeClass($cropper, CLASS_HIDDEN);
     },
 
     // image box (wrapper)
@@ -934,12 +937,13 @@
 
   prototype.addListeners = function () {
     var options = this.options;
+    var $cropper = $(this.$cropper);
 
     this.$element.on(EVENT_DRAG_START, options.dragstart).on(EVENT_DRAG_MOVE, options.dragmove).on(EVENT_DRAG_END, options.dragend).on(EVENT_ZOOM_IN, options.zoomin).on(EVENT_ZOOM_OUT, options.zoomout);
-    this.$cropper.on(EVENT_MOUSE_DOWN, (this._dragstart = proxy(this.dragstart, this))).on(EVENT_DBLCLICK, (this._dblclick = proxy(this.dblclick, this)));
+    $cropper.on(EVENT_MOUSE_DOWN, (this._dragstart = proxy(this.dragstart, this))).on(EVENT_DBLCLICK, (this._dblclick = proxy(this.dblclick, this)));
 
     if (options.zoomable && options.mouseWheelZoom) {
-      this.$cropper.on(EVENT_WHEEL, (this._wheel = proxy(this.wheel, this)));
+      $cropper.on(EVENT_WHEEL, (this._wheel = proxy(this.wheel, this)));
     }
 
     $document.on(EVENT_MOUSE_MOVE, (this._dragmove = proxy(this.dragmove, this))).on(EVENT_MOUSE_UP, (this._dragend = proxy(this.dragend, this)));
@@ -951,12 +955,13 @@
 
   prototype.removeListeners = function () {
     var options = this.options;
+    var $cropper = $(this.$cropper);
 
     this.$element.off(EVENT_DRAG_START, options.dragstart).off(EVENT_DRAG_MOVE, options.dragmove).off(EVENT_DRAG_END, options.dragend).off(EVENT_ZOOM_IN, options.zoomin).off(EVENT_ZOOM_OUT, options.zoomout);
-    this.$cropper.off(EVENT_MOUSE_DOWN, this.dragstart).off(EVENT_DBLCLICK, this.dblclick);
+    $cropper.off(EVENT_MOUSE_DOWN, this.dragstart).off(EVENT_DBLCLICK, this.dblclick);
 
     if (options.zoomable && options.mouseWheelZoom) {
-      this.$cropper.off(EVENT_WHEEL, this.wheel);
+      $cropper.off(EVENT_WHEEL, this.wheel);
     }
 
     $document.off(EVENT_MOUSE_MOVE, this._dragmove).off(EVENT_MOUSE_UP, this._dragend);
@@ -1254,14 +1259,14 @@
     enable: function () {
       if (this.built) {
         this.disabled = false;
-        removeClass(this.$cropper.get(0), CLASS_DISABLED);
+        removeClass(this.$cropper, CLASS_DISABLED);
       }
     },
 
     disable: function () {
       if (this.built) {
         this.disabled = true;
-        addClass(this.$cropper.get(0), CLASS_DISABLED);
+        addClass(this.$cropper, CLASS_DISABLED);
       }
     },
 
@@ -1986,7 +1991,7 @@
       // Crop image
       case 'crop':
         if (range.x && range.y) {
-          var rect = this.$cropper.get(0).getBoundingClientRect();
+          var rect = this.$cropper.getBoundingClientRect();
           offset = {
             top  : rect.top + document.body.scrollTop,
             left : rect.left + document.body.scrollLeft

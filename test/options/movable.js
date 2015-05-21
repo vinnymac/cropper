@@ -22,7 +22,7 @@ $(function () {
       });
 
       QUnit.test('options.movable', function (assert) {
-        assert.notEqual(cropper.$cropper.find('.cropper-face').data('directive'), 'all');
+        assert.notEqual($(cropper.$cropper).find('.cropper-face').data('directive'), 'all');
       });
 
     }

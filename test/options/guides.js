@@ -11,7 +11,7 @@ $(function () {
       var cropper = $image.data('cropper');
 
       QUnit.test('options.guides', function (assert) {
-        assert.ok(cropper.$cropper.find('.cropper-dashed').hasClass('cropper-hidden'));
+        assert.ok($(cropper.$cropper).find('.cropper-dashed').hasClass('cropper-hidden'));
       });
 
     }

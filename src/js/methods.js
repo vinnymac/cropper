@@ -79,14 +79,14 @@
     enable: function () {
       if (this.built) {
         this.disabled = false;
-        removeClass(this.$cropper.get(0), CLASS_DISABLED);
+        removeClass(this.$cropper, CLASS_DISABLED);
       }
     },
 
     disable: function () {
       if (this.built) {
         this.disabled = true;
-        addClass(this.$cropper.get(0), CLASS_DISABLED);
+        addClass(this.$cropper, CLASS_DISABLED);
       }
     },
 

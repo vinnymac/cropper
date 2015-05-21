@@ -2,6 +2,7 @@
     var $this = this.$element,
         $clone = this.$clone,
         options = this.options,
+        cropperContainer,
         $cropper,
         $cropBox;
 
@@ -14,7 +15,9 @@
     }
 
     // Create cropper elements
-    this.$cropper = $cropper = $(Cropper.TEMPLATE);
+    cropperContainer = document.createElement('div');
+    cropperContainer.innerHTML = Cropper.TEMPLATE;
+    this.$cropper = $cropper = cropperContainer.firstChild;
 
     // Hide the original image
     addClass($this.get(0), CLASS_HIDDEN);
@@ -23,14 +26,14 @@
     removeClass($clone.get(0), CLASS_HIDE);
 
     this.$container = $this.parent();
-    this.$container.get(0).appendChild($cropper.get(0));
+    this.$container.get(0).appendChild($cropper);
 
-    this.$canvas = $cropper.get(0).querySelector('.cropper-canvas');
+    this.$canvas = $cropper.querySelector('.cropper-canvas');
     this.$canvas.appendChild($clone.get(0));
 
-    this.$dragBox = $cropper.get(0).querySelector('.cropper-drag-box');
-    this.$cropBox = $cropBox = $cropper.get(0).querySelector('.cropper-crop-box');
-    this.$viewBox = $cropper.get(0).querySelector('.cropper-view-box');
+    this.$dragBox = $cropper.querySelector('.cropper-drag-box');
+    this.$cropBox = $cropBox = $cropper.querySelector('.cropper-crop-box');
+    this.$viewBox = $cropper.querySelector('.cropper-view-box');
 
     this.addListeners();
     this.initPreview();
@@ -49,7 +52,7 @@
     }
 
     if (options.background) {
-      addClass($cropper.get(0), CLASS_BG);
+      addClass($cropper, CLASS_BG);
     }
 
     if (!options.highlight) {
@@ -107,6 +110,6 @@
     this.$canvas = null;
     this.$container = null;
 
-    remove(this.$cropper.get(0));
+    remove(this.$cropper);
     this.$cropper = null;
   };

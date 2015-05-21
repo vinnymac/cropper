@@ -14,7 +14,7 @@ $(function () {
           _ratio = cropper.image.ratio;
 
       QUnit.test('options.touchDragZoom', function (assert) {
-        cropper.$cropper.trigger($.Event('touchstart', {
+        $(cropper.$cropper).trigger($.Event('touchstart', {
           originalEvent: {
             touches: [
               {
