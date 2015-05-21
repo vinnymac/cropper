@@ -23,13 +23,13 @@
     addClass($this.get(0), CLASS_HIDDEN);
 
     // Show the clone iamge
-    removeClass($clone.get(0), CLASS_HIDE);
+    removeClass($clone, CLASS_HIDE);
 
     this.$container = $this.get(0).parentNode;
     this.$container.appendChild($cropper);
 
     this.$canvas = $cropper.querySelector('.cropper-canvas');
-    this.$canvas.appendChild($clone.get(0));
+    this.$canvas.appendChild($clone);
 
     this.$dragBox = $cropper.querySelector('.cropper-drag-box');
     this.$cropBox = $cropBox = $cropper.querySelector('.cropper-crop-box');

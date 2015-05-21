@@ -63,7 +63,7 @@
         this.unbuild();
         removeClass($this.get(0), CLASS_HIDDEN);
       } else if (this.$clone) {
-        remove(this.$clone.get(0));
+        remove(this.$clone);
       }
 
       $this.removeData('cropper');
@@ -365,7 +365,7 @@
 
       // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D.drawImage
       context.drawImage.apply(context, (function () {
-        var source = getSourceCanvas(this.$clone[0], this.image),
+        var source = getSourceCanvas(this.$clone, this.image),
             sourceWidth = source.width,
             sourceHeight = source.height,
             args = [source],

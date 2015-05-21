@@ -229,7 +229,7 @@
         top: 0
       });
 
-      assign(this.$clone.get(0).style, {
+      assign(this.$clone.style, {
         width: image.width + 'px',
         height: image.height + 'px',
         marginLeft: image.left + 'px',

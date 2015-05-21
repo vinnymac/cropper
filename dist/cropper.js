@@ -326,11 +326,11 @@
       }
     }
 
-    this.$clone = $clone = $('<img>');
+    this.$clone = $clone = document.createElement('img');
 
-    $clone.one('load', proxy(function () {
-      var naturalWidth = $clone.get(0).naturalWidth || $clone.get(0).offsetWidth,
-          naturalHeight = $clone.get(0).naturalHeight || $clone.get(0).offsetHeight;
+    $($clone).one('load', proxy(function () {
+      var naturalWidth = $clone.naturalWidth || $clone.offsetWidth,
+          naturalHeight = $clone.naturalHeight || $clone.offsetHeight;
 
       this.image = {
         naturalWidth: naturalWidth,
@@ -343,15 +343,15 @@
       this.ready = true;
       this.build();
     }, this)).one('error', function () {
-      remove($clone.get(0));
+      remove($clone);
     });
 
-    $clone.get(0).crossOrigin = crossOrigin || null; // "crossOrigin" must before "src" (#271)
-    $clone.get(0).src         = bustCacheUrl || url;
+    $clone.crossOrigin = crossOrigin || null; // "crossOrigin" must before "src" (#271)
+    $clone.src         = bustCacheUrl || url;
 
     // Hide and insert into the document
-    addClass($clone.get(0), CLASS_HIDE);
-    insertAfter($this.get(0), $clone.get(0));
+    addClass($clone, CLASS_HIDE);
+    insertAfter($this.get(0), $clone);
   };
   prototype.build = function () {
     var $this = this.$element,
@@ -378,13 +378,13 @@
     addClass($this.get(0), CLASS_HIDDEN);
 
     // Show the clone iamge
-    removeClass($clone.get(0), CLASS_HIDE);
+    removeClass($clone, CLASS_HIDE);
 
     this.$container = $this.get(0).parentNode;
     this.$container.appendChild($cropper);
 
     this.$canvas = $cropper.querySelector('.cropper-canvas');
-    this.$canvas.appendChild($clone.get(0));
+    this.$canvas.appendChild($clone);
 
     this.$dragBox = $cropper.querySelector('.cropper-drag-box');
     this.$cropBox = $cropBox = $cropper.querySelector('.cropper-crop-box');
@@ -700,7 +700,7 @@
         top: 0
       });
 
-      assign(this.$clone.get(0).style, {
+      assign(this.$clone.style, {
         width: image.width + 'px',
         height: image.height + 'px',
         marginLeft: image.left + 'px',
@@ -1243,7 +1243,7 @@
         this.unbuild();
         removeClass($this.get(0), CLASS_HIDDEN);
       } else if (this.$clone) {
-        remove(this.$clone.get(0));
+        remove(this.$clone);
       }
 
       $this.removeData('cropper');
@@ -1545,7 +1545,7 @@
 
       // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D.drawImage
       context.drawImage.apply(context, (function () {
-        var source = getSourceCanvas(this.$clone[0], this.image),
+        var source = getSourceCanvas(this.$clone, this.image),
             sourceWidth = source.width,
             sourceHeight = source.height,
             args = [source],

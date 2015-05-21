@@ -37,11 +37,11 @@
       }
     }
 
-    this.$clone = $clone = $('<img>');
+    this.$clone = $clone = document.createElement('img');
 
-    $clone.one('load', proxy(function () {
-      var naturalWidth = $clone.get(0).naturalWidth || $clone.get(0).offsetWidth,
-          naturalHeight = $clone.get(0).naturalHeight || $clone.get(0).offsetHeight;
+    $($clone).one('load', proxy(function () {
+      var naturalWidth = $clone.naturalWidth || $clone.offsetWidth,
+          naturalHeight = $clone.naturalHeight || $clone.offsetHeight;
 
       this.image = {
         naturalWidth: naturalWidth,
@@ -54,13 +54,13 @@
       this.ready = true;
       this.build();
     }, this)).one('error', function () {
-      remove($clone.get(0));
+      remove($clone);
     });
 
-    $clone.get(0).crossOrigin = crossOrigin || null; // "crossOrigin" must before "src" (#271)
-    $clone.get(0).src         = bustCacheUrl || url;
+    $clone.crossOrigin = crossOrigin || null; // "crossOrigin" must before "src" (#271)
+    $clone.src         = bustCacheUrl || url;
 
     // Hide and insert into the document
-    addClass($clone.get(0), CLASS_HIDE);
-    insertAfter($this.get(0), $clone.get(0));
+    addClass($clone, CLASS_HIDE);
+    insertAfter($this.get(0), $clone);
   };
