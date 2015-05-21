@@ -10,9 +10,9 @@
         return;
       }
 
-      ratio = $container.get(0).offsetWidth / container.width;
+      ratio = $container.offsetWidth / container.width;
 
-      if (ratio !== 1 || $container.get(0).offsetHeight !== container.height) {
+      if (ratio !== 1 || $container.offsetHeight !== container.height) {
         canvasData = this.getCanvasData();
         cropBoxData = this.getCropBoxData();
 

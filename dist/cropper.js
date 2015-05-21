@@ -380,8 +380,8 @@
     // Show the clone iamge
     removeClass($clone.get(0), CLASS_HIDE);
 
-    this.$container = $this.parent();
-    this.$container.get(0).appendChild($cropper);
+    this.$container = $this.get(0).parentNode;
+    this.$container.appendChild($cropper);
 
     this.$canvas = $cropper.querySelector('.cropper-canvas');
     this.$canvas.appendChild($clone.get(0));
@@ -492,8 +492,8 @@
       removeClass($this.get(0), CLASS_HIDDEN);
 
       this.container = {
-        width: max($container.get(0).offsetWidth, num(options.minContainerWidth) || 200),
-        height: max($container.get(0).offsetHeight, num(options.minContainerHeight) || 100)
+        width: max($container.offsetWidth, num(options.minContainerWidth) || 200),
+        height: max($container.offsetHeight, num(options.minContainerHeight) || 100)
       };
 
       assign($cropper.style, {
@@ -983,9 +983,9 @@
         return;
       }
 
-      ratio = $container.get(0).offsetWidth / container.width;
+      ratio = $container.offsetWidth / container.width;
 
-      if (ratio !== 1 || $container.get(0).offsetHeight !== container.height) {
+      if (ratio !== 1 || $container.offsetHeight !== container.height) {
         canvasData = this.getCanvasData();
         cropBoxData = this.getCropBoxData();
 

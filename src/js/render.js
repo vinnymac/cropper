@@ -21,8 +21,8 @@
       removeClass($this.get(0), CLASS_HIDDEN);
 
       this.container = {
-        width: max($container.get(0).offsetWidth, num(options.minContainerWidth) || 200),
-        height: max($container.get(0).offsetHeight, num(options.minContainerHeight) || 100)
+        width: max($container.offsetWidth, num(options.minContainerWidth) || 200),
+        height: max($container.offsetHeight, num(options.minContainerHeight) || 100)
       };
 
       assign($cropper.style, {
