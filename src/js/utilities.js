@@ -101,6 +101,32 @@
     return canvas;
   }
 
+  function createEvent(eventName, data) {
+    var event;
+    if (window.CustomEvent) {
+      event = new CustomEvent(eventName, { detail: data });
+    } else {
+      event = document.createEvent('CustomEvent');
+      event.initCustomEvent(eventName, true, true, data);
+    }
+    return event;
+  }
+
+  function on(element, eventName, callback, once) {
+    element.addEventListener(eventName, function y(e) {
+      if (once) {
+        e.target.removeEventListener(e.type, y);
+      }
+      if (callback) {
+        callback(e);
+      }
+    });
+  }
+
+  function off(element, eventName, callback) {
+    element.removeEventListener(eventName, callback);
+  }
+
   function toObject(val) {
     if (val === null) {
       throw new TypeError('Object.assign cannot be called with null or undefined');

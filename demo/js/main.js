@@ -81,29 +81,34 @@ $(function () {
           }
         };
 
+    $image.get().forEach(function (element) {
+      element.addEventListener('dragstart.cropper', function (e) {
+        console.log(e.type.split('.')[0], e.detail.dragType);
+      });
+      element.addEventListener('dragmove.cropper', function (e) {
+        console.log(e.type.split('.')[0], e.detail.dragType);
+      });
+      element.addEventListener('dragend.cropper', function (e) {
+        console.log(e.type.split('.')[0], e.detail.dragType);
+      });
+      element.addEventListener('zoomin.cropper', function (e) {
+        console.log(e.type.split('.')[0]);
+      });
+      element.addEventListener('zoomout.cropper', function (e) {
+        console.log(e.type.split('.')[0]);
+      });
+    });
+
     $image.on({
       'build.cropper': function (e) {
         console.log(e.type);
       },
       'built.cropper': function (e) {
         console.log(e.type);
-      },
-      'dragstart.cropper': function (e) {
-        console.log(e.type, e.dragType);
-      },
-      'dragmove.cropper': function (e) {
-        console.log(e.type, e.dragType);
-      },
-      'dragend.cropper': function (e) {
-        console.log(e.type, e.dragType);
-      },
-      'zoomin.cropper': function (e) {
-        console.log(e.type);
-      },
-      'zoomout.cropper': function (e) {
-        console.log(e.type);
       }
-    }).cropper(options);
+    });
+
+    $image.cropper(options);
 
 
     // Methods

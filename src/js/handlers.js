@@ -52,7 +52,7 @@
         return;
       }
 
-      event.preventDefault();
+      e.preventDefault();
 
       if (e.deltaY) {
         delta = e.deltaY > 0 ? 1 : -1;
@@ -67,9 +67,9 @@
 
     dragstart: function (event) {
       var options = this.options,
-          originalEvent = event.originalEvent,
+          originalEvent = event.originalEvent || event,
           touches = originalEvent && originalEvent.touches,
-          e = event,
+          e = originalEvent,
           dragType,
           dragStartEvent,
           touchesLength;
@@ -98,16 +98,16 @@
       dragType = dragType || e.target.getAttribute('data-drag');
 
       if (REGEXP_DRAG_TYPES.test(dragType)) {
-        event.preventDefault();
+        originalEvent.preventDefault();
 
-        dragStartEvent = $.Event(EVENT_DRAG_START, {
+        dragStartEvent = createEvent(EVENT_DRAG_START, {
           originalEvent: originalEvent,
           dragType: dragType
         });
 
-        $(this.$element).trigger(dragStartEvent);
+        this.$element.dispatchEvent(dragStartEvent);
 
-        if (dragStartEvent.isDefaultPrevented()) {
+        if (dragStartEvent.defaultPrevented) {
           return;
         }
 
@@ -127,7 +127,7 @@
       var options = this.options,
           originalEvent = event.originalEvent,
           touches = originalEvent && originalEvent.touches,
-          e = event,
+          e = originalEvent,
           dragType = this.dragType,
           dragMoveEvent,
           touchesLength;
@@ -153,16 +153,16 @@
       }
 
       if (dragType) {
-        event.preventDefault();
+        originalEvent.preventDefault();
 
-        dragMoveEvent = $.Event(EVENT_DRAG_MOVE, {
+        dragMoveEvent = createEvent(EVENT_DRAG_MOVE, {
           originalEvent: originalEvent,
           dragType: dragType
         });
 
-        $(this.$element).trigger(dragMoveEvent);
+        this.$element.dispatchEvent(dragMoveEvent);
 
-        if (dragMoveEvent.isDefaultPrevented()) {
+        if (dragMoveEvent.defaultPrevented) {
           return;
         }
 
@@ -182,16 +182,16 @@
       }
 
       if (dragType) {
-        event.preventDefault();
+        event.originalEvent.preventDefault();
 
-        dragEndEvent = $.Event(EVENT_DRAG_END, {
+        dragEndEvent = createEvent(EVENT_DRAG_END, {
           originalEvent: event.originalEvent,
           dragType: dragType
         });
 
-        $(this.$element).trigger(dragEndEvent);
+        this.$element.dispatchEvent(dragEndEvent);
 
-        if (dragEndEvent.isDefaultPrevented()) {
+        if (dragEndEvent.defaultPrevented) {
           return;
         }
 

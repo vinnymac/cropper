@@ -180,6 +180,32 @@
     return canvas;
   }
 
+  function createEvent(eventName, data) {
+    var event;
+    if (window.CustomEvent) {
+      event = new CustomEvent(eventName, { detail: data });
+    } else {
+      event = document.createEvent('CustomEvent');
+      event.initCustomEvent(eventName, true, true, data);
+    }
+    return event;
+  }
+
+  function on(element, eventName, callback, once) {
+    element.addEventListener(eventName, function y(e) {
+      if (once) {
+        e.target.removeEventListener(e.type, y);
+      }
+      if (callback) {
+        callback(e);
+      }
+    });
+  }
+
+  function off(element, eventName, callback) {
+    element.removeEventListener(eventName, callback);
+  }
+
   function toObject(val) {
     if (val === null) {
       throw new TypeError('Object.assign cannot be called with null or undefined');
@@ -937,10 +963,14 @@
 
   prototype.addListeners = function () {
     var options = this.options,
-      $cropper = $(this.$cropper),
-      $element = $(this.$element);
+      $cropper = $(this.$cropper);
 
-    $element.on(EVENT_DRAG_START, options.dragstart).on(EVENT_DRAG_MOVE, options.dragmove).on(EVENT_DRAG_END, options.dragend).on(EVENT_ZOOM_IN, options.zoomin).on(EVENT_ZOOM_OUT, options.zoomout);
+    on(this.$element, EVENT_DRAG_START, options.dragstart);
+    on(this.$element, EVENT_DRAG_MOVE, options.dragmove);
+    on(this.$element, EVENT_DRAG_END, options.dragend);
+    on(this.$element, EVENT_ZOOM_IN, options.zoomin);
+    on(this.$element, EVENT_ZOOM_OUT, options.zoomout);
+
     $cropper.on(EVENT_MOUSE_DOWN, (this._dragstart = proxy(this.dragstart, this))).on(EVENT_DBLCLICK, (this._dblclick = proxy(this.dblclick, this)));
 
     if (options.zoomable && options.mouseWheelZoom) {
@@ -956,10 +986,14 @@
 
   prototype.removeListeners = function () {
     var options = this.options,
-      $cropper = $(this.$cropper),
-      $element = $(this.$element);
+      $cropper = $(this.$cropper);
 
-    $element.off(EVENT_DRAG_START, options.dragstart).off(EVENT_DRAG_MOVE, options.dragmove).off(EVENT_DRAG_END, options.dragend).off(EVENT_ZOOM_IN, options.zoomin).off(EVENT_ZOOM_OUT, options.zoomout);
+    off(this.$element, EVENT_DRAG_START, options.dragstart);
+    off(this.$element, EVENT_DRAG_MOVE, options.dragmove);
+    off(this.$element, EVENT_DRAG_END, options.dragend);
+    off(this.$element, EVENT_ZOOM_IN, options.zoomin);
+    off(this.$element, EVENT_ZOOM_OUT, options.zoomout);
+
     $cropper.off(EVENT_MOUSE_DOWN, this.dragstart).off(EVENT_DBLCLICK, this.dblclick);
 
     if (options.zoomable && options.mouseWheelZoom) {
@@ -1027,7 +1061,7 @@
         return;
       }
 
-      event.preventDefault();
+      e.preventDefault();
 
       if (e.deltaY) {
         delta = e.deltaY > 0 ? 1 : -1;
@@ -1042,9 +1076,9 @@
 
     dragstart: function (event) {
       var options = this.options,
-          originalEvent = event.originalEvent,
+          originalEvent = event.originalEvent || event,
           touches = originalEvent && originalEvent.touches,
-          e = event,
+          e = originalEvent,
           dragType,
           dragStartEvent,
           touchesLength;
@@ -1073,16 +1107,16 @@
       dragType = dragType || e.target.getAttribute('data-drag');
 
       if (REGEXP_DRAG_TYPES.test(dragType)) {
-        event.preventDefault();
+        originalEvent.preventDefault();
 
-        dragStartEvent = $.Event(EVENT_DRAG_START, {
+        dragStartEvent = createEvent(EVENT_DRAG_START, {
           originalEvent: originalEvent,
           dragType: dragType
         });
 
-        $(this.$element).trigger(dragStartEvent);
+        this.$element.dispatchEvent(dragStartEvent);
 
-        if (dragStartEvent.isDefaultPrevented()) {
+        if (dragStartEvent.defaultPrevented) {
           return;
         }
 
@@ -1102,7 +1136,7 @@
       var options = this.options,
           originalEvent = event.originalEvent,
           touches = originalEvent && originalEvent.touches,
-          e = event,
+          e = originalEvent,
           dragType = this.dragType,
           dragMoveEvent,
           touchesLength;
@@ -1128,16 +1162,16 @@
       }
 
       if (dragType) {
-        event.preventDefault();
+        originalEvent.preventDefault();
 
-        dragMoveEvent = $.Event(EVENT_DRAG_MOVE, {
+        dragMoveEvent = createEvent(EVENT_DRAG_MOVE, {
           originalEvent: originalEvent,
           dragType: dragType
         });
 
-        $(this.$element).trigger(dragMoveEvent);
+        this.$element.dispatchEvent(dragMoveEvent);
 
-        if (dragMoveEvent.isDefaultPrevented()) {
+        if (dragMoveEvent.defaultPrevented) {
           return;
         }
 
@@ -1157,16 +1191,16 @@
       }
 
       if (dragType) {
-        event.preventDefault();
+        event.originalEvent.preventDefault();
 
-        dragEndEvent = $.Event(EVENT_DRAG_END, {
+        dragEndEvent = createEvent(EVENT_DRAG_END, {
           originalEvent: event.originalEvent,
           dragType: dragType
         });
 
-        $(this.$element).trigger(dragEndEvent);
+        this.$element.dispatchEvent(dragEndEvent);
 
-        if (dragEndEvent.isDefaultPrevented()) {
+        if (dragEndEvent.defaultPrevented) {
           return;
         }
 
@@ -1291,10 +1325,10 @@
       delta = num(delta);
 
       if (delta && this.built && !this.disabled && this.options.zoomable) {
-        zoomEvent = delta > 0 ? $.Event(EVENT_ZOOM_IN) : $.Event(EVENT_ZOOM_OUT);
-        $(this.$element).trigger(zoomEvent);
+        zoomEvent = delta > 0 ? createEvent(EVENT_ZOOM_IN) : createEvent(EVENT_ZOOM_OUT);
+        this.$element.dispatchEvent(zoomEvent);
 
-        if (zoomEvent.isDefaultPrevented()) {
+        if (zoomEvent.defaultPrevented) {
           return;
         }
 

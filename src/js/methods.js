@@ -109,10 +109,10 @@
       delta = num(delta);
 
       if (delta && this.built && !this.disabled && this.options.zoomable) {
-        zoomEvent = delta > 0 ? $.Event(EVENT_ZOOM_IN) : $.Event(EVENT_ZOOM_OUT);
-        $(this.$element).trigger(zoomEvent);
+        zoomEvent = delta > 0 ? createEvent(EVENT_ZOOM_IN) : createEvent(EVENT_ZOOM_OUT);
+        this.$element.dispatchEvent(zoomEvent);
 
-        if (zoomEvent.isDefaultPrevented()) {
+        if (zoomEvent.defaultPrevented) {
           return;
         }
 
