@@ -23,7 +23,8 @@
       CLASS_BG = 'cropper-bg',
 
       // Events
-      EVENT_MOUSE_DOWN = 'mousedown touchstart',
+      EVENT_MOUSE_DOWN = 'mousedown',
+      EVENT_TOUCH_START = 'touchstart',
       EVENT_MOUSE_MOVE = 'mousemove touchmove',
       EVENT_MOUSE_UP = 'mouseup mouseleave touchend touchleave touchcancel',
       EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll',

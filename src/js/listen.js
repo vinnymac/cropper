@@ -8,7 +8,9 @@
     on(this.$element, EVENT_ZOOM_IN, options.zoomin);
     on(this.$element, EVENT_ZOOM_OUT, options.zoomout);
 
-    $cropper.on(EVENT_MOUSE_DOWN, (this._dragstart = proxy(this.dragstart, this))).on(EVENT_DBLCLICK, (this._dblclick = proxy(this.dblclick, this)));
+    on(this.$cropper, EVENT_MOUSE_DOWN, (this._dragstart = proxy(this.dragstart, this)));
+    on(this.$cropper, EVENT_TOUCH_START, this._dragstart);
+    on(this.$cropper, EVENT_DBLCLICK, (this._dblclick = proxy(this.dblclick, this)));
 
     if (options.zoomable && options.mouseWheelZoom) {
       $cropper.on(EVENT_WHEEL, (this._wheel = proxy(this.wheel, this)));
@@ -31,7 +33,9 @@
     off(this.$element, EVENT_ZOOM_IN, options.zoomin);
     off(this.$element, EVENT_ZOOM_OUT, options.zoomout);
 
-    $cropper.off(EVENT_MOUSE_DOWN, this.dragstart).off(EVENT_DBLCLICK, this.dblclick);
+    off(this.$cropper, EVENT_MOUSE_DOWN, this._dragstart);
+    off(this.$cropper, EVENT_TOUCH_START, this._dragstart);
+    off(this.$cropper, EVENT_DBLCLICK, this._dblclick);
 
     if (options.zoomable && options.mouseWheelZoom) {
       $cropper.off(EVENT_WHEEL, this.wheel);
