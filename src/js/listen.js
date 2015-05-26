@@ -1,6 +1,5 @@
   prototype.addListeners = function () {
-    var options = this.options,
-      $cropper = $(this.$cropper);
+    var options = this.options;
 
     on(this.$element, EVENT_DRAG_START, options.dragstart);
     on(this.$element, EVENT_DRAG_MOVE, options.dragmove);
@@ -13,7 +12,9 @@
     on(this.$cropper, EVENT_DBLCLICK, (this._dblclick = proxy(this.dblclick, this)));
 
     if (options.zoomable && options.mouseWheelZoom) {
-      $cropper.on(EVENT_WHEEL, (this._wheel = proxy(this.wheel, this)));
+      on(this.$cropper, EVENT_WHEEL, (this._wheel = proxy(this.wheel, this)));
+      on(this.$cropper, EVENT_MOUSE_WHEEL, this._wheel);
+      on(this.$cropper, EVENT_DOM_MOUSE_SCROLL, this._wheel);
     }
 
     $document.on(EVENT_MOUSE_MOVE, (this._dragmove = proxy(this.dragmove, this))).on(EVENT_MOUSE_UP, (this._dragend = proxy(this.dragend, this)));
@@ -24,8 +25,7 @@
   };
 
   prototype.removeListeners = function () {
-    var options = this.options,
-      $cropper = $(this.$cropper);
+    var options = this.options;
 
     off(this.$element, EVENT_DRAG_START, options.dragstart);
     off(this.$element, EVENT_DRAG_MOVE, options.dragmove);
@@ -38,7 +38,9 @@
     off(this.$cropper, EVENT_DBLCLICK, this._dblclick);
 
     if (options.zoomable && options.mouseWheelZoom) {
-      $cropper.off(EVENT_WHEEL, this.wheel);
+      off(this.$cropper, EVENT_WHEEL, this._wheel);
+      off(this.$cropper, EVENT_MOUSE_WHEEL, this._wheel);
+      off(this.$cropper, EVENT_DOM_MOUSE_SCROLL, this._wheel);
     }
 
     $document.off(EVENT_MOUSE_MOVE, this._dragmove).off(EVENT_MOUSE_UP, this._dragend);

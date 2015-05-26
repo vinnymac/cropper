@@ -52,7 +52,9 @@
       EVENT_TOUCH_START = 'touchstart',
       EVENT_MOUSE_MOVE = 'mousemove touchmove',
       EVENT_MOUSE_UP = 'mouseup mouseleave touchend touchleave touchcancel',
-      EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll',
+      EVENT_WHEEL = 'wheel',
+      EVENT_MOUSE_WHEEL = 'mousewheel',
+      EVENT_DOM_MOUSE_SCROLL = 'DOMMouseScroll',
       EVENT_DBLCLICK = 'dblclick',
       EVENT_RESIZE = 'resize' + CROPPER_NAMESPACE, // Bind to window with namespace
       EVENT_BUILD = 'build' + CROPPER_NAMESPACE,
@@ -963,8 +965,7 @@
   };
 
   prototype.addListeners = function () {
-    var options = this.options,
-      $cropper = $(this.$cropper);
+    var options = this.options;
 
     on(this.$element, EVENT_DRAG_START, options.dragstart);
     on(this.$element, EVENT_DRAG_MOVE, options.dragmove);
@@ -977,7 +978,9 @@
     on(this.$cropper, EVENT_DBLCLICK, (this._dblclick = proxy(this.dblclick, this)));
 
     if (options.zoomable && options.mouseWheelZoom) {
-      $cropper.on(EVENT_WHEEL, (this._wheel = proxy(this.wheel, this)));
+      on(this.$cropper, EVENT_WHEEL, (this._wheel = proxy(this.wheel, this)));
+      on(this.$cropper, EVENT_MOUSE_WHEEL, this._wheel);
+      on(this.$cropper, EVENT_DOM_MOUSE_SCROLL, this._wheel);
     }
 
     $document.on(EVENT_MOUSE_MOVE, (this._dragmove = proxy(this.dragmove, this))).on(EVENT_MOUSE_UP, (this._dragend = proxy(this.dragend, this)));
@@ -988,8 +991,7 @@
   };
 
   prototype.removeListeners = function () {
-    var options = this.options,
-      $cropper = $(this.$cropper);
+    var options = this.options;
 
     off(this.$element, EVENT_DRAG_START, options.dragstart);
     off(this.$element, EVENT_DRAG_MOVE, options.dragmove);
@@ -1002,7 +1004,9 @@
     off(this.$cropper, EVENT_DBLCLICK, this._dblclick);
 
     if (options.zoomable && options.mouseWheelZoom) {
-      $cropper.off(EVENT_WHEEL, this.wheel);
+      off(this.$cropper, EVENT_WHEEL, this._wheel);
+      off(this.$cropper, EVENT_MOUSE_WHEEL, this._wheel);
+      off(this.$cropper, EVENT_DOM_MOUSE_SCROLL, this._wheel);
     }
 
     $document.off(EVENT_MOUSE_MOVE, this._dragmove).off(EVENT_MOUSE_UP, this._dragend);
@@ -1059,21 +1063,20 @@
     },
 
     wheel: function (event) {
-      var e = event.originalEvent,
-          delta = 1;
+      var delta = 1;
 
       if (this.disabled) {
         return;
       }
 
-      e.preventDefault();
+      event.preventDefault();
 
-      if (e.deltaY) {
-        delta = e.deltaY > 0 ? 1 : -1;
-      } else if (e.wheelDelta) {
-        delta = -e.wheelDelta / 120;
-      } else if (e.detail) {
-        delta = e.detail > 0 ? 1 : -1;
+      if (event.deltaY) {
+        delta = event.deltaY > 0 ? 1 : -1;
+      } else if (event.wheelDelta) {
+        delta = -event.wheelDelta / 120;
+      } else if (event.detail) {
+        delta = event.detail > 0 ? 1 : -1;
       }
 
       this.zoom(-delta * 0.1);

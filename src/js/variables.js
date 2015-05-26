@@ -27,7 +27,9 @@
       EVENT_TOUCH_START = 'touchstart',
       EVENT_MOUSE_MOVE = 'mousemove touchmove',
       EVENT_MOUSE_UP = 'mouseup mouseleave touchend touchleave touchcancel',
-      EVENT_WHEEL = 'wheel mousewheel DOMMouseScroll',
+      EVENT_WHEEL = 'wheel',
+      EVENT_MOUSE_WHEEL = 'mousewheel',
+      EVENT_DOM_MOUSE_SCROLL = 'DOMMouseScroll',
       EVENT_DBLCLICK = 'dblclick',
       EVENT_RESIZE = 'resize' + CROPPER_NAMESPACE, // Bind to window with namespace
       EVENT_BUILD = 'build' + CROPPER_NAMESPACE,

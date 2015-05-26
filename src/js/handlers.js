@@ -45,21 +45,20 @@
     },
 
     wheel: function (event) {
-      var e = event.originalEvent,
-          delta = 1;
+      var delta = 1;
 
       if (this.disabled) {
         return;
       }
 
-      e.preventDefault();
+      event.preventDefault();
 
-      if (e.deltaY) {
-        delta = e.deltaY > 0 ? 1 : -1;
-      } else if (e.wheelDelta) {
-        delta = -e.wheelDelta / 120;
-      } else if (e.detail) {
-        delta = e.detail > 0 ? 1 : -1;
+      if (event.deltaY) {
+        delta = event.deltaY > 0 ? 1 : -1;
+      } else if (event.wheelDelta) {
+        delta = -event.wheelDelta / 120;
+      } else if (event.detail) {
+        delta = event.detail > 0 ? 1 : -1;
       }
 
       this.zoom(-delta * 0.1);
