@@ -23,8 +23,7 @@
 
   'use strict';
 
-  var $document = $(document),
-      location = window.location,
+  var location = window.location,
 
       // Constants
       CROPPER_NAMESPACE = '.cropper',
@@ -49,8 +48,13 @@
       // Events
       EVENT_MOUSE_DOWN = 'mousedown',
       EVENT_TOUCH_START = 'touchstart',
-      EVENT_MOUSE_MOVE = 'mousemove touchmove',
-      EVENT_MOUSE_UP = 'mouseup mouseleave touchend touchleave touchcancel',
+      EVENT_MOUSE_MOVE = 'mousemove',
+      EVENT_TOUCH_MOVE = 'touchmove',
+      EVENT_MOUSE_UP = 'mouseup',
+      EVENT_MOUSE_LEAVE = 'mouseleave',
+      EVENT_TOUCH_END = 'touchend',
+      EVENT_TOUCH_LEAVE = 'touchleave',
+      EVENT_TOUCH_CANCEL = 'touchcancel',
       EVENT_WHEEL = 'wheel',
       EVENT_MOUSE_WHEEL = 'mousewheel',
       EVENT_DOM_MOUSE_SCROLL = 'DOMMouseScroll',
@@ -982,7 +986,14 @@
       on(this.$cropper, EVENT_DOM_MOUSE_SCROLL, this._wheel);
     }
 
-    $document.on(EVENT_MOUSE_MOVE, (this._dragmove = proxy(this.dragmove, this))).on(EVENT_MOUSE_UP, (this._dragend = proxy(this.dragend, this)));
+    on(document, EVENT_MOUSE_MOVE, (this._dragmove = proxy(this.dragmove, this)));
+    on(document, EVENT_TOUCH_MOVE, this._dragmove);
+
+    on(document, EVENT_MOUSE_UP, (this._dragend = proxy(this.dragend, this)));
+    on(document, EVENT_MOUSE_LEAVE, this._dragend);
+    on(document, EVENT_TOUCH_END, this._dragend);
+    on(document, EVENT_TOUCH_LEAVE, this._dragend);
+    on(document, EVENT_TOUCH_CANCEL, this._dragend);
 
     if (options.responsive) {
       on(window, EVENT_RESIZE, (this._resize = proxy(this.resize, this)));
@@ -1008,7 +1019,14 @@
       off(this.$cropper, EVENT_DOM_MOUSE_SCROLL, this._wheel);
     }
 
-    $document.off(EVENT_MOUSE_MOVE, this._dragmove).off(EVENT_MOUSE_UP, this._dragend);
+    off(document, EVENT_MOUSE_MOVE, this._dragmove);
+    off(document, EVENT_TOUCH_MOVE, this._dragmove);
+
+    off(document, EVENT_MOUSE_UP, this._dragend);
+    off(document, EVENT_MOUSE_LEAVE, this._dragend);
+    off(document, EVENT_TOUCH_END, this._dragend);
+    off(document, EVENT_TOUCH_LEAVE, this._dragend);
+    off(document, EVENT_TOUCH_CANCEL, this._dragend);
 
     if (options.responsive) {
       off(window, EVENT_RESIZE, this._resize);

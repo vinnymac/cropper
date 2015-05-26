@@ -1,5 +1,4 @@
-  var $document = $(document),
-      location = window.location,
+  var location = window.location,
 
       // Constants
       CROPPER_NAMESPACE = '.cropper',
@@ -24,8 +23,13 @@
       // Events
       EVENT_MOUSE_DOWN = 'mousedown',
       EVENT_TOUCH_START = 'touchstart',
-      EVENT_MOUSE_MOVE = 'mousemove touchmove',
-      EVENT_MOUSE_UP = 'mouseup mouseleave touchend touchleave touchcancel',
+      EVENT_MOUSE_MOVE = 'mousemove',
+      EVENT_TOUCH_MOVE = 'touchmove',
+      EVENT_MOUSE_UP = 'mouseup',
+      EVENT_MOUSE_LEAVE = 'mouseleave',
+      EVENT_TOUCH_END = 'touchend',
+      EVENT_TOUCH_LEAVE = 'touchleave',
+      EVENT_TOUCH_CANCEL = 'touchcancel',
       EVENT_WHEEL = 'wheel',
       EVENT_MOUSE_WHEEL = 'mousewheel',
       EVENT_DOM_MOUSE_SCROLL = 'DOMMouseScroll',

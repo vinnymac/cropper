@@ -17,7 +17,14 @@
       on(this.$cropper, EVENT_DOM_MOUSE_SCROLL, this._wheel);
     }
 
-    $document.on(EVENT_MOUSE_MOVE, (this._dragmove = proxy(this.dragmove, this))).on(EVENT_MOUSE_UP, (this._dragend = proxy(this.dragend, this)));
+    on(document, EVENT_MOUSE_MOVE, (this._dragmove = proxy(this.dragmove, this)));
+    on(document, EVENT_TOUCH_MOVE, this._dragmove);
+
+    on(document, EVENT_MOUSE_UP, (this._dragend = proxy(this.dragend, this)));
+    on(document, EVENT_MOUSE_LEAVE, this._dragend);
+    on(document, EVENT_TOUCH_END, this._dragend);
+    on(document, EVENT_TOUCH_LEAVE, this._dragend);
+    on(document, EVENT_TOUCH_CANCEL, this._dragend);
 
     if (options.responsive) {
       on(window, EVENT_RESIZE, (this._resize = proxy(this.resize, this)));
@@ -43,7 +50,14 @@
       off(this.$cropper, EVENT_DOM_MOUSE_SCROLL, this._wheel);
     }
 
-    $document.off(EVENT_MOUSE_MOVE, this._dragmove).off(EVENT_MOUSE_UP, this._dragend);
+    off(document, EVENT_MOUSE_MOVE, this._dragmove);
+    off(document, EVENT_TOUCH_MOVE, this._dragmove);
+
+    off(document, EVENT_MOUSE_UP, this._dragend);
+    off(document, EVENT_MOUSE_LEAVE, this._dragend);
+    off(document, EVENT_TOUCH_END, this._dragend);
+    off(document, EVENT_TOUCH_LEAVE, this._dragend);
+    off(document, EVENT_TOUCH_CANCEL, this._dragend);
 
     if (options.responsive) {
       off(window, EVENT_RESIZE, this._resize);
