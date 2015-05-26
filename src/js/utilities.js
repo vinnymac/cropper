@@ -123,6 +123,10 @@
     });
   }
 
+  function one(element, eventName, callback) {
+    on(element, eventName, callback, true);
+  }
+
   function off(element, eventName, callback) {
     element.removeEventListener(eventName, callback);
   }

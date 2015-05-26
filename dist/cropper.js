@@ -208,6 +208,10 @@
     });
   }
 
+  function one(element, eventName, callback) {
+    on(element, eventName, callback, true);
+  }
+
   function off(element, eventName, callback) {
     element.removeEventListener(eventName, callback);
   }
@@ -360,7 +364,7 @@
 
     this.$clone = $clone = document.createElement('img');
 
-    $($clone).one('load', proxy(function () {
+    one($clone, 'load', proxy(function () {
       var naturalWidth = $clone.naturalWidth || $clone.offsetWidth,
           naturalHeight = $clone.naturalHeight || $clone.offsetHeight;
 
@@ -374,7 +378,9 @@
       this.url = url;
       this.ready = true;
       this.build();
-    }, this)).one('error', function () {
+    }, this));
+
+    one($clone, 'error', function () {
       remove($clone);
     });
 
