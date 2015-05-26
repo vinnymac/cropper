@@ -1,5 +1,4 @@
-  var $window = $(window),
-      $document = $(document),
+  var $document = $(document),
       location = window.location,
 
       // Constants
@@ -31,7 +30,7 @@
       EVENT_MOUSE_WHEEL = 'mousewheel',
       EVENT_DOM_MOUSE_SCROLL = 'DOMMouseScroll',
       EVENT_DBLCLICK = 'dblclick',
-      EVENT_RESIZE = 'resize' + CROPPER_NAMESPACE, // Bind to window with namespace
+      EVENT_RESIZE = 'resize', // + CROPPER_NAMESPACE, // Bind to window with namespace
       EVENT_BUILD = 'build' + CROPPER_NAMESPACE,
       EVENT_BUILT = 'built' + CROPPER_NAMESPACE,
       EVENT_DRAG_START = 'dragstart' + CROPPER_NAMESPACE,

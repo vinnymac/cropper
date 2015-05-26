@@ -20,7 +20,7 @@
     $document.on(EVENT_MOUSE_MOVE, (this._dragmove = proxy(this.dragmove, this))).on(EVENT_MOUSE_UP, (this._dragend = proxy(this.dragend, this)));
 
     if (options.responsive) {
-      $window.on(EVENT_RESIZE, (this._resize = proxy(this.resize, this)));
+      on(window, EVENT_RESIZE, (this._resize = proxy(this.resize, this)));
     }
   };
 
@@ -46,6 +46,6 @@
     $document.off(EVENT_MOUSE_MOVE, this._dragmove).off(EVENT_MOUSE_UP, this._dragend);
 
     if (options.responsive) {
-      $window.off(EVENT_RESIZE, this._resize);
+      off(window, EVENT_RESIZE, this._resize);
     }
   };
