@@ -1,10 +1,10 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = window.createCropperImage();
+  var image = window.createCropperImage();
 
-  $($image).get().forEach(function (element) {
+  [].forEach.call(image, function (element) {
     element.addEventListener('dragstart.cropper', function (e) {
 
       QUnit.test('methods.dragstart', function (assert) {
@@ -16,18 +16,18 @@ $(function () {
     });
   });
 
-  var cropper = new window.Cropper($image, {
+  var cropper = new window.Cropper(image, {
     built: function () {
-      var $dragBox = cropper.$dragBox;
+      var dragBox = cropper.$dragBox;
 
       // Triggers events manually when built
       var mouseDown = document.createEvent('MouseEvents');
       mouseDown.initEvent('mousedown', true, true);
-      $dragBox.dispatchEvent(mouseDown);
+      dragBox.dispatchEvent(mouseDown);
 
       var mouseUp = document.createEvent('MouseEvents');
       mouseUp.initEvent('mouseup', true, true);
-      $dragBox.dispatchEvent(mouseUp);
+      dragBox.dispatchEvent(mouseUp);
     },
 
     dragstart: function (e) {
@@ -43,4 +43,4 @@ $(function () {
 
   return cropper;
 
-});
+})();

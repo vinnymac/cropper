@@ -1,15 +1,17 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var image = window.createCropperImage();
 
-  $image.one('built.cropper', function () {
+  image.addEventListener('built.cropper', function y(e) {
+    image.removeEventListener(e.type, y);
 
     QUnit.test('methods.replace', function (assert) {
       var done = assert.async();
 
-      $image.one('built.cropper', function () {
+      image.addEventListener('built.cropper', function y(e) {
+        image.removeEventListener(e.type, y);
         assert.ok(true);
         done();
       });
@@ -20,8 +22,8 @@ $(function () {
 
   });
 
-  var cropper = new window.Cropper($image.get(0));
+  var cropper = new window.Cropper(image);
 
   return cropper;
 
-});
+})();

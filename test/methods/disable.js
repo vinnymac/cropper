@@ -1,10 +1,10 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = window.createCropperImage();
+  var image = window.createCropperImage();
 
-  var cropper = new window.Cropper($image, {
+  var cropper = new window.Cropper(image, {
     built: function () {
       var options = cropper.options;
 
@@ -12,7 +12,7 @@ $(function () {
 
       QUnit.test('methods.disable', function (assert) {
         assert.ok(cropper.disabled);
-        assert.ok($(cropper.$cropper).hasClass('cropper-disabled'));
+        assert.ok(cropper.$cropper.classList.contains('cropper-disabled'));
       });
 
       QUnit.test('methods.disable: setAspectRatio', function (assert) {
@@ -65,4 +65,4 @@ $(function () {
     }
   });
 
-});
+})();

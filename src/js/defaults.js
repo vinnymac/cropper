@@ -16,7 +16,7 @@
     data: null,
 
     // Add extra containers for previewing
-    // Type: String (jQuery selector)
+    // Type: String (selector)
     preview: '',
 
     // Toggles

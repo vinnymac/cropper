@@ -1,24 +1,21 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = window.createCropperCanvas(),
-      isNumber = function (n) {
-        return typeof n === 'number' && !isNaN(n);
-      };
+  var image = window.createCropperCanvas();
 
-  var cropper = new window.Cropper($image, {
+  var cropper = new window.Cropper(image, {
     built: function () {
 
       QUnit.test('methods.getContainerData', function (assert) {
         var data = cropper.getContainerData();
 
-        assert.ok($.isPlainObject(data));
-        assert.ok(isNumber(data.width));
-        assert.ok(isNumber(data.height));
+        assert.ok(window.isPlainObject(data));
+        assert.ok(window.isNumber(data.width));
+        assert.ok(window.isNumber(data.height));
       });
 
     }
   });
 
-});
+})();

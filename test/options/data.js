@@ -1,8 +1,8 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = window.createCropperImage(),
+  var image = window.createCropperImage(),
       _data = {
         x: 360,
         y: 450,
@@ -11,7 +11,7 @@ $(function () {
         rotate: 45
       };
 
-  var cropper = new window.Cropper($image, {
+  var cropper = new window.Cropper(image, {
     data: _data,
 
     built: function () {
@@ -28,4 +28,4 @@ $(function () {
     }
   });
 
-});
+})();

@@ -1,17 +1,17 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var image = window.createCropperImage();
 
-  var cropper = new window.Cropper($image, {
+  var cropper = new window.Cropper(image, {
     built: function () {
       var options = cropper.options;
 
       QUnit.test('methods.setAspectRatio', function (assert) {
         var ratios = [0, 1 / 2, 1, 'auto', true, null, { a:1 }, ['auto', 2, 3], [1, 2, 3]];
 
-        $.each(ratios, function (i, ratio) {
+        [].forEach.call(ratios, function (ratio, i) {
 
           cropper.setAspectRatio(ratio);
 
@@ -47,4 +47,4 @@ $(function () {
     }
   });
 
-});
+})();

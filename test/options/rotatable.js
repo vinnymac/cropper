@@ -1,10 +1,10 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = window.createCropperImage();
+  var image = window.createCropperImage();
 
-  var cropper = new window.Cropper($image, {
+  var cropper = new window.Cropper(image, {
     rotatable: false,
 
     built: function () {
@@ -18,4 +18,4 @@ $(function () {
     }
   });
 
-});
+})();

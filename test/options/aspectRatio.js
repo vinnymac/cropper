@@ -1,10 +1,10 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var image = window.createCropperImage();
 
-  var cropper = new window.Cropper($image.get(0), {
+  var cropper = new window.Cropper(image, {
     built: function () {
       var options = cropper.options,
           cropBox = cropper.cropBox;
@@ -12,7 +12,7 @@ $(function () {
       QUnit.test('options.aspectRatio: Number', function (assert) {
         var ratios = [NaN, 0, 9, -8 / 7, -6 / 5, -1, -1 / 2, -3 / 4, 1 / 2, 3 / 4, 1, 8 / 7, 6 / 5, 9];
 
-        $.each(ratios, function (i, ratio) {
+        [].forEach.call(ratios, function (ratio, i) {
           var data;
 
           cropper.setAspectRatio(ratio);
@@ -31,7 +31,7 @@ $(function () {
       QUnit.test('options.aspectRatio: String', function (assert) {
         var ratios = ['auto', 'a1', '2a', '3', '0'];
 
-        $.each(ratios, function (i, ratio) {
+        [].forEach.call(ratios, function (ratio, i) {
 
           cropper.setAspectRatio(ratio);
 
@@ -57,7 +57,7 @@ $(function () {
       QUnit.test('options.aspectRatio: Boolean', function (assert) {
         var ratios = [true, false];
 
-        $.each(ratios, function (i, ratio) {
+        [].forEach.call(ratios, function (ratio) {
 
           cropper.setAspectRatio(ratio);
           assert.ok(isNaN(options.aspectRatio));
@@ -68,7 +68,7 @@ $(function () {
       QUnit.test('options.aspectRatio: Object', function (assert) {
         var ratios = [null, {}, { a: 1, b: 2 }];
 
-        $.each(ratios, function (i, ratio) {
+        [].forEach.call(ratios, function (ratio) {
 
           cropper.setAspectRatio(ratio);
           assert.ok(isNaN(options.aspectRatio));
@@ -79,7 +79,7 @@ $(function () {
       QUnit.test('options.aspectRatio: Array', function (assert) {
         var ratios = [[], [1], [2, 3], [undefined, 4, 5]];
 
-        $.each(ratios, function (i, ratio) {
+        [].forEach.call(ratios, function (ratio, i) {
 
           cropper.setAspectRatio(ratio);
 
@@ -116,4 +116,4 @@ $(function () {
     }
   });
 
-});
+})();

@@ -1,11 +1,11 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = window.createCropperImage(),
+  var image = window.createCropperImage(),
       minContainerWidth = 641;
 
-  var cropper = new window.Cropper($image, {
+  var cropper = new window.Cropper(image, {
     minContainerWidth: minContainerWidth,
 
     built: function () {
@@ -18,4 +18,4 @@ $(function () {
     }
   });
 
-});
+})();

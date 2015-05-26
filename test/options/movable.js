@@ -1,10 +1,10 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = window.createCropperImage();
+  var image = window.createCropperImage();
 
-  var cropper = new window.Cropper($image, {
+  var cropper = new window.Cropper(image, {
     movable: false,
 
     built: function () {
@@ -21,10 +21,10 @@ $(function () {
       });
 
       QUnit.test('options.movable', function (assert) {
-        assert.notEqual($(cropper.$cropper).find('.cropper-face').data('directive'), 'all');
+        assert.notEqual(cropper.$cropper.querySelectorAll('.cropper-face')[0].getAttribute('directive'), 'all');
       });
 
     }
   });
 
-});
+})();

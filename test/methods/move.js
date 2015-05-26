@@ -1,15 +1,15 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage()),
+  var image = window.createCropperImage(),
       random = function (offset) {
         var n = Math.random() * offset;
 
         return parseInt(n, 10) % 2 === 0 ? -n : n;
       };
 
-  var cropper = new window.Cropper($image.get(0), {
+  var cropper = new window.Cropper(image, {
     strict: false,
 
     built: function () {
@@ -30,7 +30,7 @@ $(function () {
           })();
 
       QUnit.test('methods.move', function (assert) {
-        $.each(offsets, function (i, offset) {
+        [].forEach.call(offsets, function (offset) {
           var left = canvas.left + offset.x,
               top = canvas.top + offset.y;
 
@@ -44,4 +44,4 @@ $(function () {
     }
   });
 
-});
+})();
