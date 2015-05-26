@@ -1084,9 +1084,8 @@
 
     dragstart: function (event) {
       var options = this.options,
-          originalEvent = event.originalEvent || event,
-          touches = originalEvent && originalEvent.touches,
-          e = originalEvent,
+          touches = event && event.touches,
+          e = event,
           dragType,
           dragStartEvent,
           touchesLength;
@@ -1115,10 +1114,10 @@
       dragType = dragType || e.target.getAttribute('data-drag');
 
       if (REGEXP_DRAG_TYPES.test(dragType)) {
-        originalEvent.preventDefault();
+        event.preventDefault();
 
         dragStartEvent = createEvent(EVENT_DRAG_START, {
-          originalEvent: originalEvent,
+          originalEvent: event,
           dragType: dragType
         });
 
@@ -1142,9 +1141,8 @@
 
     dragmove: function (event) {
       var options = this.options,
-          originalEvent = event.originalEvent,
-          touches = originalEvent && originalEvent.touches,
-          e = originalEvent,
+          touches = event && event.touches,
+          e = event,
           dragType = this.dragType,
           dragMoveEvent,
           touchesLength;
@@ -1170,10 +1168,10 @@
       }
 
       if (dragType) {
-        originalEvent.preventDefault();
+        event.preventDefault();
 
         dragMoveEvent = createEvent(EVENT_DRAG_MOVE, {
-          originalEvent: originalEvent,
+          originalEvent: event,
           dragType: dragType
         });
 
@@ -1199,10 +1197,10 @@
       }
 
       if (dragType) {
-        event.originalEvent.preventDefault();
+        event.preventDefault();
 
         dragEndEvent = createEvent(EVENT_DRAG_END, {
-          originalEvent: event.originalEvent,
+          originalEvent: event,
           dragType: dragType
         });
 
