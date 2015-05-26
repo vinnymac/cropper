@@ -82,6 +82,9 @@ $(function () {
         };
 
     $image.get().forEach(function (element) {
+      element.addEventListener('build.cropper', function (e) {
+        console.log(e.type.split('.')[0]);
+      });
       element.addEventListener('dragstart.cropper', function (e) {
         console.log(e.type.split('.')[0], e.detail.dragType);
       });
@@ -100,9 +103,6 @@ $(function () {
     });
 
     $image.on({
-      'build.cropper': function (e) {
-        console.log(e.type);
-      },
       'built.cropper': function (e) {
         console.log(e.type);
       }

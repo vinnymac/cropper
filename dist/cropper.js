@@ -347,10 +347,11 @@
       return;
     }
 
-    buildEvent = $.Event(EVENT_BUILD);
-    $($this).one(EVENT_BUILD, options.build).trigger(buildEvent); // Only trigger once
+    buildEvent = createEvent(EVENT_BUILD);
+    one($this, EVENT_BUILD, options.build);
+    $this.dispatchEvent(buildEvent); // Only trigger once
 
-    if (buildEvent.isDefaultPrevented()) {
+    if (buildEvent.defaultPrevented) {
       return;
     }
 

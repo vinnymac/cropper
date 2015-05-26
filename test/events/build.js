@@ -2,37 +2,45 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var $image = window.createCropperImage();
 
-  $image.one('build.cropper', function (e) {
+  $image.addEventListener('build.cropper', function y(e) {
+    $image.removeEventListener(e.type, y);
 
     QUnit.test('methods.build', function (assert) {
-      assert.ok(e.type === 'build' && e.namespace === 'cropper');
+      var type = e.type.split('.');
+      assert.ok(type[0] === 'build' && type[1] === 'cropper');
     });
 
     e.preventDefault();
 
     QUnit.test('methods.build: prevent default', function (assert) {
-      assert.ok(e.isDefaultPrevented());
+      assert.ok(e.defaultPrevented);
     });
 
-  }).one('built.cropper', function (e) {
+  });
+
+  $image.addEventListener('built.cropper', function y(e) {
+    $image.removeEventListener(e.type, y);
 
     QUnit.test('methods.build: default prevented', function (assert) {
       assert.ok(e.type !== 'built');
     });
 
-  }).cropper({
+  });
+
+  $($image).cropper({
     build: function (e) {
 
       QUnit.test('options.build', function (assert) {
-        assert.ok(e.type === 'build' && e.namespace === 'cropper');
+        var type = e.type.split('.');
+        assert.ok(type[0] === 'build' && type[1] === 'cropper');
       });
 
       e.preventDefault();
 
       QUnit.test('options.build: prevent default', function (assert) {
-        assert.ok(e.isDefaultPrevented());
+        assert.ok(e.defaultPrevented);
       });
 
     },
