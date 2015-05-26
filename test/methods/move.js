@@ -13,7 +13,7 @@ $(function () {
     strict: false,
 
     built: function () {
-      var cropper = $(this).data('cropper'),
+      var cropper = $image.data('cropper'),
           canvas = cropper.canvas,
           offsets = (function () {
             var data = [],

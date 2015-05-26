@@ -85,6 +85,9 @@ $(function () {
       element.addEventListener('build.cropper', function (e) {
         console.log(e.type.split('.')[0]);
       });
+      element.addEventListener('built.cropper', function (e) {
+        console.log(e.type.split('.')[0]);
+      });
       element.addEventListener('dragstart.cropper', function (e) {
         console.log(e.type.split('.')[0], e.detail.dragType);
       });
@@ -100,12 +103,6 @@ $(function () {
       element.addEventListener('zoomout.cropper', function (e) {
         console.log(e.type.split('.')[0]);
       });
-    });
-
-    $image.on({
-      'built.cropper': function (e) {
-        console.log(e.type);
-      }
     });
 
     $image.cropper(options);

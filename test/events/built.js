@@ -2,19 +2,24 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var $image = window.createCropperImage();
 
-  $image.one('built.cropper', function (e) {
+  $image.addEventListener('built.cropper', function y(e) {
+    $image.removeEventListener(e.type, y);
 
     QUnit.test('methods.built', function (assert) {
-      assert.ok(e.type === 'built' && e.namespace === 'cropper');
+      var type = e.type.split('.');
+      assert.ok(type[0] === 'built' && type[1] === 'cropper');
     });
 
-  }).cropper({
+  });
+
+  $($image).cropper({
     built: function (e) {
 
       QUnit.test('options.built', function (assert) {
-        assert.ok(e.type === 'built' && e.namespace === 'cropper');
+        var type = e.type.split('.');
+        assert.ok(type[0] === 'built' && type[1] === 'cropper');
       });
 
     }
