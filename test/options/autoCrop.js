@@ -4,7 +4,7 @@ $(function () {
 
   var $image = $(window.createCropperImage());
 
-  $image.cropper({
+  var cropper = new window.Cropper($image.get(0), {
     autoCrop: false,
 
     crop: function () {
@@ -14,7 +14,6 @@ $(function () {
     },
 
     built: function () {
-      var cropper = $image.data('cropper');
 
       QUnit.test('options.autoCrop', function (assert) {
         assert.notEqual(cropper.cropped, true);

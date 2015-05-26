@@ -1325,8 +1325,6 @@
       } else if (this.$clone) {
         remove(this.$clone);
       }
-
-      $($this).removeData('cropper');
     },
 
     replace: function (url) {

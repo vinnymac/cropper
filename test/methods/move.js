@@ -9,12 +9,11 @@ $(function () {
         return parseInt(n, 10) % 2 === 0 ? -n : n;
       };
 
-  $image.cropper({
+  var cropper = new window.Cropper($image.get(0), {
     strict: false,
 
     built: function () {
-      var cropper = $image.data('cropper'),
-          canvas = cropper.canvas,
+      var canvas = cropper.canvas,
           offsets = (function () {
             var data = [],
                 max = 10,
@@ -35,7 +34,7 @@ $(function () {
           var left = canvas.left + offset.x,
               top = canvas.top + offset.y;
 
-          $image.cropper('move', offset.x, offset.y);
+          cropper.move(offset.x, offset.y);
 
           assert.ok(canvas.left === left);
           assert.ok(canvas.top === top);

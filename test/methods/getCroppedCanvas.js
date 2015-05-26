@@ -2,21 +2,21 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var $image = window.createCropperImage();
 
-  $image.cropper({
+  var cropper = new window.Cropper($image, {
     strict: false,
 
     built: function () {
 
       QUnit.test('methods.getCroppedCanvas', function (assert) {
-        var canvas = $image.cropper('getCroppedCanvas');
+        var canvas = cropper.getCroppedCanvas();
 
         assert.ok(canvas instanceof HTMLCanvasElement);
       });
 
       QUnit.test('methods.getCroppedCanvas: resize', function (assert) {
-        var canvas = $image.cropper('getCroppedCanvas', {
+        var canvas = cropper.getCroppedCanvas({
               width: 160,
               height: 90
             });
@@ -26,7 +26,8 @@ $(function () {
       });
 
       QUnit.test('methods.getCroppedCanvas: fillColor', function (assert) {
-        var canvas = $image.cropper('rotate', 90).cropper('getCroppedCanvas', {
+        cropper.rotate(90);
+        var canvas = cropper.getCroppedCanvas({
               fillColor: '#010101'
             }),
             pixelData = canvas.getContext('2d').getImageData(0, 0, 1, 1).data;

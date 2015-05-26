@@ -14,7 +14,7 @@ $(function () {
 
   });
 
-  $($image).cropper({
+  var cropper = new window.Cropper($image, {
     built: function (e) {
 
       QUnit.test('options.built', function (assert) {
@@ -24,5 +24,7 @@ $(function () {
 
     }
   });
+
+  return cropper;
 
 });

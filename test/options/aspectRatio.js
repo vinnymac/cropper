@@ -4,10 +4,9 @@ $(function () {
 
   var $image = $(window.createCropperImage());
 
-  $image.cropper({
+  var cropper = new window.Cropper($image.get(0), {
     built: function () {
-      var cropper = $image.data('cropper'),
-          options = cropper.options,
+      var options = cropper.options,
           cropBox = cropper.cropBox;
 
       QUnit.test('options.aspectRatio: Number', function (assert) {
@@ -16,9 +15,9 @@ $(function () {
         $.each(ratios, function (i, ratio) {
           var data;
 
-          $image.cropper('setAspectRatio', ratio);
+          cropper.setAspectRatio(ratio);
 
-          data = $image.cropper('getCropBoxData');
+          data = cropper.getCropBoxData();
 
           if (i === 0 || i === 1) {
             ratio = cropBox.width / cropBox.height;
@@ -34,7 +33,7 @@ $(function () {
 
         $.each(ratios, function (i, ratio) {
 
-          $image.cropper('setAspectRatio', ratio);
+          cropper.setAspectRatio(ratio);
 
           switch (i) {
             case 0:
@@ -60,7 +59,7 @@ $(function () {
 
         $.each(ratios, function (i, ratio) {
 
-          $image.cropper('setAspectRatio', ratio);
+          cropper.setAspectRatio(ratio);
           assert.ok(isNaN(options.aspectRatio));
 
         });
@@ -71,7 +70,7 @@ $(function () {
 
         $.each(ratios, function (i, ratio) {
 
-          $image.cropper('setAspectRatio', ratio);
+          cropper.setAspectRatio(ratio);
           assert.ok(isNaN(options.aspectRatio));
 
         });
@@ -82,7 +81,7 @@ $(function () {
 
         $.each(ratios, function (i, ratio) {
 
-          $image.cropper('setAspectRatio', ratio);
+          cropper.setAspectRatio(ratio);
 
           switch (i) {
             case 0:
@@ -105,7 +104,7 @@ $(function () {
       QUnit.test('options.aspectRatio: undefined', function (assert) {
         var aspectRatio = options.aspectRatio;
 
-        $image.cropper('setAspectRatio', undefined);
+        cropper.setAspectRatio(undefined);
 
         if (isNaN(aspectRatio)) {
           assert.ok(isNaN(options.aspectRatio));

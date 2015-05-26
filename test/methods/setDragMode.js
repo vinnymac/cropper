@@ -4,21 +4,21 @@ $(function () {
 
   var $image = $(window.createCropperImage());
 
-  $image.cropper({
+  var cropper = new window.Cropper($image.get(0), {
     built: function () {
-      var $dragBox = $image.data('cropper').$dragBox;
+      var $dragBox = cropper.$dragBox;
 
       QUnit.test('methods.setDragMode', function (assert) {
         assert.equal($dragBox.getAttribute('data-drag'), 'crop');
       });
 
       QUnit.test('methods.setDragMode: move', function (assert) {
-        $image.cropper('setDragMode', 'move');
+        cropper.setDragMode('move');
         assert.equal($dragBox.getAttribute('data-drag'), 'move');
       });
 
       QUnit.test('methods.setDragMode: crop', function (assert) {
-        $image.cropper('setDragMode', 'crop');
+        cropper.setDragMode('crop');
         assert.equal($dragBox.getAttribute('data-drag'), 'crop');
       });
 

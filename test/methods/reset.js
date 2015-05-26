@@ -4,31 +4,31 @@ $(function () {
 
   var $image = $(window.createCropperImage());
 
-  $image.cropper({
+  var cropper = new window.Cropper($image.get(0), {
     strict: false,
 
     built: function () {
-      var canvasData = $image.cropper('getCanvasData'),
-          cropBoxData = $image.cropper('getCropBoxData');
+      var canvasData = cropper.getCanvasData(),
+          cropBoxData = cropper.getCropBoxData();
 
       QUnit.test('methods.reset', function (assert) {
-        $image.cropper('setCanvasData', {
+        cropper.setCanvasData({
           top: canvasData.top + 10,
           width: canvasData.width - 10
         });
 
-        assert.notDeepEqual($image.cropper('getCanvasData'), canvasData);
+        assert.notDeepEqual(cropper.getCanvasData(), canvasData);
 
-        $image.cropper('setCropBoxData', {
+        cropper.setCropBoxData({
           left: cropBoxData.left + 10,
           height: cropBoxData.height - 10
         });
 
-        assert.notDeepEqual($image.cropper('getCropBoxData'), cropBoxData);
+        assert.notDeepEqual(cropper.getCropBoxData(), cropBoxData);
 
-        $image.cropper('reset');
-        assert.deepEqual($image.cropper('getCanvasData'), canvasData);
-        assert.deepEqual($image.cropper('getCropBoxData'), cropBoxData);
+        cropper.reset();
+        assert.deepEqual(cropper.getCanvasData(), canvasData);
+        assert.deepEqual(cropper.getCropBoxData(), cropBoxData);
       });
 
     }

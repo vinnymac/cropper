@@ -11,9 +11,8 @@ $(function () {
         crossOrigin: 'anonymous'
       }));
 
-  $image.cropper({
+  var cropper = new window.Cropper($image.get(0), {
     built: function () {
-      var cropper = $image.data('cropper');
 
       QUnit.test('options.checkImageOrigin', function (assert) {
         assert.ok(cropper.$clone.attr('crossOrigin') === 'anonymous');
@@ -23,13 +22,12 @@ $(function () {
     }
   });
 
-  $image2.cropper({
+  var cropper2 = new window.Cropper($image2.get(0), {
     built: function () {
-      var cropper = $image2.data('cropper');
 
       QUnit.test('options.checkImageOrigin: exists crossOrigin attribute', function (assert) {
-        assert.ok(cropper.$clone.attr('crossOrigin') === 'anonymous');
-        assert.ok(cropper.$clone.attr('src').indexOf('timestamp') === -1);
+        assert.ok(cropper2.$clone.attr('crossOrigin') === 'anonymous');
+        assert.ok(cropper2.$clone.attr('src').indexOf('timestamp') === -1);
       });
 
     }

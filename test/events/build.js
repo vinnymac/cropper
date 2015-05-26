@@ -29,7 +29,7 @@ $(function () {
 
   });
 
-  var cropper = new Cropper($image, {
+  var cropper = new window.Cropper($image, {
     build: function (e) {
 
       QUnit.test('options.build', function (assert) {
@@ -53,5 +53,7 @@ $(function () {
 
     }
   });
+
+  return cropper;
 
 });
