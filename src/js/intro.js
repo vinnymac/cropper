@@ -8,17 +8,30 @@
  * Date: @DATE
  */
 
-(function (factory) {
+(function (root, factory) {
+
+  // Save the other cropper
+  var previousCropper = root.Cropper;
+
+  // No conflict
+  factory.noConflict = function () {
+    root.Cropper = previousCropper;
+    return this;
+  };
+
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as anonymous module.
-    define(['jquery'], factory);
+    define([], function () {
+      return (root.returnExportsGlobal = factory());
+    });
   } else if (typeof exports === 'object') {
     // Node / CommonJS
-    factory(require('jquery'));
+    module.exports = factory();
   } else {
     // Browser globals.
-    factory(jQuery);
+    root.Cropper = factory();
   }
-})(function ($) {
+
+}(this, function () {
 
   'use strict';

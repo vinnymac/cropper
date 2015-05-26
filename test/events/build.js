@@ -29,7 +29,7 @@ $(function () {
 
   });
 
-  $($image).cropper({
+  var cropper = new Cropper($image, {
     build: function (e) {
 
       QUnit.test('options.build', function (assert) {

@@ -18,7 +18,6 @@ module.exports = function (grunt) {
         'src/js/prototype.js',
         'src/js/defaults.js',
         'src/js/template.js',
-        'src/js/plugin.js',
         'src/js/outro.js'
       ];
 

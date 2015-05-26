@@ -105,8 +105,7 @@ $(function () {
       });
     });
 
-    $image.cropper(options);
-
+    var cropper = new window.Cropper($image.get(0), options);
 
     // Methods
     $(document.body).on('click', '[data-method]', function () {
@@ -129,7 +128,7 @@ $(function () {
           }
         }
 
-        result = $image.cropper(data.method, data.option);
+        result = cropper[data.method](data.option);
 
         if (data.method === 'getCroppedCanvas') {
           $('#getCroppedCanvasModal').modal().find('.modal-body').html(result);
@@ -149,22 +148,22 @@ $(function () {
       switch (e.which) {
         case 37:
           e.preventDefault();
-          $image.cropper('move', -1, 0);
+          cropper.move(-1, 0);
           break;
 
         case 38:
           e.preventDefault();
-          $image.cropper('move', 0, -1);
+          cropper.move(0, -1);
           break;
 
         case 39:
           e.preventDefault();
-          $image.cropper('move', 1, 0);
+          cropper.move(1, 0);
           break;
 
         case 40:
           e.preventDefault();
-          $image.cropper('move', 0, 1);
+          cropper.move(0, 1);
           break;
       }
 
@@ -188,7 +187,9 @@ $(function () {
             blobURL = URL.createObjectURL(file);
             $image.one('built.cropper', function () {
               URL.revokeObjectURL(blobURL); // Revoke when load complete
-            }).cropper('reset').cropper('replace', blobURL);
+            });
+            cropper.reset();
+            cropper.replace(blobURL);
             $inputImage.val('');
           } else {
             showMessage('Please choose an image file.');
@@ -205,7 +206,8 @@ $(function () {
       var $this = $(this);
 
       options[$this.val()] = $this.prop('checked');
-      $image.cropper('destroy').cropper(options);
+      cropper.destroy();
+      cropper = new window.Cropper($image.get(0), options);
     });
 
 

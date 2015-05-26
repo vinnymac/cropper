@@ -8,18 +8,31 @@
  * Date: @DATE
  */
 
-(function (factory) {
+(function (root, factory) {
+
+  // Save the other cropper
+  var previousCropper = root.Cropper;
+
+  // No conflict
+  factory.noConflict = function () {
+    root.Cropper = previousCropper;
+    return this;
+  };
+
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as anonymous module.
-    define(['jquery'], factory);
+    define([], function () {
+      return (root.returnExportsGlobal = factory());
+    });
   } else if (typeof exports === 'object') {
     // Node / CommonJS
-    factory(require('jquery'));
+    module.exports = factory();
   } else {
     // Browser globals.
-    factory(jQuery);
+    root.Cropper = factory();
   }
-})(function ($) {
+
+}(this, function () {
 
   'use strict';
 
@@ -2210,38 +2223,7 @@
   </div>
   */
 
-  // Save the other cropper
-  Cropper.other = $.fn.cropper;
 
-  // Register as jQuery plugin
-  $.fn.cropper = function (options) {
-    var args = toArray(arguments, 1),
-        result;
+  return Cropper;
 
-    this.each(function () {
-      var $this = $(this),
-          data = $this.data('cropper'),
-          fn;
-
-      if (!data) {
-        $this.data('cropper', (data = new Cropper(this, options)));
-      }
-
-      if (typeof options === 'string' && (typeof (fn = data[options]) === 'function' || false)) {
-        result = fn.apply(data, args);
-      }
-    });
-
-    return isUndefined(result) ? this : result;
-  };
-
-  $.fn.cropper.Constructor = Cropper;
-  $.fn.cropper.setDefaults = Cropper.setDefaults;
-
-  // No conflict
-  $.fn.cropper.noConflict = function () {
-    $.fn.cropper = Cropper.other;
-    return this;
-  };
-
-});
+}));
