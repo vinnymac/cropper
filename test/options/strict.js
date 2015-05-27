@@ -2,17 +2,17 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var $image = window.createCropperImage();
 
-  $image.cropper({
+  var cropper = new window.Cropper($image, {
     built: function () {
       var canvasData,
           cropBoxData;
 
       QUnit.test('options.strict: true', function (assert) {
-        $image.cropper('zoom', -0.5); // Zoom out
-        canvasData = $image.cropper('getCanvasData');
-        cropBoxData = $image.cropper('getCropBoxData');
+        cropper.zoom(-0.5); // Zoom out
+        canvasData = cropper.getCanvasData();
+        cropBoxData = cropper.getCropBoxData();
         assert.equal(Math.round(canvasData.width), Math.round(cropBoxData.width));
         assert.equal(Math.round(canvasData.height), Math.round(cropBoxData.height));
         assert.equal(Math.round(canvasData.left), Math.round(cropBoxData.left));
@@ -23,9 +23,9 @@ $(function () {
   });
 
   (function () {
-    var $image = $(window.createCropperImage());
+    var $image = window.createCropperImage();
 
-    $image.cropper({
+    var cropper = new window.Cropper($image, {
       strict: false,
 
       built: function () {
@@ -37,8 +37,8 @@ $(function () {
             };
 
         QUnit.test('options.strict: false', function (assert) {
-          $image.cropper('setCanvasData', canvasData);
-          assert.deepEqual($image.cropper('getCanvasData'), canvasData);
+          cropper.setCanvasData(canvasData);
+          assert.deepEqual(cropper.getCanvasData(), canvasData);
         });
 
       }

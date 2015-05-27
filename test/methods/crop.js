@@ -2,18 +2,17 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var $image = window.createCropperImage();
 
-  $image.cropper({
+  var cropper = new window.Cropper($image, {
     autoCrop: false,
 
     built: function () {
-      var cropper = $image.data('cropper');
 
       QUnit.test('methods.crop', function (assert) {
-        $image.cropper('crop');
+        cropper.crop();
         assert.ok(cropper.cropped);
-        assert.ok(cropper.$cropBox.is(':visible'));
+        assert.ok(cropper.$cropBox.offsetWidth > 0 && cropper.$cropBox.offsetHeight > 0);
       });
 
     }

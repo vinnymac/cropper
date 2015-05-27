@@ -2,16 +2,15 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var $image = window.createCropperImage();
 
-  $image.cropper({
+  var cropper = new window.Cropper($image, {
     resizable: false,
 
     built: function () {
-      var cropper = $image.data('cropper');
 
       QUnit.test('options.resizable', function (assert) {
-        assert.ok(cropper.$cropper.find('.cropper-line, .cropper-point').hasClass('cropper-hidden'));
+        assert.ok($(cropper.$cropper).find('.cropper-line, .cropper-point').hasClass('cropper-hidden'));
       });
 
     }

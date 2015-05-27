@@ -2,20 +2,21 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var $image = window.createCropperImage();
 
-  $image.cropper({
+  var cropper = new window.Cropper($image, {
     built: function () {
-      var cropper = $image.data('cropper');
 
       QUnit.test('methods.clear', function (assert) {
-        $image.cropper('clear');
+        cropper.clear();
         assert.ok(!cropper.cropped);
-        assert.ok(cropper.$cropBox.is(':hidden'));
-        assert.deepEqual($image.cropper('getCropBoxData'), {});
+        assert.ok(!(cropper.$cropBox.offsetWidth > 0 && cropper.$cropBox.offsetHeight > 0));
+        assert.deepEqual(cropper.getCropBoxData(), {});
       });
 
     }
   });
+
+  return cropper;
 
 });

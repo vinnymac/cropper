@@ -2,19 +2,22 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage()),
+  var $image = window.createCropperImage(),
       minCanvasHeight = 90;
 
-  $image.cropper({
+  var cropper = new window.Cropper($image, {
     strict: false,
     minCanvasHeight: minCanvasHeight,
 
     built: function () {
 
       QUnit.test('options.minCanvasHeight', function (assert) {
-        var data = $image.cropper('setCanvasData', {
-              height: 45
-            }).cropper('getCanvasData');
+
+        cropper.setCanvasData({
+          height: 45
+        });
+
+        var data = cropper.getCanvasData();
 
         assert.ok(Math.round(data.height) === minCanvasHeight);
       });

@@ -2,16 +2,15 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var $image = window.createCropperImage();
 
-  $image.cropper({
+  var cropper = new window.Cropper($image, {
     modal: false,
 
     built: function () {
-      var cropper = $image.data('cropper');
 
       QUnit.test('options.modal', function (assert) {
-        assert.ok(!cropper.$canvas.hasClass('cropper-modal'));
+        assert.ok(!cropper.$canvas.classList.contains('cropper-modal'));
       });
 
     }

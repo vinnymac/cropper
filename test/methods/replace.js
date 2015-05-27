@@ -12,10 +12,16 @@ $(function () {
       $image.one('built.cropper', function () {
         assert.ok(true);
         done();
-      }).cropper('replace', '../assets/img/picture-2.jpg');
+      });
+
+      cropper.replace('../assets/img/picture-2.jpg');
 
     });
 
-  }).cropper();
+  });
+
+  var cropper = new window.Cropper($image.get(0));
+
+  return cropper;
 
 });

@@ -2,16 +2,15 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var $image = window.createCropperImage();
 
-  $image.cropper({
+  var cropper = new window.Cropper($image, {
     rotatable: false,
 
     built: function () {
-      var cropper = $image.data('cropper');
 
       QUnit.test('options.rotatable', function (assert) {
-        $image.cropper('rotate', 15);
+        cropper.rotate(15);
 
         assert.equal(cropper.image.rotate, 0);
       });

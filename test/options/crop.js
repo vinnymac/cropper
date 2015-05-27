@@ -2,9 +2,9 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var $image = window.createCropperImage();
 
-  $image.cropper({
+  var cropper = new window.Cropper($image, {
     crop: function (data) {
 
       QUnit.test('options.crop', function (assert) {
@@ -17,5 +17,7 @@ $(function () {
 
     }
   });
+
+  return cropper;
 
 });

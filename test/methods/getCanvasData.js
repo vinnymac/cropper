@@ -2,16 +2,16 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperCanvas()),
+  var $image = window.createCropperCanvas(),
       isNumber = function (n) {
         return typeof n === 'number' && !isNaN(n);
       };
 
-  $image.cropper({
+  var cropper = new window.Cropper($image, {
     built: function () {
 
       QUnit.test('methods.getCanvasData', function (assert) {
-        var data = $image.cropper('getCanvasData');
+        var data = cropper.getCanvasData();
 
         assert.ok($.isPlainObject(data));
         assert.ok(isNumber(data.aspectRatio));

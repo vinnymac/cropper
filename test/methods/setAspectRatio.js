@@ -4,17 +4,16 @@ $(function () {
 
   var $image = $(window.createCropperImage());
 
-  $image.cropper({
+  var cropper = new window.Cropper($image, {
     built: function () {
-      var cropper = $image.data('cropper'),
-          options = cropper.options;
+      var options = cropper.options;
 
       QUnit.test('methods.setAspectRatio', function (assert) {
         var ratios = [0, 1 / 2, 1, 'auto', true, null, { a:1 }, ['auto', 2, 3], [1, 2, 3]];
 
         $.each(ratios, function (i, ratio) {
 
-          $image.cropper('setAspectRatio', ratio);
+          cropper.setAspectRatio(ratio);
 
           switch (i) {
             case 0:

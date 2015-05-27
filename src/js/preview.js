@@ -1,27 +1,26 @@
   prototype.initPreview = function () {
     var url = this.url;
 
-    this.$preview = $(this.options.preview);
-    this.$viewBox.html('<img src="' + url + '">');
+    this.$preview = toArray(document.querySelectorAll(this.options.preview || null));
+    this.$viewBox.innerHTML = '<img src="' + url + '">';
 
     // Override img element styles
     // Add `display:block` to avoid margin top issue (Occur only when margin-top <= -height)
-    this.$preview.each(function () {
-      var $this = $(this);
+    this.$preview.forEach(function (element) {
 
-      $this.data(CROPPER_PREVIEW, {
-        width: $this.width(),
-        height: $this.height(),
-        original: $this.html()
-      }).html('<img src="' + url + '" style="display:block;width:100%;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;image-orientation: 0deg!important">');
+      element.setAttribute(CROPPER_PREVIEW_WIDTH, element.offsetWidth);
+      element.setAttribute(CROPPER_PREVIEW_HEIGHT, element.offsetHeight);
+      element.setAttribute(CROPPER_PREVIEW_ORIGINAL, element.innerHTML);
+
+      element.innerHTML = '<img src="' + url + '" style="display:block;width:100%;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;image-orientation: 0deg!important">';
     });
   };
 
   prototype.resetPreview = function () {
-    this.$preview.each(function () {
-      var $this = $(this);
+    this.$preview.forEach(function (element) {
 
-      $this.html($this.data(CROPPER_PREVIEW).original).removeData(CROPPER_PREVIEW);
+      element.innerHTML = element.getAttribute(CROPPER_PREVIEW_ORIGINAL);
+      element.removeAttribute(CROPPER_PREVIEW_ORIGINAL);
     });
   };
 
@@ -39,17 +38,21 @@
       return;
     }
 
-    this.$viewBox.find('img').css({
-      width: width,
-      height: height,
-      marginLeft: -left,
-      marginTop: -top,
-      transform: getRotateValue(rotate)
+    toArray(this.$viewBox.querySelectorAll('img')).forEach(function (element) {
+      assign(element.style, {
+        width      : width + 'px',
+        height     : height + 'px',
+        marginLeft : -left + 'px',
+        marginTop  : -top + 'px',
+        transform  : getRotateValue(rotate)
+      });
     });
 
-    this.$preview.each(function () {
-      var $this = $(this),
-          data = $this.data(CROPPER_PREVIEW),
+    this.$preview.forEach(function (element) {
+      var data = {
+            width  : parseFloat(element.getAttribute(CROPPER_PREVIEW_WIDTH)),
+            height : parseFloat(element.getAttribute(CROPPER_PREVIEW_HEIGHT))
+          },
           ratio = data.width / cropBox.width,
           newWidth = data.width,
           newHeight = cropBox.height * ratio;
@@ -60,12 +63,19 @@
         newHeight = data.height;
       }
 
-      $this.width(newWidth).height(newHeight).find('img').css({
-        width: width * ratio,
-        height: height * ratio,
-        marginLeft: -left * ratio,
-        marginTop: -top * ratio,
-        transform: getRotateValue(rotate)
+      assign(element.style, {
+        width  : newWidth + 'px',
+        height : newHeight + 'px'
+      });
+
+      toArray(element.querySelectorAll('img')).forEach(function (element) {
+        assign(element.style, {
+          width      : (width * ratio) + 'px',
+          height     : (height * ratio) + 'px',
+          marginLeft : (-left * ratio) + 'px',
+          marginTop  : (-top * ratio) + 'px',
+          transform  : getRotateValue(rotate)
+        });
       });
     });
   };

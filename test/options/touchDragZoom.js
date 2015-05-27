@@ -2,19 +2,18 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage()),
+  var $image = window.createCropperImage(),
       pageX = window.innerWidth / 2,
       pageY = window.innerHeight / 2;
 
-  $image.cropper({
+  var cropper = new window.Cropper($image, {
     touchDragZoom: false,
 
     built: function () {
-      var cropper = $image.data('cropper'),
-          _ratio = cropper.image.ratio;
+      var _ratio = cropper.image.ratio;
 
       QUnit.test('options.touchDragZoom', function (assert) {
-        cropper.$cropper.trigger($.Event('touchstart', {
+        $(cropper.$cropper).trigger($.Event('touchstart', {
           originalEvent: {
             touches: [
               {

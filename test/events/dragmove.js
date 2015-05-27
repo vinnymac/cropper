@@ -2,21 +2,37 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var $image = window.createCropperImage();
 
-  $image.on('dragmove.cropper', function (e) {
+  $($image).get().forEach(function (element) {
+    element.addEventListener('dragmove.cropper', function (e) {
 
-    QUnit.test('methods.dragmove', function (assert) {
-      assert.equal(e.type, 'dragmove');
-      assert.equal(e.namespace, 'cropper');
+      QUnit.test('methods.dragmove', function (assert) {
+        var type = e.type.split('.');
+        assert.equal(type[0], 'dragmove');
+        assert.equal(type[1], 'cropper');
+      });
+
     });
+  });
 
-  }).cropper({
+  var cropper = new window.Cropper($image, {
     built: function () {
-      var $dragBox = $image.data('cropper').$dragBox;
+      var $dragBox = cropper.$dragBox;
 
       // Triggers events manually when built
-      $dragBox.trigger('mousedown').trigger('mousemove').trigger('mouseup');
+
+      var mouseDown = document.createEvent('MouseEvents');
+      mouseDown.initEvent('mousedown', true, true);
+      $dragBox.dispatchEvent(mouseDown);
+
+      var mouseUp = document.createEvent('MouseEvents');
+      mouseUp.initEvent('mouseup', true, true);
+      $dragBox.dispatchEvent(mouseUp);
+
+      var mouseMove = document.createEvent('MouseEvents');
+      mouseMove.initEvent('mousemove', true, true);
+      $dragBox.dispatchEvent(mouseMove);
     },
 
     dragmove: function (e) {
@@ -28,5 +44,7 @@ $(function () {
 
     }
   });
+
+  return cropper;
 
 });

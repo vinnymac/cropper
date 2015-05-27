@@ -2,16 +2,16 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage()),
+  var $image = window.createCropperImage(),
       isNumber = function (n) {
         return typeof n === 'number' && !isNaN(n);
       };
 
-  $image.cropper({
+  var cropper = new window.Cropper($image, {
     built: function () {
 
       QUnit.test('methods.getImageData', function (assert) {
-        var data = $image.cropper('getImageData');
+        var data = cropper.getImageData();
 
         // Not rotate
         assert.ok($.isPlainObject(data));

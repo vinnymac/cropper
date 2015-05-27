@@ -2,6 +2,7 @@
     var $this = this.$element,
         $clone = this.$clone,
         options = this.options,
+        cropperContainer,
         $cropper,
         $cropBox;
 
@@ -14,19 +15,25 @@
     }
 
     // Create cropper elements
-    this.$cropper = $cropper = $(Cropper.TEMPLATE);
+    cropperContainer = document.createElement('div');
+    cropperContainer.innerHTML = Cropper.TEMPLATE;
+    this.$cropper = $cropper = cropperContainer.firstChild;
 
     // Hide the original image
-    $this.addClass(CLASS_HIDDEN);
+    addClass($this, CLASS_HIDDEN);
 
     // Show the clone iamge
-    $clone.removeClass(CLASS_HIDE);
+    removeClass($clone, CLASS_HIDE);
 
-    this.$container = $this.parent().append($cropper);
-    this.$canvas = $cropper.find('.cropper-canvas').append($clone);
-    this.$dragBox = $cropper.find('.cropper-drag-box');
-    this.$cropBox = $cropBox = $cropper.find('.cropper-crop-box');
-    this.$viewBox = $cropper.find('.cropper-view-box');
+    this.$container = $this.parentNode;
+    this.$container.appendChild($cropper);
+
+    this.$canvas = $cropper.querySelector('.cropper-canvas');
+    this.$canvas.appendChild($clone);
+
+    this.$dragBox = $cropper.querySelector('.cropper-drag-box');
+    this.$cropBox = $cropBox = $cropper.querySelector('.cropper-crop-box');
+    this.$viewBox = $cropper.querySelector('.cropper-view-box');
 
     this.addListeners();
     this.initPreview();
@@ -38,30 +45,38 @@
       this.cropped = true;
 
       if (options.modal) {
-        this.$dragBox.addClass(CLASS_MODAL);
+        addClass(this.$dragBox, CLASS_MODAL);
       }
     } else {
-      $cropBox.addClass(CLASS_HIDDEN);
+      addClass($cropBox, CLASS_HIDDEN);
     }
 
     if (options.background) {
-      $cropper.addClass(CLASS_BG);
+      addClass($cropper, CLASS_BG);
     }
 
     if (!options.highlight) {
-      $cropBox.find('.cropper-face').addClass(CLASS_INVISIBLE);
+      toArray($cropBox.querySelectorAll('.cropper-face')).forEach(function (element) {
+        addClass(element, CLASS_INVISIBLE);
+      });
     }
 
     if (!options.guides) {
-      $cropBox.find('.cropper-dashed').addClass(CLASS_HIDDEN);
+      toArray($cropBox.querySelectorAll('.cropper-dashed')).forEach(function (element) {
+        addClass(element, CLASS_HIDDEN);
+      });
     }
 
     if (!options.movable) {
-      $cropBox.find('.cropper-face').data('drag', 'move');
+      toArray($cropBox.querySelectorAll('.cropper-face')).forEach(function (element) {
+        element.setAttribute('data-drag', 'move');
+      });
     }
 
     if (!options.resizable) {
-      $cropBox.find('.cropper-line, .cropper-point').addClass(CLASS_HIDDEN);
+      toArray($cropBox.querySelectorAll('.cropper-line, .cropper-point')).forEach(function (element) {
+        addClass(element, CLASS_HIDDEN);
+      });
     }
 
     this.setDragMode(options.dragCrop ? 'crop' : 'move');
@@ -69,7 +84,8 @@
     this.built = true;
     this.render();
     this.setData(options.data);
-    $this.one(EVENT_BUILT, options.built).trigger(EVENT_BUILT); // Only trigger once
+    one($this, EVENT_BUILT, options.built);
+    $this.dispatchEvent(createEvent(EVENT_BUILT)); // Only trigger once
   };
 
   prototype.unbuild = function () {
@@ -95,6 +111,6 @@
     this.$canvas = null;
     this.$container = null;
 
-    this.$cropper.remove();
+    remove(this.$cropper);
     this.$cropper = null;
   };

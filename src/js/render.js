@@ -1,4 +1,4 @@
-  $.extend(prototype, {
+  assign(prototype, {
     render: function () {
       this.initContainer();
       this.initCanvas();
@@ -17,16 +17,21 @@
           $cropper = this.$cropper,
           options = this.options;
 
-      $cropper.addClass(CLASS_HIDDEN);
-      $this.removeClass(CLASS_HIDDEN);
+      addClass($cropper, CLASS_HIDDEN);
+      removeClass($this, CLASS_HIDDEN);
 
-      $cropper.css((this.container = {
-        width: max($container.width(), num(options.minContainerWidth) || 200),
-        height: max($container.height(), num(options.minContainerHeight) || 100)
-      }));
+      this.container = {
+        width: max($container.offsetWidth, num(options.minContainerWidth) || 200),
+        height: max($container.offsetHeight, num(options.minContainerHeight) || 100)
+      };
 
-      $this.addClass(CLASS_HIDDEN);
-      $cropper.removeClass(CLASS_HIDDEN);
+      assign($cropper.style, {
+        width  : this.container.width + 'px',
+        height : this.container.height + 'px'
+      });
+
+      addClass($this, CLASS_HIDDEN);
+      removeClass($cropper, CLASS_HIDDEN);
     },
 
     // image box (wrapper)
@@ -53,8 +58,8 @@
 
       this.canvas = canvas;
       this.limitCanvas(true, true);
-      this.initialImage = $.extend({}, image);
-      this.initialCanvas = $.extend({}, canvas);
+      this.initialImage = assign({}, image);
+      this.initialCanvas = assign({}, canvas);
     },
 
     limitCanvas: function (size, position) {
@@ -105,7 +110,7 @@
           }
         }
 
-        $.extend(canvas, {
+        assign(canvas, {
           minWidth: minCanvasWidth,
           minHeight: minCanvasHeight,
           maxWidth: Infinity,
@@ -180,11 +185,11 @@
       canvas.oldLeft = canvas.left = min(max(canvas.left, canvas.minLeft), canvas.maxLeft);
       canvas.oldTop = canvas.top = min(max(canvas.top, canvas.minTop), canvas.maxTop);
 
-      this.$canvas.css({
-        width: canvas.width,
-        height: canvas.height,
-        left: canvas.left,
-        top: canvas.top
+      assign(this.$canvas.style, {
+        width: canvas.width + 'px',
+        height: canvas.height + 'px',
+        left: canvas.left + 'px',
+        top: canvas.top + 'px'
       });
 
       this.renderImage();
@@ -212,7 +217,7 @@
         }, true);
       }
 
-      $.extend(image, reversed ? {
+      assign(image, reversed ? {
         width: reversed.width,
         height: reversed.height,
         left: (canvas.width - reversed.width) / 2,
@@ -224,11 +229,11 @@
         top: 0
       });
 
-      this.$clone.css({
-        width: image.width,
-        height: image.height,
-        marginLeft: image.left,
-        marginTop: image.top,
+      assign(this.$clone.style, {
+        width: image.width + 'px',
+        height: image.height + 'px',
+        marginLeft: image.left + 'px',
+        marginTop: image.top + 'px',
         transform: getRotateValue(image.rotate)
       });
     },
@@ -264,7 +269,7 @@
       cropBox.oldLeft = cropBox.left = canvas.left + (canvas.width - cropBox.width) / 2;
       cropBox.oldTop = cropBox.top = canvas.top + (canvas.height - cropBox.height) / 2;
 
-      this.initialCropBox = $.extend({}, cropBox);
+      this.initialCropBox = assign({}, cropBox);
     },
 
     limitCropBox: function (size, position) {
@@ -345,14 +350,16 @@
       cropBox.oldTop = cropBox.top = min(max(cropBox.top, cropBox.minTop), cropBox.maxTop);
 
       if (options.movable) {
-        $cropBox.find('.cropper-face').data('drag', (cropBox.width === containerWidth && cropBox.height === containerHeight) ? 'move' : 'all');
+        toArray($cropBox.querySelectorAll('.cropper-face')).forEach(function (element) {
+          element.setAttribute('data-drag', (cropBox.width === containerWidth && cropBox.height === containerHeight) ? 'move' : 'all');
+        });
       }
 
-      $cropBox.css({
-        width: cropBox.width,
-        height: cropBox.height,
-        left: cropBox.left,
-        top: cropBox.top
+      assign($cropBox.style, {
+        width: cropBox.width + 'px',
+        height: cropBox.height + 'px',
+        left: cropBox.left + 'px',
+        top: cropBox.top + 'px'
       });
 
       if (this.cropped && options.strict) {

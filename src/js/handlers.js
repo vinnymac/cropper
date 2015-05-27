@@ -1,4 +1,4 @@
-  $.extend(prototype, {
+  assign(prototype, {
     resize: function () {
       var $container = this.$container,
           container = this.container,
@@ -10,19 +10,26 @@
         return;
       }
 
-      ratio = $container.width() / container.width;
+      ratio = $container.offsetWidth / container.width;
 
-      if (ratio !== 1 || $container.height() !== container.height) {
+      if (ratio !== 1 || $container.offsetHeight !== container.height) {
         canvasData = this.getCanvasData();
         cropBoxData = this.getCropBoxData();
 
         this.render();
-        this.setCanvasData($.each(canvasData, function (i, n) {
-          canvasData[i] = n * ratio;
-        }));
-        this.setCropBoxData($.each(cropBoxData, function (i, n) {
-          cropBoxData[i] = n * ratio;
-        }));
+        for (var k in canvasData) {
+          if (canvasData.hasOwnProperty(k)) {
+            canvasData[k] = canvasData[k] * ratio;
+          }
+        }
+        this.setCanvasData(canvasData);
+
+        for (k in cropBoxData) {
+          if (cropBoxData.hasOwnProperty(k)) {
+            cropBoxData[k] = cropBoxData[k] * ratio;
+          }
+        }
+        this.setCropBoxData(cropBoxData);
       }
     },
 
@@ -30,8 +37,7 @@
       if (this.disabled) {
         return;
       }
-
-      if (this.$dragBox.hasClass(CLASS_CROP)) {
+      if (hasClass(this.$dragBox, CLASS_CROP)) {
         this.setDragMode('move');
       } else {
         this.setDragMode('crop');
@@ -39,8 +45,7 @@
     },
 
     wheel: function (event) {
-      var e = event.originalEvent,
-          delta = 1;
+      var delta = 1;
 
       if (this.disabled) {
         return;
@@ -48,12 +53,12 @@
 
       event.preventDefault();
 
-      if (e.deltaY) {
-        delta = e.deltaY > 0 ? 1 : -1;
-      } else if (e.wheelDelta) {
-        delta = -e.wheelDelta / 120;
-      } else if (e.detail) {
-        delta = e.detail > 0 ? 1 : -1;
+      if (event.deltaY) {
+        delta = event.deltaY > 0 ? 1 : -1;
+      } else if (event.wheelDelta) {
+        delta = -event.wheelDelta / 120;
+      } else if (event.detail) {
+        delta = event.detail > 0 ? 1 : -1;
       }
 
       this.zoom(-delta * 0.1);
@@ -61,8 +66,7 @@
 
     dragstart: function (event) {
       var options = this.options,
-          originalEvent = event.originalEvent,
-          touches = originalEvent && originalEvent.touches,
+          touches = event && event.touches,
           e = event,
           dragType,
           dragStartEvent,
@@ -89,19 +93,19 @@
         e = touches[0];
       }
 
-      dragType = dragType || $(e.target).data('drag');
+      dragType = dragType || e.target.getAttribute('data-drag');
 
       if (REGEXP_DRAG_TYPES.test(dragType)) {
         event.preventDefault();
 
-        dragStartEvent = $.Event(EVENT_DRAG_START, {
-          originalEvent: originalEvent,
+        dragStartEvent = createEvent(EVENT_DRAG_START, {
+          originalEvent: event,
           dragType: dragType
         });
 
-        this.$element.trigger(dragStartEvent);
+        this.$element.dispatchEvent(dragStartEvent);
 
-        if (dragStartEvent.isDefaultPrevented()) {
+        if (dragStartEvent.defaultPrevented) {
           return;
         }
 
@@ -112,15 +116,14 @@
 
         if (dragType === 'crop') {
           this.cropping = true;
-          this.$dragBox.addClass(CLASS_MODAL);
+          addClass(this.$dragBox, CLASS_MODAL);
         }
       }
     },
 
     dragmove: function (event) {
       var options = this.options,
-          originalEvent = event.originalEvent,
-          touches = originalEvent && originalEvent.touches,
+          touches = event && event.touches,
           e = event,
           dragType = this.dragType,
           dragMoveEvent,
@@ -149,14 +152,14 @@
       if (dragType) {
         event.preventDefault();
 
-        dragMoveEvent = $.Event(EVENT_DRAG_MOVE, {
-          originalEvent: originalEvent,
+        dragMoveEvent = createEvent(EVENT_DRAG_MOVE, {
+          originalEvent: event,
           dragType: dragType
         });
 
-        this.$element.trigger(dragMoveEvent);
+        this.$element.dispatchEvent(dragMoveEvent);
 
-        if (dragMoveEvent.isDefaultPrevented()) {
+        if (dragMoveEvent.defaultPrevented) {
           return;
         }
 
@@ -178,20 +181,20 @@
       if (dragType) {
         event.preventDefault();
 
-        dragEndEvent = $.Event(EVENT_DRAG_END, {
-          originalEvent: event.originalEvent,
+        dragEndEvent = createEvent(EVENT_DRAG_END, {
+          originalEvent: event,
           dragType: dragType
         });
 
-        this.$element.trigger(dragEndEvent);
+        this.$element.dispatchEvent(dragEndEvent);
 
-        if (dragEndEvent.isDefaultPrevented()) {
+        if (dragEndEvent.defaultPrevented) {
           return;
         }
 
         if (this.cropping) {
           this.cropping = false;
-          this.$dragBox.toggleClass(CLASS_MODAL, this.cropped && this.options.modal);
+          toggleClass(this.$dragBox, CLASS_MODAL, this.cropped && this.options.modal);
         }
 
         this.dragType = '';

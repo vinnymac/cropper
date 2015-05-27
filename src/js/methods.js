@@ -1,4 +1,4 @@
-  $.extend(prototype, {
+  assign(prototype, {
     crop: function () {
       if (!this.built || this.disabled) {
         return;
@@ -9,10 +9,10 @@
         this.limitCropBox(true, true);
 
         if (this.options.modal) {
-          this.$dragBox.addClass(CLASS_MODAL);
+          addClass(this.$dragBox, CLASS_MODAL);
         }
 
-        this.$cropBox.removeClass(CLASS_HIDDEN);
+        removeClass(this.$cropBox, CLASS_HIDDEN);
       }
 
       this.setCropBoxData(this.initialCropBox);
@@ -23,9 +23,9 @@
         return;
       }
 
-      this.image = $.extend({}, this.initialImage);
-      this.canvas = $.extend({}, this.initialCanvas);
-      this.cropBox = $.extend({}, this.initialCropBox); // required for strict mode
+      this.image = assign({}, this.initialImage);
+      this.canvas = assign({}, this.initialCanvas);
+      this.cropBox = assign({}, this.initialCropBox); // required for strict mode
 
       this.renderCanvas();
 
@@ -39,7 +39,7 @@
         return;
       }
 
-      $.extend(this.cropBox, {
+      assign(this.cropBox, {
         left: 0,
         top: 0,
         width: 0,
@@ -52,8 +52,8 @@
       this.limitCanvas();
       this.renderCanvas(); // Render canvas after render crop box
 
-      this.$dragBox.removeClass(CLASS_MODAL);
-      this.$cropBox.addClass(CLASS_HIDDEN);
+      removeClass(this.$dragBox, CLASS_MODAL);
+      addClass(this.$cropBox, CLASS_HIDDEN);
     },
 
     destroy: function () {
@@ -61,12 +61,10 @@
 
       if (this.ready) {
         this.unbuild();
-        $this.removeClass(CLASS_HIDDEN);
+        removeClass($this, CLASS_HIDDEN);
       } else if (this.$clone) {
-        this.$clone.remove();
+        remove(this.$clone);
       }
-
-      $this.removeData('cropper');
     },
 
     replace: function (url) {
@@ -79,14 +77,14 @@
     enable: function () {
       if (this.built) {
         this.disabled = false;
-        this.$cropper.removeClass(CLASS_DISABLED);
+        removeClass(this.$cropper, CLASS_DISABLED);
       }
     },
 
     disable: function () {
       if (this.built) {
         this.disabled = true;
-        this.$cropper.addClass(CLASS_DISABLED);
+        addClass(this.$cropper, CLASS_DISABLED);
       }
     },
 
@@ -109,10 +107,10 @@
       delta = num(delta);
 
       if (delta && this.built && !this.disabled && this.options.zoomable) {
-        zoomEvent = delta > 0 ? $.Event(EVENT_ZOOM_IN) : $.Event(EVENT_ZOOM_OUT);
-        this.$element.trigger(zoomEvent);
+        zoomEvent = delta > 0 ? createEvent(EVENT_ZOOM_IN) : createEvent(EVENT_ZOOM_OUT);
+        this.$element.dispatchEvent(zoomEvent);
 
-        if (zoomEvent.isDefaultPrevented()) {
+        if (zoomEvent.defaultPrevented) {
           return;
         }
 
@@ -157,10 +155,11 @@
 
         ratio = image.width / image.naturalWidth;
 
-        $.each(data, function (i, n) {
-          n = n / ratio;
-          data[i] = n;
-        });
+        for (var k in data) {
+          if (data.hasOwnProperty(k)) {
+            data[k] = (data[k] / ratio);
+          }
+        }
 
       } else {
         data = {
@@ -182,7 +181,7 @@
           cropBoxData = {},
           ratio;
 
-      if (this.built && !this.disabled && $.isPlainObject(data)) {
+      if (this.built && !this.disabled && isPlainObject(data)) {
         if (isNumber(data.rotate) && data.rotate !== image.rotate && this.options.rotatable) {
           image.rotate = data.rotate;
           this.rotated = true;
@@ -239,7 +238,7 @@
       var canvas = this.canvas,
           aspectRatio = canvas.aspectRatio;
 
-      if (this.built && !this.disabled && $.isPlainObject(data)) {
+      if (this.built && !this.disabled && isPlainObject(data)) {
         if (isNumber(data.left)) {
           canvas.left = data.left;
         }
@@ -280,7 +279,7 @@
       var cropBox = this.cropBox,
           aspectRatio = this.options.aspectRatio;
 
-      if (this.built && this.cropped && !this.disabled && $.isPlainObject(data)) {
+      if (this.built && this.cropped && !this.disabled && isPlainObject(data)) {
 
         if (isNumber(data.left)) {
           cropBox.left = data.left;
@@ -327,7 +326,7 @@
         return;
       }
 
-      if (!$.isPlainObject(options)) {
+      if (!isPlainObject(options)) {
         options = {};
       }
 
@@ -336,7 +335,7 @@
       originalHeight = data.height;
       aspectRatio = originalWidth / originalHeight;
 
-      if ($.isPlainObject(options)) {
+      if (isPlainObject(options)) {
         scaledWidth = options.width;
         scaledHeight = options.height;
 
@@ -352,7 +351,7 @@
       canvasWidth = scaledWidth || originalWidth;
       canvasHeight = scaledHeight || originalHeight;
 
-      canvas = $('<canvas>')[0];
+      canvas = document.createElement('canvas');
       canvas.width = canvasWidth;
       canvas.height = canvasHeight;
       context = canvas.getContext('2d');
@@ -364,7 +363,7 @@
 
       // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D.drawImage
       context.drawImage.apply(context, (function () {
-        var source = getSourceCanvas(this.$clone[0], this.image),
+        var source = getSourceCanvas(this.$clone, this.image),
             sourceWidth = source.width,
             sourceHeight = source.height,
             args = [source],
@@ -449,7 +448,7 @@
         case 'crop':
           if (this.options.dragCrop) {
             cropable = true;
-            $dragBox.data('drag', mode);
+            $dragBox.setAttribute('data-drag', mode);
           } else {
             movable = true;
           }
@@ -458,14 +457,14 @@
 
         case 'move':
           movable = true;
-          $dragBox.data('drag', mode);
+          $dragBox.setAttribute('data-drag', mode);
 
           break;
 
         default:
-          $dragBox.removeData('drag');
+          $dragBox.removeAttribute('drag');
       }
-
-      $dragBox.toggleClass(CLASS_CROP, cropable).toggleClass(CLASS_MOVE, movable);
+      toggleClass($dragBox, CLASS_CROP, cropable);
+      toggleClass($dragBox, CLASS_MOVE, movable);
     }
   });

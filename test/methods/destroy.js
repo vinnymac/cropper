@@ -2,30 +2,33 @@ $(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage());
+  var image = window.createCropperImage();
+  var $image = $(image);
 
   QUnit.test('methods.destroy: before built', function (assert) {
     assert.ok(!$image.hasClass('cropper-hidden'));
 
-    $image.cropper();
+    var cropper = new window.Cropper(image);
     assert.ok(!$image.hasClass('cropper-hidden'));
-    assert.ok(typeof $image.data('cropper') === 'object');
+    assert.ok(typeof cropper === 'object');
 
-    $image.cropper('destroy');
+    cropper.destroy();
+    cropper = null;
     assert.ok(!$image.hasClass('cropper-hidden'));
-    assert.ok(typeof $image.data('cropper') === 'undefined');
+    assert.ok(cropper === null);
 
     QUnit.test('methods.destroy: after built', function (assert) {
       var done = assert.async();
 
-      $image.cropper({
+      var cropper = new window.Cropper(image, {
         built: function () {
           assert.ok($image.hasClass('cropper-hidden'));
-          assert.ok(typeof $image.data('cropper') === 'object');
+          assert.ok(typeof cropper === 'object');
 
-          $image.cropper('destroy');
+          cropper.destroy();
+          cropper = null;
           assert.ok(!$image.hasClass('cropper-hidden'));
-          assert.ok(typeof $image.data('cropper') === 'undefined');
+          assert.ok(cropper === null);
           done();
         }
       });

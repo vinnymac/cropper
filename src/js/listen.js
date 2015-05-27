@@ -1,33 +1,65 @@
   prototype.addListeners = function () {
     var options = this.options;
 
-    this.$element.on(EVENT_DRAG_START, options.dragstart).on(EVENT_DRAG_MOVE, options.dragmove).on(EVENT_DRAG_END, options.dragend).on(EVENT_ZOOM_IN, options.zoomin).on(EVENT_ZOOM_OUT, options.zoomout);
-    this.$cropper.on(EVENT_MOUSE_DOWN, $.proxy(this.dragstart, this)).on(EVENT_DBLCLICK, $.proxy(this.dblclick, this));
+    on(this.$element, EVENT_DRAG_START, options.dragstart);
+    on(this.$element, EVENT_DRAG_MOVE, options.dragmove);
+    on(this.$element, EVENT_DRAG_END, options.dragend);
+    on(this.$element, EVENT_ZOOM_IN, options.zoomin);
+    on(this.$element, EVENT_ZOOM_OUT, options.zoomout);
+
+    on(this.$cropper, EVENT_MOUSE_DOWN, (this._dragstart = proxy(this.dragstart, this)));
+    on(this.$cropper, EVENT_TOUCH_START, this._dragstart);
+    on(this.$cropper, EVENT_DBLCLICK, (this._dblclick = proxy(this.dblclick, this)));
 
     if (options.zoomable && options.mouseWheelZoom) {
-      this.$cropper.on(EVENT_WHEEL, $.proxy(this.wheel, this));
+      on(this.$cropper, EVENT_WHEEL, (this._wheel = proxy(this.wheel, this)));
+      on(this.$cropper, EVENT_MOUSE_WHEEL, this._wheel);
+      on(this.$cropper, EVENT_DOM_MOUSE_SCROLL, this._wheel);
     }
 
-    $document.on(EVENT_MOUSE_MOVE, (this._dragmove = proxy(this.dragmove, this))).on(EVENT_MOUSE_UP, (this._dragend = proxy(this.dragend, this)));
+    on(document, EVENT_MOUSE_MOVE, (this._dragmove = proxy(this.dragmove, this)));
+    on(document, EVENT_TOUCH_MOVE, this._dragmove);
+
+    on(document, EVENT_MOUSE_UP, (this._dragend = proxy(this.dragend, this)));
+    on(document, EVENT_MOUSE_LEAVE, this._dragend);
+    on(document, EVENT_TOUCH_END, this._dragend);
+    on(document, EVENT_TOUCH_LEAVE, this._dragend);
+    on(document, EVENT_TOUCH_CANCEL, this._dragend);
 
     if (options.responsive) {
-      $window.on(EVENT_RESIZE, (this._resize = proxy(this.resize, this)));
+      on(window, EVENT_RESIZE, (this._resize = proxy(this.resize, this)));
     }
   };
 
   prototype.removeListeners = function () {
     var options = this.options;
 
-    this.$element.off(EVENT_DRAG_START, options.dragstart).off(EVENT_DRAG_MOVE, options.dragmove).off(EVENT_DRAG_END, options.dragend).off(EVENT_ZOOM_IN, options.zoomin).off(EVENT_ZOOM_OUT, options.zoomout);
-    this.$cropper.off(EVENT_MOUSE_DOWN, this.dragstart).off(EVENT_DBLCLICK, this.dblclick);
+    off(this.$element, EVENT_DRAG_START, options.dragstart);
+    off(this.$element, EVENT_DRAG_MOVE, options.dragmove);
+    off(this.$element, EVENT_DRAG_END, options.dragend);
+    off(this.$element, EVENT_ZOOM_IN, options.zoomin);
+    off(this.$element, EVENT_ZOOM_OUT, options.zoomout);
+
+    off(this.$cropper, EVENT_MOUSE_DOWN, this._dragstart);
+    off(this.$cropper, EVENT_TOUCH_START, this._dragstart);
+    off(this.$cropper, EVENT_DBLCLICK, this._dblclick);
 
     if (options.zoomable && options.mouseWheelZoom) {
-      this.$cropper.off(EVENT_WHEEL, this.wheel);
+      off(this.$cropper, EVENT_WHEEL, this._wheel);
+      off(this.$cropper, EVENT_MOUSE_WHEEL, this._wheel);
+      off(this.$cropper, EVENT_DOM_MOUSE_SCROLL, this._wheel);
     }
 
-    $document.off(EVENT_MOUSE_MOVE, this._dragmove).off(EVENT_MOUSE_UP, this._dragend);
+    off(document, EVENT_MOUSE_MOVE, this._dragmove);
+    off(document, EVENT_TOUCH_MOVE, this._dragmove);
+
+    off(document, EVENT_MOUSE_UP, this._dragend);
+    off(document, EVENT_MOUSE_LEAVE, this._dragend);
+    off(document, EVENT_TOUCH_END, this._dragend);
+    off(document, EVENT_TOUCH_LEAVE, this._dragend);
+    off(document, EVENT_TOUCH_CANCEL, this._dragend);
 
     if (options.responsive) {
-      $window.off(EVENT_RESIZE, this._resize);
+      off(window, EVENT_RESIZE, this._resize);
     }
   };

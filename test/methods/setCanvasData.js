@@ -7,15 +7,17 @@ $(function () {
         return typeof n === 'number' && !isNaN(n);
       };
 
-  $image.cropper({
+  var cropper = new window.Cropper($image.get(0), {
     built: function () {
-      var _data = $image.cropper('getImageData');
+      var _data = cropper.getImageData();
 
       QUnit.test('methods.setCanvasData', function (assert) {
-        var data = $image.cropper('setCanvasData', {
-              left: 16,
-              height: 120
-            }).cropper('getCanvasData');
+        cropper.setCanvasData({
+          left: 16,
+          height: 120
+        });
+
+        var data = cropper.getCanvasData();
 
         assert.ok($.isPlainObject(data));
         assert.ok(isNumber(data.left));
@@ -30,10 +32,14 @@ $(function () {
       });
 
       QUnit.test('methods.setCanvasData: move', function (assert) {
-        var data = $image.cropper('reset').cropper('setCanvasData', {
-              left: 16,
-              top: 9
-            }).cropper('getCanvasData');
+        cropper.reset();
+
+        cropper.setCanvasData({
+          left: 16,
+          top: 9
+        });
+
+        var data = cropper.getCanvasData();
 
         assert.notEqual(data.left, _data.left);
         assert.notEqual(data.top, _data.top);
@@ -43,10 +49,14 @@ $(function () {
 
 
       QUnit.test('methods.setCanvasData: resize', function (assert) {
-        var data = $image.cropper('reset').cropper('setCanvasData', {
-              width: 320,
-              height: 180
-            }).cropper('getCanvasData');
+        cropper.reset();
+
+        cropper.setCanvasData({
+          width: 320,
+          height: 180
+        });
+
+        var data = cropper.getCanvasData();
 
         assert.equal(data.left, _data.left);
         assert.equal(data.top, _data.top);
