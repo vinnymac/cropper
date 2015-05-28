@@ -1,11 +1,11 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = window.createCropperImage();
+  var image = window.createCropperImage();
 
-  $image.addEventListener('build.cropper', function y(e) {
-    $image.removeEventListener(e.type, y);
+  image.addEventListener('build.cropper', function y(e) {
+    image.removeEventListener(e.type, y);
 
     QUnit.test('methods.build', function (assert) {
       var type = e.type.split('.');
@@ -20,8 +20,8 @@ $(function () {
 
   });
 
-  $image.addEventListener('built.cropper', function y(e) {
-    $image.removeEventListener(e.type, y);
+  image.addEventListener('built.cropper', function y(e) {
+    image.removeEventListener(e.type, y);
 
     QUnit.test('methods.build: default prevented', function (assert) {
       assert.ok(e.type !== 'built');
@@ -29,7 +29,7 @@ $(function () {
 
   });
 
-  var cropper = new window.Cropper($image, {
+  var cropper = new window.Cropper(image, {
     build: function (e) {
 
       QUnit.test('options.build', function (assert) {
@@ -56,4 +56,4 @@ $(function () {
 
   return cropper;
 
-});
+})();

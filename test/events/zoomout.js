@@ -1,10 +1,11 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = window.createCropperImage();
+  var image = window.createCropperImage();
 
-  $($image).one('zoomout.cropper', function (e) {
+  image.addEventListener('zoomout.cropper', function y(e) {
+    image.removeEventListener(e.type, y);
 
     QUnit.test('methods.zoomout', function (assert) {
       assert.ok(e.type === 'zoomout' && e.namespace === 'cropper');
@@ -12,7 +13,7 @@ $(function () {
 
   });
 
-  var cropper = new window.Cropper($image, {
+  var cropper = new window.Cropper(image, {
     zoomout: function (e) {
 
       QUnit.test('options.zoomout', function (assert) {
@@ -24,4 +25,4 @@ $(function () {
 
   return cropper;
 
-});
+})();

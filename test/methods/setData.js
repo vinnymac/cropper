@@ -1,13 +1,10 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage()),
-      isNumber = function (n) {
-        return typeof n === 'number' && !isNaN(n);
-      };
+  var image = window.createCropperImage();
 
-  var cropper = new window.Cropper($image.get(0), {
+  var cropper = new window.Cropper(image, {
     built: function () {
       var _data = cropper.getData();
 
@@ -19,11 +16,11 @@ $(function () {
 
         var data = cropper.getData();
 
-        assert.ok($.isPlainObject(data));
-        assert.ok(isNumber(data.x));
-        assert.ok(isNumber(data.y));
-        assert.ok(isNumber(data.width));
-        assert.ok(isNumber(data.height));
+        assert.ok(window.isPlainObject(data));
+        assert.ok(window.isNumber(data.x));
+        assert.ok(window.isNumber(data.y));
+        assert.ok(window.isNumber(data.width));
+        assert.ok(window.isNumber(data.height));
 
         assert.notEqual(data.x, _data.x);
         assert.equal(data.y, _data.y);
@@ -67,4 +64,4 @@ $(function () {
     }
   });
 
-});
+})();

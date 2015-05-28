@@ -252,7 +252,6 @@ module.exports = function (grunt) {
           flatten: true,
           cwd: 'bower_components',
           src: [
-            'jquery/dist/jquery.min.js',
             'bootstrap/dist/js/bootstrap.min.js',
             'qunit/qunit/qunit.js'
           ],

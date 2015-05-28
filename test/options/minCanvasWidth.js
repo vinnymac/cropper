@@ -1,11 +1,11 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = $(window.createCropperImage()),
+  var image = window.createCropperImage(),
       minCanvasWidth = 160;
 
-  var cropper = new window.Cropper($image, {
+  var cropper = new window.Cropper(image, {
     strict: false,
     minCanvasWidth: minCanvasWidth,
 
@@ -24,4 +24,4 @@ $(function () {
     }
   });
 
-});
+})();

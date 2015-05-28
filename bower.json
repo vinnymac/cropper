@@ -1,6 +1,6 @@
 {
   "name": "cropper",
-  "description": "A simple jQuery image cropping plugin.",
+  "description": "A simple image cropping plugin.",
   "version": "0.9.3",
   "main": [
     "dist/cropper.js",
@@ -9,7 +9,6 @@
   "keywords": [
     "image",
     "crop",
-    "jquery",
     "plugin",
     "html",
     "css",
@@ -33,12 +32,8 @@
     "demo",
     "docs"
   ],
-  "dependencies": {
-    "jquery": ">= 1.9.1"
-  },
   "devDependencies": {
     "bootstrap": "~3.3.4",
-    "jquery": "~1.11.3",
     "qunit": "~1.18.0"
   }
 }

@@ -1,19 +1,21 @@
-$(function () {
+(function () {
 
   'use strict';
 
-  var $image = window.createCropperImage(),
+  var image = window.createCropperImage(),
       pageX = window.innerWidth / 2,
       pageY = window.innerHeight / 2;
 
-  var cropper = new window.Cropper($image, {
+  var cropper = new window.Cropper(image, {
     touchDragZoom: false,
 
     built: function () {
       var _ratio = cropper.image.ratio;
 
       QUnit.test('options.touchDragZoom', function (assert) {
-        $(cropper.$cropper).trigger($.Event('touchstart', {
+
+        var touchstart = document.createEvent('CustomEvent');
+        var data = {
           originalEvent: {
             touches: [
               {
@@ -26,7 +28,12 @@ $(function () {
               }
             ]
           }
-        })).trigger($.Event('touchmove', {
+        };
+        touchstart.initCustomEvent('touchstart', true, true, data);
+        cropper.$cropper.dispatchEvent(touchstart);
+
+        var touchmove = document.createEvent('CustomEvent');
+        data = {
           originalEvent: {
             touches: [
               {
@@ -39,7 +46,13 @@ $(function () {
               }
             ]
           }
-        })).trigger('touchend');
+        };
+        touchmove.initCustomEvent('touchmove', true, true, data);
+        cropper.$cropper.dispatchEvent(touchmove);
+
+        var touchend = document.createEvent('CustomEvent');
+        touchend.initCustomEvent('touchend', true, true, {});
+        cropper.$cropper.dispatchEvent(touchend);
 
         assert.equal(cropper.image.ratio, _ratio);
       });
@@ -47,4 +60,4 @@ $(function () {
     }
   });
 
-});
+})();
