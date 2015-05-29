@@ -210,19 +210,17 @@
     return event;
   }
 
-  function on(element, eventName, callback, once) {
-    element.addEventListener(eventName, function y(e) {
-      if (once) {
-        e.target.removeEventListener(e.type, y);
-      }
+  function on(element, eventName, callback) {
+    element.addEventListener(eventName, callback);
+  }
+
+  function one(element, eventName, callback) {
+    on(element, eventName, function y(e) {
+      e.target.removeEventListener(e.type, y);
       if (callback) {
         callback(e);
       }
     });
-  }
-
-  function one(element, eventName, callback) {
-    on(element, eventName, callback, true);
   }
 
   function off(element, eventName, callback) {
