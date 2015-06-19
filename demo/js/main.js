@@ -45,12 +45,12 @@ $(function () {
   // -------------------------------------------------------------------------
 
   (function () {
-    var image = document.querySelector('.img-container > img'),
-        $dataX = $('#dataX'),
-        $dataY = $('#dataY'),
-        $dataHeight = $('#dataHeight'),
-        $dataWidth = $('#dataWidth'),
-        $dataRotate = $('#dataRotate'),
+    var image      = document.querySelector('.img-container > img'),
+        dataX      = document.querySelector('#dataX'),
+        dataY      = document.querySelector('#dataY'),
+        dataHeight = document.querySelector('#dataHeight'),
+        dataWidth  = document.querySelector('#dataWidth'),
+        dataRotate = document.querySelector('#dataRotate'),
         options = {
           // data: {
           //   x: 420,
@@ -95,11 +95,11 @@ $(function () {
           aspectRatio: 16 / 9,
           preview: '.img-preview',
           crop: function (data) {
-            $dataX.get(0).value      = Math.round(data.x);
-            $dataY.get(0).value      = Math.round(data.y);
-            $dataHeight.get(0).value = Math.round(data.height);
-            $dataWidth.get(0).value  = Math.round(data.width);
-            $dataRotate.get(0).value = Math.round(data.rotate);
+            dataX.value      = Math.round(data.x);
+            dataY.value      = Math.round(data.y);
+            dataHeight.value = Math.round(data.height);
+            dataWidth.value  = Math.round(data.width);
+            dataRotate.value = Math.round(data.rotate);
           }
         };
 
@@ -128,42 +128,51 @@ $(function () {
     var cropper = new window.Cropper(image, options);
 
     // Methods
-    $(document.body).on('click', '[data-method]', function () {
-      var data = $(this).data(),
-          $target,
-          result;
+    toArray(document.querySelectorAll('[data-method]')).forEach(function (element) {
+      element.addEventListener('click', function (e) {
+        var option = e.currentTarget.getAttribute('data-option');
+        try { option = JSON.parse(option); } catch (e) { }
 
-      if (data.method) {
-        data = $.extend({}, data); // Clone a new one
+        var target, result, data = {
+          method : e.currentTarget.getAttribute('data-method'),
+          option : option,
+          target : e.currentTarget.getAttribute('data-target')
+        };
 
-        if (typeof data.target !== 'undefined') {
-          $target = $(data.target);
+        if (data.method) {
+          data = $.extend({}, data); // Clone a new one
 
-          if (typeof data.option === 'undefined') {
+          if (!!data.target) {
+            target = document.querySelector(data.target);
+
+            if (!data.option && target.value) {
+              try {
+                data.option = JSON.parse(target.value);
+              } catch (e) {
+                console.log(e.message);
+              }
+            }
+          }
+
+          result = cropper[data.method](data.option);
+
+          if (data.method === 'getCroppedCanvas') {
+            $('#getCroppedCanvasModal').modal().find('.modal-body').html(result);
+          }
+
+          if ($.isPlainObject(result) && target) {
             try {
-              data.option = JSON.parse($target.val());
+              target.value = JSON.stringify(result);
             } catch (e) {
               console.log(e.message);
             }
           }
+
         }
+      });
+    });
 
-        result = cropper[data.method](data.option);
-
-        if (data.method === 'getCroppedCanvas') {
-          $('#getCroppedCanvasModal').modal().find('.modal-body').html(result);
-        }
-
-        if ($.isPlainObject(result) && $target) {
-          try {
-            $target.val(JSON.stringify(result));
-          } catch (e) {
-            console.log(e.message);
-          }
-        }
-
-      }
-    }).on('keydown', function (e) {
+    $(document.body).on('keydown', function (e) {
 
       switch (e.which) {
         case 37:

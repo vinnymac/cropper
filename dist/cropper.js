@@ -5,7 +5,7 @@
  * Copyright (c) 2014-2015 Fengyuan Chen and contributors
  * Released under the MIT license
  *
- * Date: 2015-06-19T14:50:15.515Z
+ * Date: 2015-06-19T16:08:39.967Z
  */
 
 (function (root, factory) {
