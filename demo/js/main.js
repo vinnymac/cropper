@@ -24,6 +24,40 @@ $(function () {
     return args.slice.apply(obj, args);
   }
 
+  function isPlainObject(obj) {
+    var type = typeof obj;
+    var isObject = type === 'function' || type === 'object' && !!obj;
+    return isObject && obj.constructor === Object;
+  }
+
+  function toObject(val) {
+    if (val === null) {
+      throw new TypeError('Object.assign cannot be called with null or undefined');
+    }
+
+    return Object(val);
+  }
+
+  function assign(target, source) {
+    if (Object.assign) {
+      return Object.assign(target, source);
+    }
+    var from;
+    var keys;
+    var to = toObject(target);
+
+    for (var s = 1; s < arguments.length; s++) {
+      from = arguments[s];
+      keys = Object.keys(Object(from));
+
+      for (var i = 0; i < keys.length; i++) {
+        to[keys[i]] = from[keys[i]];
+      }
+    }
+
+    return to;
+  }
+
   var console = window.console || { log: function () {} },
       alert = document.querySelector('.docs-alert'),
       messageEl = alert.querySelector('.message'),
@@ -142,7 +176,7 @@ $(function () {
         };
 
         if (data.method) {
-          data = $.extend({}, data); // Clone a new one
+          data = assign({}, data); // Clone a new one
 
           if (!!data.target) {
             target = document.querySelector(data.target);
@@ -159,10 +193,14 @@ $(function () {
           result = cropper[data.method](data.option);
 
           if (data.method === 'getCroppedCanvas') {
-            $('#getCroppedCanvasModal').modal().find('.modal-body').html(result);
+            var canvasModal = document.querySelector('#getCroppedCanvasModal');
+            $(canvasModal).modal();
+            var modalBody = canvasModal.querySelector('.modal-body');
+            modalBody.innerHTML = '';
+            modalBody.appendChild(result);
           }
 
-          if ($.isPlainObject(result) && target) {
+          if (isPlainObject(result) && target) {
             try {
               target.value = JSON.stringify(result);
             } catch (e) {
@@ -174,7 +212,7 @@ $(function () {
       });
     });
 
-    $(document.body).on('keydown', function (e) {
+    document.body.addEventListener('keydown', function (e) {
 
       switch (e.which) {
         case 37:
@@ -202,12 +240,12 @@ $(function () {
 
 
     // Import image
-    var $inputImage = $('#inputImage'),
+    var inputImage = document.querySelector('#inputImage'),
         URL = window.URL || window.webkitURL,
         blobURL;
 
     if (URL) {
-      $inputImage.change(function () {
+      inputImage.addEventListener('change', function () {
         var files = this.files,
             file;
 
@@ -222,15 +260,14 @@ $(function () {
             });
             cropper.reset();
             cropper.replace(blobURL);
-            $inputImage.val('');
+            inputImage.value = '';
           } else {
             showMessage('Please choose an image file.');
           }
         }
       });
     } else {
-      var inputImageEl = $inputImage.get(0);
-      inputImageEl.parentNode.removeChild(inputImageEl);
+      inputImage.parentNode.removeChild(inputImage);
     }
 
 
@@ -244,7 +281,9 @@ $(function () {
     });
 
     // Tooltips
-    $('[data-toggle="tooltip"]').tooltip();
+    toArray(document.querySelectorAll('[data-toggle="tooltip"]')).forEach(function (element) {
+      $(element).tooltip();
+    });
 
   }());
 
