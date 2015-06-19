@@ -45,7 +45,7 @@ $(function () {
   // -------------------------------------------------------------------------
 
   (function () {
-    var $image = $('.img-container > img'),
+    var image = document.querySelector('.img-container > img'),
         $dataX = $('#dataX'),
         $dataY = $('#dataY'),
         $dataHeight = $('#dataHeight'),
@@ -103,31 +103,29 @@ $(function () {
           }
         };
 
-    $image.get().forEach(function (element) {
-      element.addEventListener('build.cropper', function (e) {
-        console.log(e.type.split('.')[0]);
-      });
-      element.addEventListener('built.cropper', function (e) {
-        console.log(e.type.split('.')[0]);
-      });
-      element.addEventListener('dragstart.cropper', function (e) {
-        console.log(e.type.split('.')[0], e.detail.dragType);
-      });
-      element.addEventListener('dragmove.cropper', function (e) {
-        console.log(e.type.split('.')[0], e.detail.dragType);
-      });
-      element.addEventListener('dragend.cropper', function (e) {
-        console.log(e.type.split('.')[0], e.detail.dragType);
-      });
-      element.addEventListener('zoomin.cropper', function (e) {
-        console.log(e.type.split('.')[0]);
-      });
-      element.addEventListener('zoomout.cropper', function (e) {
-        console.log(e.type.split('.')[0]);
-      });
+    image.addEventListener('build.cropper', function (e) {
+      console.log(e.type.split('.')[0]);
+    });
+    image.addEventListener('built.cropper', function (e) {
+      console.log(e.type.split('.')[0]);
+    });
+    image.addEventListener('dragstart.cropper', function (e) {
+      console.log(e.type.split('.')[0], e.detail.dragType);
+    });
+    image.addEventListener('dragmove.cropper', function (e) {
+      console.log(e.type.split('.')[0], e.detail.dragType);
+    });
+    image.addEventListener('dragend.cropper', function (e) {
+      console.log(e.type.split('.')[0], e.detail.dragType);
+    });
+    image.addEventListener('zoomin.cropper', function (e) {
+      console.log(e.type.split('.')[0]);
+    });
+    image.addEventListener('zoomout.cropper', function (e) {
+      console.log(e.type.split('.')[0]);
     });
 
-    var cropper = new window.Cropper($image.get(0), options);
+    var cropper = new window.Cropper(image, options);
 
     // Methods
     $(document.body).on('click', '[data-method]', function () {
@@ -207,7 +205,8 @@ $(function () {
 
           if (/^image\/\w+$/.test(file.type)) {
             blobURL = URL.createObjectURL(file);
-            $image.one('built.cropper', function () {
+            image.addEventListener('built.cropper', function y(e) {
+              e.target.removeEventListener(e.type, y);
               URL.revokeObjectURL(blobURL); // Revoke when load complete
             });
             cropper.reset();
@@ -229,7 +228,7 @@ $(function () {
       element.addEventListener('change', function () {
         options[this.value] = this.checked;
         cropper.destroy();
-        cropper = new window.Cropper($image.get(0), options);
+        cropper = new window.Cropper(image, options);
       });
     });
 
