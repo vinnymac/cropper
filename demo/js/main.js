@@ -2,36 +2,14 @@ $(function () {
 
   'use strict';
 
-  function addClass(element, className) {
-    if (element.classList) {
-      element.classList.add(className);
-    } else {
-      element.className += ' ' + className;
-    }
-  }
-
-  function isNumber(n) {
-    return typeof n === 'number' && !isNaN(n);
-  }
-
-  function toArray(obj, offset) {
-    var args = [];
-
-    if (isNumber(offset)) { // It's necessary for IE8
-      args.push(offset);
-    }
-
-    return args.slice.apply(obj, args);
-  }
-
   var console = window.console || { log: function () {} },
       $alert = $('.docs-alert'),
-      messageEl = $alert.get(0).querySelector('.message'),
+      $message = $alert.find('.message'),
       showMessage = function (message, type) {
-        messageEl.textContent = message;
+        $message.text(message);
 
         if (type) {
-          addClass(messageEl, type);
+          $message.addClass(type);
         }
 
         $alert.fadeIn();
@@ -95,11 +73,11 @@ $(function () {
           aspectRatio: 16 / 9,
           preview: '.img-preview',
           crop: function (data) {
-            $dataX.get(0).value      = Math.round(data.x);
-            $dataY.get(0).value      = Math.round(data.y);
-            $dataHeight.get(0).value = Math.round(data.height);
-            $dataWidth.get(0).value  = Math.round(data.width);
-            $dataRotate.get(0).value = Math.round(data.rotate);
+            $dataX.val(Math.round(data.x));
+            $dataY.val(Math.round(data.y));
+            $dataHeight.val(Math.round(data.height));
+            $dataWidth.val(Math.round(data.width));
+            $dataRotate.val(Math.round(data.rotate));
           }
         };
 
@@ -219,19 +197,19 @@ $(function () {
         }
       });
     } else {
-      var inputImageEl = $inputImage.get(0);
-      inputImageEl.parentNode.removeChild(inputImageEl);
+      $inputImage.parent().remove();
     }
 
 
     // Options
-    toArray(document.querySelectorAll('.docs-options input[type="checkbox"]')).forEach(function (element) {
-      element.addEventListener('change', function () {
-        options[this.value] = this.checked;
-        cropper.destroy();
-        cropper = new window.Cropper($image.get(0), options);
-      });
+    $('.docs-options :checkbox').on('change', function () {
+      var $this = $(this);
+
+      options[$this.val()] = $this.prop('checked');
+      cropper.destroy();
+      cropper = new window.Cropper($image.get(0), options);
     });
+
 
     // Tooltips
     $('[data-toggle="tooltip"]').tooltip();
