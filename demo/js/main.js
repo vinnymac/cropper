@@ -2,20 +2,78 @@ $(function () {
 
   'use strict';
 
+  function addClass(element, className) {
+    if (element.classList) {
+      element.classList.add(className);
+    } else {
+      element.className += ' ' + className;
+    }
+  }
+
+  function isNumber(n) {
+    return typeof n === 'number' && !isNaN(n);
+  }
+
+  function toArray(obj, offset) {
+    var args = [];
+
+    if (isNumber(offset)) { // It's necessary for IE8
+      args.push(offset);
+    }
+
+    return args.slice.apply(obj, args);
+  }
+
+  function isPlainObject(obj) {
+    var type = typeof obj;
+    var isObject = type === 'function' || type === 'object' && !!obj;
+    return isObject && obj.constructor === Object;
+  }
+
+  function toObject(val) {
+    if (val === null) {
+      throw new TypeError('Object.assign cannot be called with null or undefined');
+    }
+
+    return Object(val);
+  }
+
+  function assign(target, source) {
+    if (Object.assign) {
+      return Object.assign(target, source);
+    }
+    var from;
+    var keys;
+    var to = toObject(target);
+
+    for (var s = 1; s < arguments.length; s++) {
+      from = arguments[s];
+      keys = Object.keys(Object(from));
+
+      for (var i = 0; i < keys.length; i++) {
+        to[keys[i]] = from[keys[i]];
+      }
+    }
+
+    return to;
+  }
+
   var console = window.console || { log: function () {} },
-      $alert = $('.docs-alert'),
-      $message = $alert.find('.message'),
+      alert = document.querySelector('.docs-alert'),
+      messageEl = alert.querySelector('.message'),
       showMessage = function (message, type) {
-        $message.text(message);
+        messageEl.textContent = message;
 
         if (type) {
-          $message.addClass(type);
+          addClass(messageEl, type);
         }
 
-        $alert.fadeIn();
+        alert.style.display = 'block';
+        alert.style.opacity = 100;
 
         setTimeout(function () {
-          $alert.fadeOut();
+          alert.style.display = 'none';
+          alert.style.opacity = -0.1;
         }, 3000);
       };
 
@@ -23,12 +81,12 @@ $(function () {
   // -------------------------------------------------------------------------
 
   (function () {
-    var $image = $('.img-container > img'),
-        $dataX = $('#dataX'),
-        $dataY = $('#dataY'),
-        $dataHeight = $('#dataHeight'),
-        $dataWidth = $('#dataWidth'),
-        $dataRotate = $('#dataRotate'),
+    var image      = document.querySelector('.img-container > img'),
+        dataX      = document.querySelector('#dataX'),
+        dataY      = document.querySelector('#dataY'),
+        dataHeight = document.querySelector('#dataHeight'),
+        dataWidth  = document.querySelector('#dataWidth'),
+        dataRotate = document.querySelector('#dataRotate'),
         options = {
           // data: {
           //   x: 420,
@@ -73,77 +131,88 @@ $(function () {
           aspectRatio: 16 / 9,
           preview: '.img-preview',
           crop: function (data) {
-            $dataX.val(Math.round(data.x));
-            $dataY.val(Math.round(data.y));
-            $dataHeight.val(Math.round(data.height));
-            $dataWidth.val(Math.round(data.width));
-            $dataRotate.val(Math.round(data.rotate));
+            dataX.value      = Math.round(data.x);
+            dataY.value      = Math.round(data.y);
+            dataHeight.value = Math.round(data.height);
+            dataWidth.value  = Math.round(data.width);
+            dataRotate.value = Math.round(data.rotate);
           }
         };
 
-    $image.get().forEach(function (element) {
-      element.addEventListener('build.cropper', function (e) {
-        console.log(e.type.split('.')[0]);
-      });
-      element.addEventListener('built.cropper', function (e) {
-        console.log(e.type.split('.')[0]);
-      });
-      element.addEventListener('dragstart.cropper', function (e) {
-        console.log(e.type.split('.')[0], e.detail.dragType);
-      });
-      element.addEventListener('dragmove.cropper', function (e) {
-        console.log(e.type.split('.')[0], e.detail.dragType);
-      });
-      element.addEventListener('dragend.cropper', function (e) {
-        console.log(e.type.split('.')[0], e.detail.dragType);
-      });
-      element.addEventListener('zoomin.cropper', function (e) {
-        console.log(e.type.split('.')[0]);
-      });
-      element.addEventListener('zoomout.cropper', function (e) {
-        console.log(e.type.split('.')[0]);
-      });
+    image.addEventListener('build.cropper', function (e) {
+      console.log(e.type.split('.')[0]);
+    });
+    image.addEventListener('built.cropper', function (e) {
+      console.log(e.type.split('.')[0]);
+    });
+    image.addEventListener('dragstart.cropper', function (e) {
+      console.log(e.type.split('.')[0], e.detail.dragType);
+    });
+    image.addEventListener('dragmove.cropper', function (e) {
+      console.log(e.type.split('.')[0], e.detail.dragType);
+    });
+    image.addEventListener('dragend.cropper', function (e) {
+      console.log(e.type.split('.')[0], e.detail.dragType);
+    });
+    image.addEventListener('zoomin.cropper', function (e) {
+      console.log(e.type.split('.')[0]);
+    });
+    image.addEventListener('zoomout.cropper', function (e) {
+      console.log(e.type.split('.')[0]);
     });
 
-    var cropper = new window.Cropper($image.get(0), options);
+    var cropper = new window.Cropper(image, options);
 
     // Methods
-    $(document.body).on('click', '[data-method]', function () {
-      var data = $(this).data(),
-          $target,
-          result;
+    toArray(document.querySelectorAll('[data-method]')).forEach(function (element) {
+      element.addEventListener('click', function (e) {
+        var option = e.currentTarget.getAttribute('data-option');
+        try { option = JSON.parse(option); } catch (e) { }
 
-      if (data.method) {
-        data = $.extend({}, data); // Clone a new one
+        var target, result, data = {
+          method : e.currentTarget.getAttribute('data-method'),
+          option : option,
+          target : e.currentTarget.getAttribute('data-target')
+        };
 
-        if (typeof data.target !== 'undefined') {
-          $target = $(data.target);
+        if (data.method) {
+          data = assign({}, data); // Clone a new one
 
-          if (typeof data.option === 'undefined') {
+          if (!!data.target) {
+            target = document.querySelector(data.target);
+
+            if (!data.option && target.value) {
+              try {
+                data.option = JSON.parse(target.value);
+              } catch (e) {
+                console.log(e.message);
+              }
+            }
+          }
+
+          result = cropper[data.method](data.option);
+
+          if (data.method === 'getCroppedCanvas') {
+            var canvasModal = document.querySelector('#getCroppedCanvasModal');
+            $(canvasModal).modal();
+            var modalBody = canvasModal.querySelector('.modal-body');
+            modalBody.innerHTML = '';
+            modalBody.appendChild(result);
+          }
+
+          if (isPlainObject(result) && target) {
             try {
-              data.option = JSON.parse($target.val());
+              target.value = JSON.stringify(result);
             } catch (e) {
               console.log(e.message);
             }
           }
+
         }
+      });
+    });
 
-        result = cropper[data.method](data.option);
-
-        if (data.method === 'getCroppedCanvas') {
-          $('#getCroppedCanvasModal').modal().find('.modal-body').html(result);
-        }
-
-        if ($.isPlainObject(result) && $target) {
-          try {
-            $target.val(JSON.stringify(result));
-          } catch (e) {
-            console.log(e.message);
-          }
-        }
-
-      }
-    }).on('keydown', function (e) {
+    document.body.addEventListener('keydown', function (e) {
 
       switch (e.which) {
         case 37:
@@ -171,12 +240,12 @@ $(function () {
 
 
     // Import image
-    var $inputImage = $('#inputImage'),
+    var inputImage = document.querySelector('#inputImage'),
         URL = window.URL || window.webkitURL,
         blobURL;
 
     if (URL) {
-      $inputImage.change(function () {
+      inputImage.addEventListener('change', function () {
         var files = this.files,
             file;
 
@@ -185,34 +254,36 @@ $(function () {
 
           if (/^image\/\w+$/.test(file.type)) {
             blobURL = URL.createObjectURL(file);
-            $image.one('built.cropper', function () {
+            image.addEventListener('built.cropper', function y(e) {
+              e.target.removeEventListener(e.type, y);
               URL.revokeObjectURL(blobURL); // Revoke when load complete
             });
             cropper.reset();
             cropper.replace(blobURL);
-            $inputImage.val('');
+            inputImage.value = '';
           } else {
             showMessage('Please choose an image file.');
           }
         }
       });
     } else {
-      $inputImage.parent().remove();
+      inputImage.parentNode.removeChild(inputImage);
     }
 
 
     // Options
-    $('.docs-options :checkbox').on('change', function () {
-      var $this = $(this);
-
-      options[$this.val()] = $this.prop('checked');
-      cropper.destroy();
-      cropper = new window.Cropper($image.get(0), options);
+    toArray(document.querySelectorAll('.docs-options input[type="checkbox"]')).forEach(function (element) {
+      element.addEventListener('change', function () {
+        options[this.value] = this.checked;
+        cropper.destroy();
+        cropper = new window.Cropper(image, options);
+      });
     });
 
-
     // Tooltips
-    $('[data-toggle="tooltip"]').tooltip();
+    toArray(document.querySelectorAll('[data-toggle="tooltip"]')).forEach(function (element) {
+      $(element).tooltip();
+    });
 
   }());
 

@@ -1,11 +1,11 @@
 /*!
- * Cropper v@VERSION
+ * Cropper v0.9.3
  * https://github.com/fengyuanchen/cropper
  *
- * Copyright (c) 2014-@YEAR Fengyuan Chen and contributors
+ * Copyright (c) 2014-2015 Fengyuan Chen and contributors
  * Released under the MIT license
  *
- * Date: @DATE
+ * Date: 2015-06-19T16:50:50.755Z
  */
 
 (function (root, factory) {
