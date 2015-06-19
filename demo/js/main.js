@@ -25,8 +25,8 @@ $(function () {
   }
 
   var console = window.console || { log: function () {} },
-      $alert = $('.docs-alert'),
-      messageEl = $alert.get(0).querySelector('.message'),
+      alert = document.querySelector('.docs-alert'),
+      messageEl = alert.querySelector('.message'),
       showMessage = function (message, type) {
         messageEl.textContent = message;
 
@@ -34,10 +34,12 @@ $(function () {
           addClass(messageEl, type);
         }
 
-        $alert.fadeIn();
+        alert.style.display = 'block';
+        alert.style.opacity = 100;
 
         setTimeout(function () {
-          $alert.fadeOut();
+          alert.style.display = 'none';
+          alert.style.opacity = -0.1;
         }, 3000);
       };
 
