@@ -6,7 +6,7 @@
           cropBoxData,
           ratio;
 
-      if (this.disabled) {
+      if (this.disabled || !container) { // Check "container" for IE8
         return;
       }
 
@@ -166,7 +166,7 @@
         this.endX = e.pageX;
         this.endY = e.pageY;
 
-        this.change();
+        this.change(e.shiftKey);
       }
     },
 
