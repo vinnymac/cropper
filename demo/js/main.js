@@ -107,11 +107,13 @@ $(function () {
           // autoCropArea: 0.5,
           // dragCrop: false,
           // movable: false,
-          // resizable: false,
           // rotatable: false,
           // zoomable: false,
           // touchDragZoom: false,
           // mouseWheelZoom: false,
+          // cropBoxMovable: false,
+          // cropBoxResizable: false,
+          // doubleClickToggle: false,
 
           // minCanvasWidth: 320,
           // minCanvasHeight: 180,
@@ -160,12 +162,19 @@ $(function () {
     image.addEventListener('zoomout.cropper', function (e) {
       console.log(e.type.split('.')[0]);
     });
+    image.addEventListener('change.cropper', function (e) {
+      console.log(e.type.split('.')[0]);
+    });
 
     var cropper = new window.Cropper(image, options);
 
     // Methods
     toArray(document.querySelectorAll('[data-method]')).forEach(function (element) {
       element.addEventListener('click', function (e) {
+        if (!cropper) {
+          return;
+        }
+
         var option = e.currentTarget.getAttribute('data-option');
         try { option = JSON.parse(option); } catch (e) { }
 
@@ -213,6 +222,9 @@ $(function () {
     });
 
     document.body.addEventListener('keydown', function (e) {
+      if (!cropper) {
+        return;
+      }
 
       switch (e.which) {
         case 37:
@@ -249,6 +261,10 @@ $(function () {
         var files = this.files,
             file;
 
+        if (!cropper) {
+          return;
+        }
+
         if (files && files.length) {
           file = files[0];
 
@@ -274,6 +290,10 @@ $(function () {
     // Options
     toArray(document.querySelectorAll('.docs-options input[type="checkbox"]')).forEach(function (element) {
       element.addEventListener('change', function () {
+        if (!cropper) {
+          return;
+        }
+
         options[this.value] = this.checked;
         cropper.destroy();
         cropper = new window.Cropper(image, options);

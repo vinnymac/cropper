@@ -4,7 +4,8 @@
         options = this.options,
         cropperContainer,
         $cropper,
-        $cropBox;
+        $cropBox,
+        $face;
 
     if (!this.ready) {
       return;
@@ -34,6 +35,7 @@
     this.$dragBox = $cropper.querySelector('.cropper-drag-box');
     this.$cropBox = $cropBox = $cropper.querySelector('.cropper-crop-box');
     this.$viewBox = $cropper.querySelector('.cropper-view-box');
+    this.$face = $face = $cropBox.querySelector('.cropper-face');
 
     this.addListeners();
     this.initPreview();
@@ -56,9 +58,7 @@
     }
 
     if (!options.highlight) {
-      toArray($cropBox.querySelectorAll('.cropper-face')).forEach(function (element) {
-        addClass(element, CLASS_INVISIBLE);
-      });
+      addClass($face, CLASS_INVISIBLE);
     }
 
     if (!options.guides) {
@@ -67,19 +67,18 @@
       });
     }
 
-    if (!options.movable) {
-      toArray($cropBox.querySelectorAll('.cropper-face')).forEach(function (element) {
-        element.setAttribute('data-drag', 'move');
-      });
+    if (options.cropBoxMovable) {
+      addClass($face, CLASS_MOVE);
+      $face.setAttribute('data-drag', 'all');
     }
 
-    if (!options.resizable) {
+    if (!options.cropBoxResizable) {
       toArray($cropBox.querySelectorAll('.cropper-line, .cropper-point')).forEach(function (element) {
         addClass(element, CLASS_HIDDEN);
       });
     }
 
-    this.setDragMode(options.dragCrop ? 'crop' : 'move');
+    this.setDragMode(options.dragCrop ? 'crop' : options.movable ? 'move' : 'none');
 
     this.built = true;
     this.render();

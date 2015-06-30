@@ -41,8 +41,8 @@
     this.$clone = $clone = document.createElement('img');
 
     one($clone, 'load', proxy(function () {
-      var naturalWidth = $clone.naturalWidth || $clone.offsetWidth,
-          naturalHeight = $clone.naturalHeight || $clone.offsetHeight;
+      var naturalWidth = $clone.naturalWidth || $clone.width,
+          naturalHeight = $clone.naturalHeight || $clone.height; // $clone.width() and $clone.height() will return 0 in IE8 (#319)
 
       this.image = {
         naturalWidth: naturalWidth,

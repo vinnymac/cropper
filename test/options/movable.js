@@ -8,22 +8,15 @@
     movable: false,
 
     built: function () {
-      var cropBox = cropper.cropBox,
-          _left = cropBox.left,
-          _top = cropBox.top;
-
-      QUnit.test('methods.move', function (assert) {
-
-        cropper.move(10, 10);
-
-        assert.equal(cropBox.left, _left);
-        assert.equal(cropBox.top, _top);
-      });
+      var canvas = cropper.canvas,
+          _left = canvas.left,
+          _top = canvas.top;
 
       QUnit.test('options.movable', function (assert) {
-        assert.notEqual(cropper.$cropper.querySelectorAll('.cropper-face')[0].getAttribute('directive'), 'all');
+        cropper.move(10, 10);
+        assert.equal(canvas.left, _left);
+        assert.equal(canvas.top, _top);
       });
-
     }
   });
 

@@ -330,7 +330,6 @@
           container = this.container,
           containerWidth = container.width,
           containerHeight = container.height,
-          $cropBox = this.$cropBox,
           cropBox = this.cropBox;
 
       if (cropBox.width > cropBox.maxWidth || cropBox.width < cropBox.minWidth) {
@@ -349,13 +348,12 @@
       cropBox.oldLeft = cropBox.left = min(max(cropBox.left, cropBox.minLeft), cropBox.maxLeft);
       cropBox.oldTop = cropBox.top = min(max(cropBox.top, cropBox.minTop), cropBox.maxTop);
 
-      if (options.movable) {
-        toArray($cropBox.querySelectorAll('.cropper-face')).forEach(function (element) {
-          element.setAttribute('data-drag', (cropBox.width === containerWidth && cropBox.height === containerHeight) ? 'move' : 'all');
-        });
+      if (options.movable && options.cropBoxMovable) {
+        // Turn to move the canvas when the crop box is equal to the container
+        this.$face.setAttribute('data-drag', (cropBox.width === containerWidth && cropBox.height === containerHeight) ? 'move' : 'all');
       }
 
-      assign($cropBox.style, {
+      assign(this.$cropBox.style, {
         width: cropBox.width + 'px',
         height: cropBox.height + 'px',
         left: cropBox.left + 'px',
@@ -372,12 +370,15 @@
     },
 
     output: function () {
-      var options = this.options;
+      var options = this.options,
+        $this = this.$element;
 
       this.preview();
 
       if (options.crop) {
-        options.crop.call(this.$element, this.getData());
+        options.crop.call($this, this.getData());
       }
+
+      $this.dispatchEvent(createEvent(EVENT_CHANGE));
     }
   });

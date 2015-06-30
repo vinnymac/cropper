@@ -5,8 +5,11 @@
   position: relative;
   overflow: hidden;
   .user-select(none);
+  direction: ltr !important; // Ignore global rtl
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
+  -ms-touch-action: none;
+  touch-action: none;
 
   img {
     display: block; // Avoid margin top issue (Occur only when margin-top <= -height)
@@ -81,7 +84,6 @@
 .cropper-face {
   top: 0;
   left: 0;
-  cursor: move;
   background-color: #fff;
 }
 

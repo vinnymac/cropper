@@ -22,6 +22,10 @@
     return isObject && obj.constructor === Object;
   }
 
+  function isFunction(obj) {
+    return typeof obj === 'function' || false;
+  }
+
   // Custom proxy to avoid jQuery's guid
   function proxy(fn, context) {
     var args = toArray(arguments, 2);

@@ -91,7 +91,7 @@
     move: function (offsetX, offsetY) {
       var canvas = this.canvas;
 
-      if (this.built && !this.disabled && isNumber(offsetX) && isNumber(offsetY)) {
+      if (this.built && !this.disabled && this.options.movable && isNumber(offsetX) && isNumber(offsetY)) {
         canvas.left += offsetX;
         canvas.top += offsetY;
         this.renderCanvas(true);
@@ -138,12 +138,13 @@
       }
     },
 
-    getData: function () {
+    getData: function (rounded) {
       var cropBox = this.cropBox,
           canvas = this.canvas,
           image = this.image,
           ratio,
-          data;
+          data,
+          n;
 
       if (this.built && this.cropped) {
         data = {
@@ -157,7 +158,8 @@
 
         for (var k in data) {
           if (data.hasOwnProperty(k)) {
-            data[k] = (data[k] / ratio);
+            n = (data[k] / ratio);
+            data[k] = rounded ? Math.round(n) : n;
           }
         }
 
@@ -436,35 +438,25 @@
     },
 
     setDragMode: function (mode) {
-      var $dragBox = this.$dragBox,
-          cropable = false,
-          movable = false;
+      var options = this.options,
+          croppable,
+          movable;
 
-      if (!this.ready || this.disabled) {
-        return;
+      if (this.ready && !this.disabled) {
+        croppable = options.dragCrop && mode === 'crop';
+        movable = options.movable && mode === 'move';
+        mode = (croppable || movable) ? mode : 'none';
+
+        this.$dragBox.setAttribute('data-drag', mode);
+        toggleClass(this.$dragBox, CLASS_CROP, croppable);
+        toggleClass(this.$dragBox, CLASS_MOVE, movable);
+
+        if (!options.cropBoxMovable) {
+          // Sync drag mode to crop box when it is not movable(#300)
+          this.$face.setAttribute('data-drag', mode);
+          toggleClass(this.$face, CLASS_CROP, croppable);
+          toggleClass(this.$face, CLASS_MOVE, movable);
+        }
       }
-
-      switch (mode) {
-        case 'crop':
-          if (this.options.dragCrop) {
-            cropable = true;
-            $dragBox.setAttribute('data-drag', mode);
-          } else {
-            movable = true;
-          }
-
-          break;
-
-        case 'move':
-          movable = true;
-          $dragBox.setAttribute('data-drag', mode);
-
-          break;
-
-        default:
-          $dragBox.removeAttribute('drag');
-      }
-      toggleClass($dragBox, CLASS_CROP, cropable);
-      toggleClass($dragBox, CLASS_MOVE, movable);
     }
   });
